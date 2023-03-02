@@ -2,8 +2,8 @@ FROM NGINX
 
 
 RUN rm /etc/nginx/conf.d/default.conf
-COPY default.conf /etc/nginx/conf.d/defailt.conf
+COPY default.conf /etc/nginx/conf.d/default.conf
 
-VILUMS /etc/nginx
+VOLUME /etc/nginx
 
 EXPOSE 80
