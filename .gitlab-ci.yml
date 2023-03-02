@@ -33,7 +33,7 @@ prerequisities:
 
 
 django-test:
-  image: python:3.7.x
+  image: python:3.7.16
   stage: test
   # only:
   #   - main
