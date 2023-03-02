@@ -87,6 +87,7 @@ publish-docker:
     - docker push ${CI_REGISTRY_IMAGE}:tpdjango
     - docker build -t ${CI_REGISTRY_IMAGE}:tpnginx nginx/
     - docker push ${CI_REGISTRY_IMAGE}:tpnginx
+    - rm file.txt
     - docker container ls -a >> file.txt
     - cat file.txt
 #uncomment this once the $RSA $VM_USER@$VM are set in the repo - Setting -> CI/CD -> variables
