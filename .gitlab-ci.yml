@@ -40,9 +40,6 @@ django-test:
   script:
     - pip install -r requirements.txt
     - python mySite/mysite/manage.py test
-    - service docker stop
-    - service docker start
-
 # nohttp:
 #   stage: check
 #   script:
@@ -85,6 +82,8 @@ publish-docker:
     DOCKER_TLS_CERTDIR: ""
   script:
     - echo "pushing ${CI_REGISTRY_IMAGE} ${CI_REGISTRY_USER} ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}"
+    - service docker stop
+    - service docker start
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t ${CI_REGISTRY_IMAGE}:tpdjango mySite/
     - docker push ${CI_REGISTRY_IMAGE}:tpdjango
