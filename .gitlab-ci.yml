@@ -1,5 +1,5 @@
 # image: jhipster/jhipster:v7.9.3
-
+image: python:3.7.16
 
 variables:
   CI_IMG: "\"${CI_REGISTRY_IMAGE}:latest\""
@@ -23,7 +23,7 @@ stages:
   # - export MAVEN_USER_HOME=`pwd`/.maven
 
 prerequisities:
-  image: python:3.7.x
+  image: python:3.7.16
   stage: check
   # only:
   #   - main
