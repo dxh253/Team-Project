@@ -86,7 +86,7 @@ publish-docker:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t ${CI_REGISTRY_IMAGE}:tpdjango mySite/
     - docker push ${CI_REGISTRY_IMAGE}:tpdjango
-    - docker build -t ${CI_REGISTRY_IMAGE}:tpnginx mySite/nginx/
+    - docker build -t ${CI_REGISTRY_IMAGE}:tpnginx nginx/
     - docker push ${CI_REGISTRY_IMAGE}:tpnginx
 #uncomment this once the $RSA $VM_USER@$VM are set in the repo - Setting -> CI/CD -> variables
 #$RSA should be a private key file, $VM_USER is the VM user name (e.g. root or ec2) and $VM is the IP address of the Virtual Machine
