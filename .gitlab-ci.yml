@@ -72,7 +72,6 @@ django-test:
 publish-docker:
   image: docker:stable
   stage: publish
-  
   # only:
   #   - main
   services:
