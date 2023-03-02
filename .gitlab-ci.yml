@@ -11,11 +11,11 @@ cache:
   #   - .maven/
 stages:
   - check
-  - build
+  # - build
   - test
-  - analyze
-  - package
-  - release
+  # - analyze
+  # - package
+  # - release
   - publish
   - deploy
 # before_script:
