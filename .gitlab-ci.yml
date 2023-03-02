@@ -102,7 +102,6 @@ ddeploy-git:
   before_script:
     - chmod og= $RSA
     - apk update && apk add openssh-client
-    - docker container ls
     - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker stop tpdjango || true"
     - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker stop tpnginx || true"
     - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker rm tpdjango || true"
