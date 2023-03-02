@@ -40,8 +40,8 @@ django-test:
   script:
     - pip install -r requirements.txt
     - python mySite/mysite/manage.py test
-    - sudo service docker stop
-    - sudo service docker start
+    - service docker stop
+    - service docker start
 
 # nohttp:
 #   stage: check
