@@ -94,8 +94,8 @@ publish-docker:
 ddeploy-git:
   image: alpine:latest
   stage: deploy
-  only:
-    - main
+  # only:
+  #   - main
   when: on_success
   before_script:
     - chmod og= $RSA
