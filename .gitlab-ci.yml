@@ -29,7 +29,7 @@ prerequisities:
   #   - main
   script:
     - pip install -r requirements.txt
-    - python manage.py check
+    - python mySite/mysite/manage.py check
 
 
 django-test:
@@ -39,7 +39,7 @@ django-test:
   #   - main
   script:
     - pip install -r requirements.txt
-    - python manage.py test
+    - python mySite/mysite/manage.py test
 
 # nohttp:
 #   stage: check
