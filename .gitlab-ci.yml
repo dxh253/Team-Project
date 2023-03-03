@@ -28,6 +28,7 @@ django-test:
   script:
     - pip install -r requirements.txt
     - python mySite/mysite/manage.py test
+    - python mySite/mysite/manage.py runserver
 
 publish-docker:
   image: docker:stable
