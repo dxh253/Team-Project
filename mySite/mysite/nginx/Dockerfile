@@ -1,9 +1,0 @@
-FROM NGINX
-
-
-RUN rm /etc/nginx/conf.d/default.conf
-COPY default.conf /etc/nginx/conf.d/defailt.conf
-
-VILUMS /etc/nginx
-
-EXPOSE 80
