@@ -55,6 +55,7 @@ deploy-git:
   stage: deploy
   when: on_success
   before_script:
+    
     - chmod og= $RSA
     - apk update && apk add openssh-client
     - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker network rm tpnetwork || true"
