@@ -152,5 +152,5 @@ deploy-git:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
 
-    # depends_on:
-    #   - tpdjango
+    depends_on:
+      -tpdjango
