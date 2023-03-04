@@ -8,7 +8,7 @@ COPY .. .
 
 RUN pip install -r requirements.txt
 
-CMD python mySite/mysite/manage.py makemigrations & python mySite/mysite/manage.py migrate & python mySite/mysite/manage.py runserver 0.0.0.0:8000
+CMD python mysite/manage.py makemigrations & python mysite/manage.py migrate & python mysite/manage.py runserver 0.0.0.0:8000
 
 
 EXPOSE 8000
