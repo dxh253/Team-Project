@@ -1,14 +1,14 @@
-#FROM python:3.7.16
+FROM python:3.7.16
 
-#ENV PYTHONUNBUFFERED=1
+ENV PYTHONUNBUFFERED=1
 
-#WORKDIR .
+WORKDIR .
 
-#COPY .. .
+COPY .. .
 
-#RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
-#CMD sudo service postgresql start & python mysite/manage.py makemigrations & python mysite/manage.py migrate & python mysite/manage.py runserver 0.0.0.0:8000
+CMD sudo service postgresql start & python mysite/manage.py makemigrations & python mysite/manage.py migrate & python mysite/manage.py runserver 0.0.0.0:8000
 
 
 #EXPOSE 8000
@@ -37,29 +37,6 @@
 
 #EXPOSE 8000
 
-FROM python:3.7.16-amazonlinux2
-
-ENV PYTHONUNBUFFERED=1
-
-RUN amazon-linux-extras install postgresql11 && \
-    yum -y update && \
-    yum -y install postgresql11 postgresql11-devel && \
-    yum clean all
-
-WORKDIR /app
-
-COPY . .
-
-RUN pip install -r requirements.txt
-
-# add command to start PostgreSQL server
-CMD service postgresql-11 initdb && \
-    service postgresql-11 start && \
-    python mysite/manage.py makemigrations && \
-    python mysite/manage.py migrate && \
-    python mysite/manage.py runserver 0.0.0.0:8000
-
-EXPOSE 8000
 
 
 
