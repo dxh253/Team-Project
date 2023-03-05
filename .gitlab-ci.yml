@@ -88,15 +88,14 @@ deploy-git:
     # - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker stop tpnginx || true"
     # - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker rm tpdjango || true"
     # - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker rm tpnginx || true"
-    - ssh -i $RSA $VM_USER@$VM "docker compose -f ~/team-project-deployment/docker-compose.yml down || true"
+    - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker compose -f ~/team-project-deployment/docker-compose.yml down || true"
     - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "rm -rf ~/team-project-deployment || true"
     # - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker container ls -a"
     - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
     - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker pull ${CI_REGISTRY_IMAGE}:tpdjango"
     # - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker pull ${CI_REGISTRY_IMAGE}:tpnginx"
   script:
-    # - scp -o StrictHostKeyChecking=no -i $RSA -r . $VM_USER@$VM:~/team-project-deployment
-    - scp -o StrictHostKeyChecking=no -i $RSA -P $VM_PORT . $VM_USER@$VM:~/team-project-deployment
+    - scp -o StrictHostKeyChecking=no -i $RSA -r . $VM_USER@$VM:~/team-project-deployment
     - ssh -i $RSA $VM_USER@$VM "docker compose -f ~/team-project-deployment/docker-compose.yml up -d"
     # - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker network rm tpnetwork || true"
     # - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker network create tpnetwork"
