@@ -1,6 +1,6 @@
 * {
     box-sizing: border-box;
-  }
+}
 
 body {
     margin: 0%;
@@ -12,9 +12,9 @@ body {
     /* position: relative; */
     justify-content: space-between;
     margin: 0 auto;
-  }
+}
 
-.topnav > a {
+.topnav>a {
     float: left;
     display: flex;
     padding: 10px 10px;
@@ -25,13 +25,13 @@ body {
     text-decoration: none;
     color: white;
     padding-left: 150px;
-  }
+}
 
-.topnav > a:hover {
+.topnav>a:hover {
     opacity: 80%;
 }
 
-.topnav > b {
+.topnav>b {
     float: left;
     display: flex;
     padding: 10px 10px;
@@ -43,7 +43,7 @@ body {
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: lighter;
-  }
+}
 
 
 .header {
@@ -56,14 +56,14 @@ body {
     text-align: center;
 }
 
-.header > a {
+.header>a {
     font-family: Arial, Helvetica, sans-serif;
     font-weight: lighter;
     font-size: 50px;
     padding-top: 10px;
 }
 
-.header > input[type=text] {
+.header>input[type=text] {
     margin-left: auto;
     margin-right: auto;
     width: 650px;
@@ -74,7 +74,7 @@ body {
     padding-top: 0%;
 }
 
-.header > c {
+.header>c {
     font-family: Arial, Helvetica, sans-serif;
     font-weight: lighter;
     padding-bottom: 20px;
@@ -85,7 +85,7 @@ body {
     text-align: center;
 }
 
-.main1 > button {
+.main1>button {
     background-color: rgba(197, 170, 240, 0.7);
     height: 150px;
     width: 300px;
@@ -97,7 +97,7 @@ body {
     border: 3px solid rgba(197, 170, 240);
 }
 
-.main1 > button:hover {
+.main1>button:hover {
     opacity: 80%;
 }
 
@@ -108,13 +108,13 @@ body {
     grid-gap: 30px;
 }
 
-.main2 > a {
+.main2>a {
     font-family: Arial, Helvetica, sans-serif;
     font-weight: lighter;
     font-size: 20px;
 }
 
-.main2 > input[type=text] {
+.main2>input[type=text] {
     background-color: rgba(197, 170, 240, 0.7);
 }
 
@@ -123,13 +123,13 @@ body {
     align-items: center;
 }
 
-.main21 > i {
+.main21>i {
     font-size: 50px;
     border: 1px solid black;
     border-radius: 50%;
 }
 
-.main21 > a {
+.main21>a {
     font-size: 20px;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: lighter;
