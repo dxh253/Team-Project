@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-rmh)o1p&g!6^^lv6^92fh45ju9*vb5$*as&3gof@c2mcto&)@f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['team22-22.bham.team']
+ALLOWED_HOSTS = ['team22-22.bham.team', '127.0.0.1']
 
 
 # Application definition
@@ -55,7 +55,7 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR, '../templates'],
+        'DIRS': [BASE_DIR, 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,8 +80,10 @@ DATABASES = {
         'NAME': 'team_project',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
+        # 'HOST': '',
         'HOST': 'db',
         'PORT': '5432',
+        # 'PORT': '',
     }
 }
 

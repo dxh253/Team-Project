@@ -5,8 +5,8 @@ from django.urls import include, path
 from . views import home
 
 urlpatterns = [
-        path('polls/', include('polls.urls')),
-        path('admin/', admin.site.urls),
+        # path('polls/', include('polls.urls')),
+        # path('admin/', admin.site.urls),
         path('', home),
         # path('', views.home()),
         ]
