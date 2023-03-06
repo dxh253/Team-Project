@@ -3,7 +3,7 @@ from django.urls import include, path
 
 from . import views
 # from mySite.mysite import home
-from mySite.mysite.mysite.views import home
+from views import home
 
 urlpatterns = [
         path('polls/', include('polls.urls')),
