@@ -15,6 +15,8 @@ stages:
 prerequisities:
   image: python:3.7.16
   stage: check
+  only:
+    - django
 
   script:
     - pip install -r requirements.txt
@@ -24,6 +26,8 @@ prerequisities:
 django-test:
   image: python:3.7.16
   stage: test
+  only:
+    - django
 
   script:
     - pip install -r requirements.txt
@@ -32,6 +36,8 @@ django-test:
 publish-docker:
   image: docker:stable
   stage: publish
+  only:
+    - django
   
   services:
     - docker:dind
@@ -50,6 +56,8 @@ publish-docker:
 deploy-git:
   image: alpine:latest
   stage: deploy
+  only:
+    - django
   when: on_success
   before_script:
 
