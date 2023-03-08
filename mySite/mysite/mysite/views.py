@@ -6,3 +6,6 @@ def helpSection(request):
 
 def homepage(request):
     return render(request, 'homepage.html')
+
+def forumpage(request):
+    return render(request, 'forumpage.html')
