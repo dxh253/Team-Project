@@ -7,6 +7,6 @@ from . views import homepage, helpSection
 urlpatterns = [
         # path('polls/', include('polls.urls')),
         # path('admin/', admin.site.urls),
-        path('', homepage),
+        path('api', homepage),
         ]
 
