@@ -52,6 +52,11 @@ publish-docker:
     - docker push ${CI_REGISTRY_IMAGE}:tpdjango
     - docker build -t ${CI_REGISTRY_IMAGE}:tpnginx nginx/
     - docker push ${CI_REGISTRY_IMAGE}:tpnginx
+    - docker build -t ${CI_REGISTRY_IMAGE}:tpvuejs front-end/
+    - docker push ${CI_REGISTRY_IMAGE}:tpvuejs 
+
+#vue-compile:
+# docker 
 
 deploy-git:
   image: alpine:latest
