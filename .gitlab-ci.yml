@@ -16,28 +16,28 @@ prerequisities:
   image: python:3.7.16
   stage: check
   only:
-    - django
+    - production
 
   script:
     - pip install -r requirements.txt
-    - python mySite/mysite/manage.py check
+    - python team_project/manage.py check
 
 
 django-test:
   image: python:3.7.16
   stage: test
   only:
-    - django
+    - production
 
   script:
     - pip install -r requirements.txt
-    - python mySite/mysite/manage.py test
+    - python team_project/manage.py test
 
 publish-docker:
   image: docker:stable
   stage: publish
   only:
-    - django
+    - production
   
   services:
     - docker:dind
@@ -48,7 +48,7 @@ publish-docker:
   script:
     - echo "pushing ${CI_REGISTRY_IMAGE} ${CI_REGISTRY_USER} ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}"
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t ${CI_REGISTRY_IMAGE}:tpdjango mySite/
+    - docker build -t ${CI_REGISTRY_IMAGE}:tpdjango team_project/
     - docker push ${CI_REGISTRY_IMAGE}:tpdjango
     - docker build -t ${CI_REGISTRY_IMAGE}:tpnginx nginx/
     - docker push ${CI_REGISTRY_IMAGE}:tpnginx
@@ -62,7 +62,8 @@ deploy-git:
   image: alpine:latest
   stage: deploy
   only:
-    - django
+    - production
+    
   when: on_success
   before_script:
 
