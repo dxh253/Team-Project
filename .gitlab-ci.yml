@@ -20,7 +20,7 @@ prerequisities:
 
   script:
     - pip install -r requirements.txt
-    - python mySite/mysite/manage.py check
+    - python team_project/manage.py check
 
 
 django-test:
@@ -31,7 +31,7 @@ django-test:
 
   script:
     - pip install -r requirements.txt
-    - python mySite/mysite/manage.py test
+    - python team_project/manage.py test
 
 publish-docker:
   image: docker:stable
