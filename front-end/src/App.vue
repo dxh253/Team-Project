@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <img alt="Vue logo" src="./assets/logo.png">
   <HelloWorld msg="Welcome to Your Vue.js App"/>
 </template>
@@ -7,9 +7,9 @@
 import HelloWorld from './components/HelloWorld.vue'
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  //name: 'App',
+  //components: {
+  //  HelloWorld
   }
 }
 </script>
@@ -23,4 +23,16 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-</style>
+</style> -->
+
+<script setup>
+import { RouterView } from "vue-router";
+</script>
+
+<template>
+  <main>
+    <router-view />
+  </main>
+</template>
+
+

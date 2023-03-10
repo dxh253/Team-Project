@@ -1,16 +1,18 @@
+/*const path = require('path')
+
+module.exports = {
+  outputDir: path.resolve(__dirname, '../mySite/mysite/templates'),
+  transpileDependencies: true
+}*/
+
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
-  server: {
+devServer: {
     proxy: {
-      '/api': 'http://localhost:8000'
+      '/api': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true
+      }
     }
-  },
-  transpileDependencies: true
+  }
 })
-
-//const path = require('path')
-
-//module.exports = {
-//  outputDir: path.resolve(__dirname, '../mySite/mysite/templates'),
-//  transpileDependencies: true
-//}
