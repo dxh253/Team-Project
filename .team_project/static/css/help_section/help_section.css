@@ -1,0 +1,227 @@
+ *{
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0%;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: white;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    border-right: 0px solid black;
+    text-align: center;
+}
+  
+.sidenav > a {
+    padding: 20px 8px 20px 0px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+    border: 0.5px solid #818181;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+  
+.sidenav a:hover {
+    color: #f1f1f1;
+    cursor: pointer;
+}
+
+  
+.sidenav .closebtn {
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.topnav {
+    background-color: #423264;
+    display: flex;
+  }
+
+.topnav > a {
+    float: left;
+    display: flex;
+    padding: 10px 10px;
+    height: 65px;
+    width: 65px;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    text-decoration: none;
+    color: white;
+    margin-left: 150px;
+  }
+
+.topnav > a:hover {
+    opacity: 80%;
+    cursor: pointer;
+}
+
+.topnav > b {
+    float: left;
+    display: flex;
+    padding: 10px 10px;
+    height: 65px;
+    width: auto;
+    align-items: center;
+    font-size: 25px;
+    text-decoration: none;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: lighter;
+  }
+
+
+.header {
+    background-color: rgba(197, 170, 240, 0.7);
+    display: grid;
+    grid: auto auto;
+    grid-gap: 0px;
+    height: 250px;
+    align-items: end;
+    text-align: center;
+}
+
+.header > a {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: lighter;
+    font-size: 50px;
+    padding-top: 10px;
+}
+
+.header > input[type=text] {
+    margin-left: auto;
+    margin-right: auto;
+    width: 650px;
+    height: 30px;
+    border-radius: 20px;
+    border: rgba(197, 170, 240, 0.7);
+    text-indent: 5%;
+    padding-top: 0%;
+}
+
+.header > c {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: lighter;
+    padding-bottom: 20px;
+}
+
+.main1 {
+    display: flex;
+    padding: 50px 10%;
+    justify-content: center;
+}
+
+.main1 > button {
+    background-color: rgba(197, 170, 240, 0.7);
+    min-height: 150px;
+    min-width: 300px;
+    font-size: 28px;
+    font-weight: lighter;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    border: 3px solid rgba(197, 170, 240);
+}
+
+.main1 > button:hover {
+    opacity: 80%;
+}
+
+.main2 {
+    margin: 50px 15%;
+    display: grid;
+    grid: auto;
+    grid-gap: 25px;
+}
+
+.main2 > a {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: lighter;
+    font-size: 20px;
+}
+
+.main21 {
+    display: flex;
+    align-items: center;
+}
+
+.main21 > i {
+    font-size: 50px;
+    border: 1px solid black;
+    border-radius: 50%;
+}
+
+.main21 > a {
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: lighter;
+    padding-left: 20px;
+}
+
+.main22 {
+    display: grid;
+    grid: auto auto;
+    grid-gap: 1px;
+    background-color: rgba(197, 170, 240, 0.7);
+    width: 900px;
+    border-radius: 20px;
+}
+
+.main22 > .title {
+    background-color: rgba(197, 170, 240, 0.7);
+    width: 500px;
+    height: 45px;
+    padding-left: 15px;
+    font-size: 26px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: lighter;
+    margin-top: 10px;
+    margin-left: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.main22 > .problem {
+    background-color: rgba(197, 170, 240, 0.7);
+    width: 750px;
+    height: auto;
+    min-height: 125px;
+    padding: 15px;
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: lighter;
+    margin-top: 5px;
+    margin-left: 20px;
+    resize: none;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.main22 > .button {
+    margin-left: 87%;
+    margin-bottom: 5px;
+    width: 100px;
+    height: 50px;
+    font-size: 20px;
+    border-radius: 20px;
+}

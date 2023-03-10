@@ -1,0 +1,62 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <link rel="stylesheet" href="{% static 'css/help_section/help_section.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+
+
+<body>
+    <!-- references to the other pages yet to be added -->
+    <!-- logo and site name yet to be added -->
+    <div id="mySidenav" class="sidenav">
+        <b class="closebtn" onclick="closeNav()">&times;</b>
+        <a href="#">Dashboard</a>
+        <a href="#">Events</a>
+        <a href="#">Discussion</a>
+        <a href="#">Resources</a>
+        <a href="#">Study Group</a>
+        <a href="help.html">Help</a>
+    </div>
+
+    <div class="topnav">
+        <a class="material-icons" onclick="openNav()">menu</a>
+        <b>Help Section</b>
+    </div>
+
+    <!-- search needs to search title in database -->
+    <div class="header">
+        <a class="headertext1" ;>How can we help?</a>
+        <input type="text" placeholder="Search your problem here" id="keywordProblem">
+        <c class="headertext3" ;>Here are some useful articles</c>
+    </div>
+
+    <!-- buttons need appriate functions -->
+    <div class="main1">
+        <button type="button" class="button" onclick="button1()">Testing</button>
+        <button type="button" class="button" onclick="button2()">Testing2</button>
+        <button type="button" class="button" onclick="button3()">Testing3</button>
+    </div>
+
+    <!-- user needs to be updated according to each user -->
+    <!-- submit function needs to be properly implemented -->
+    <div class="main2">
+        <a>Or you can submit your problem here</a>
+        <div class="main21">
+            <i class="material-icons">person</i>
+            <a>User 1</a>
+        </div>
+        <form class="main22">
+            <input type="text" id="title" placeholder="Enter Title" class="title">
+            <textarea type="text" id="problem" placeholder="Describe your problem here" class="problem"></textarea>
+            <button type="button" class="button" onclick="submit()">Submit</button>
+        </form>
+    </div>
+
+
+    <!-- <script src="help.js"></script>  -->
+</body>

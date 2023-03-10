@@ -1,7 +1,4 @@
 /.idea
-/mySite/mySite/mySite/__pycache__
-/tech_report.txt
-/mySite/mysite/mysite/__pycache__
 
-/mySite/mysite/.DS_Store
-/mySite/mysite/static/.DS_Store
+# don't add any pychache files
+__pycache__/
