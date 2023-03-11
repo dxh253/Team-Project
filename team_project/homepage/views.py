@@ -9,3 +9,5 @@ def homepage(request):
 def vue_homepage(request):
     return render(request, 'index.html')
 
+def events(request):
+    return render(request, 'events.html')

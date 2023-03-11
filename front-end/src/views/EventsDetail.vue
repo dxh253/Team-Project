@@ -13,7 +13,7 @@
 
             <div class="column is-3">
                 <h2 class="subtitle">Information</h2>
-
+                <p><strong>Venue: </strong>{{ events.venue }}</p>
                 <p><strong>Date: </strong>{{ events.date }}</p>
 
             </div>

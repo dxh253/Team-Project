@@ -10,6 +10,7 @@ class EventsSerializer(serializers.ModelSerializer):
             "name",
             "get_absolute_url",
             "description",
+            "venue",
             "date",
             "get_image",
             "get_thumbnail",

@@ -24,6 +24,7 @@ class Events(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField()
     description = models.TextField(blank=True, null=True)
+    venue = models.TextField(blank=True, null=True)
     date = models.DateField()
     image = models.ImageField(upload_to='uploads/', blank=True, null=True)
     thumbnail = models.ImageField(upload_to='uploads/', blank=True, null=True)
