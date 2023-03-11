@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue"
 import RegisterForm from "../views/RegisterForm.vue"
 import EventsView from "../views/EventsViews.vue"
 import EventsDetail from "../views/EventsDetail.vue"
+import HelpSection from "../views/HelpSection.vue"
 
 
 const router = createRouter({
@@ -14,11 +15,11 @@ const router = createRouter({
             name: "HomeView",
             component: HomeView
         },
-        // {
-        //     path: "help",
-        //     name: "HelpSection",
-        //     component: HelpSection
-        // },
+        {
+             path: "/help/",
+             name: "HelpSection",
+             component: HelpSection
+        },
         {
             path: "/register/",
             name: "RegisterForm",
