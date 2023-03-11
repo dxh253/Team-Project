@@ -1,13 +1,5 @@
 <template>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <meta name="viewport"
-            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login</title>
-    <div class="topnav">
-        <a href="#menu" class="material-icons">menu</a>
-        <b>Login</b>
-    </div>
     <div class="main3">
         <form class="login-form">
             <div class="form-group">

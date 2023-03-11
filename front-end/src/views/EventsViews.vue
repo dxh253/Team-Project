@@ -1,52 +1,66 @@
+
+import EventBox from '@/components/EventBox.vue';
+
 <template>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Events</title>
-  <div class="topnav">
-    <a href="#menu" class="material-icons">menu</a>
-    <b>Events</b>
+  <div class="home">
+    <section class="hero is-medium is-dark mb-6">
+          <div class="hero-body has-text-centered">
+            <h1 class="title">
+               Looking For Something To Do?
+            </h1>
+            <p class="subtitle">
+                Here are some upcoming events!
+            </p>
+          </div>
+        
+    </section>
+
+    <div class="columns">
+      <div class="column is-10 ">
+        <h2 class="title">Upcoming Events</h2>
+      </div>
+      <div class="column is-4 is-offset 8">
+        <button class="button is-primary is-light">Add Event</button>
+      </div>
   </div>
-
-
-  <div class="header">
-    <a class="headertext1">Looking for something to do?</a>
-    <c class="headertext3">Here are some upcoming events</c>
+  <div class="columns is-multiline">
+    <EventBox
+        v-for="events in allEvents"
+        v-bind:key="events.id"
+        v-bind:events="events"
+      />
   </div>
-
-  <div class="main0">
-    <button type="button" class="button">Add event</button>
-  </div>
-
-  <div class="main2">
-    <div class="event-card">
-      <img src="product-image.jpg" alt="Event_image">
-      <h3>Event Name</h3>
-      <p class="description">Event description goes here.</p>
-      <button>View More</button>
-    </div>
-    <div class="event-card">
-      <img src="product-image.jpg" alt="Event_image">
-      <h3>Event Name</h3>
-      <p class="description">Event description goes here.</p>
-      <button>View More</button>
-    </div>
-    <div class="event-card">
-      <img src="product-image.jpg" alt="Event_image">
-      <h3>Event Name</h3>
-      <p class="description">Event description goes here.</p>
-      <button>View More</button>
-    </div>
   </div>
 </template>
 
-<style>
-  @import url('./../assets/EventsView.css');
-</style>
-
 <script>
-  export default {
-    name: 'EventsView',
-  };
+import axios from 'axios'
+import EventBox from '@/components/EventBox'
+
+export default {
+  name: 'EventsViews',
+  data() {
+    return {
+      allEvents: []
+    }
+  },
+  components: {
+    EventBox
+  },
+  mounted() {
+    this.getLatestEvents()
+  },
+  methods: {
+    async getLatestEvents() {
+      axios
+        .get('/api/v1/latest-events/')
+        .then(response => {
+          this.allEvents = response.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    }
+  }
+}
 </script>

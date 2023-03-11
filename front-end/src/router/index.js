@@ -2,6 +2,7 @@ import { createRouter, createWebHistory} from "vue-router";
 import HomeView from "../views/HomeView.vue"
 import RegisterForm from "../views/RegisterForm.vue"
 import EventsView from "../views/EventsViews.vue"
+import EventsDetail from "../views/EventsDetail.vue"
 
 
 const router = createRouter({
@@ -28,6 +29,11 @@ const router = createRouter({
             name: "EventsView",
             component: EventsView
         },
+        {
+            path: "/:category_slug/:events_slug/",
+            name: "EventsDetail",
+            component: EventsDetail
+        }
     ]
 })
 

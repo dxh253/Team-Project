@@ -1,7 +1,8 @@
-from django.urls import path
-from . import views
+from django.urls import path, include
+
+from events import views
 
 urlpatterns = [
-    path('', views.events, name='home'),
-    # other URL patterns go here
+    path('latest-events/', views.EventsList.as_view()),
+    path('events/<slug:category_slug>/<slug:events_slug>/', views.EventsDetail.as_view()),
 ]
