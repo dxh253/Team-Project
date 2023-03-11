@@ -1,0 +1,79 @@
+image: python:3.7.16
+
+variables:
+  CI_IMG: "\"${CI_REGISTRY_IMAGE}:latest\""
+  TP_URL: "${CI_PROJECT_NAMESPACE}.bham.team"
+  TP_CONTACT: "${GITLAB_USER_EMAIL}"
+cache:
+  key: '$CI_COMMIT_REF_NAME'
+stages:
+  - check
+  - test
+  - publish
+  - deploy
+
+prerequisities:
+  image: python:3.7.16
+  stage: check
+  only:
+    - production
+
+  script:
+    - pip install -r requirements.txt
+    - python team_project/manage.py check
+
+
+django-test:
+  image: python:3.7.16
+  stage: test
+  only:
+    - production
+
+  script:
+    - pip install -r requirements.txt
+    - python team_project/manage.py test
+
+publish-docker:
+  image: docker:stable
+  stage: publish
+  only:
+    - production
+  
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: 'tcp://docker:2375'
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+  script:
+    - echo "pushing ${CI_REGISTRY_IMAGE} ${CI_REGISTRY_USER} ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}"
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t ${CI_REGISTRY_IMAGE}:tpdjango team_project/
+    - docker push ${CI_REGISTRY_IMAGE}:tpdjango
+    - docker build -t ${CI_REGISTRY_IMAGE}:tpnginx nginx/
+    - docker push ${CI_REGISTRY_IMAGE}:tpnginx
+    - docker build -t ${CI_REGISTRY_IMAGE}:tpvuejs front-end/
+    - docker push ${CI_REGISTRY_IMAGE}:tpvuejs 
+
+#vue-compile:
+# docker 
+
+deploy-git:
+  image: alpine:latest
+  stage: deploy
+  only:
+    - production
+    
+  when: on_success
+  before_script:
+
+    - chmod og= $RSA
+    - apk update && apk add openssh-client
+    - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker compose -f ~/team-project-deployment/docker-compose.yml down || true"
+    - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "rm -rf ~/team-project-deployment || true"
+    - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+    - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker pull ${CI_REGISTRY_IMAGE}:tpdjango"
+
+  script:
+    - scp -o StrictHostKeyChecking=no -i $RSA -r . $VM_USER@$VM:~/team-project-deployment
+    - ssh -o StrictHostKeyChecking=no -i $RSA $VM_USER@$VM "docker compose -f ~/team-project-deployment/docker-compose.yml up -d"

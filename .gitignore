@@ -1,0 +1,4 @@
+/.idea
+
+# don't add any pychache files
+__pycache__/
