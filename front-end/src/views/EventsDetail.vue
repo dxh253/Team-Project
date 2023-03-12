@@ -24,6 +24,7 @@
 
 <script>
 import axios from 'axios'
+import { getAPI } from '@/plugins/axios';
 export default {
     name: 'EventsDetail',
     data() {
@@ -40,7 +41,7 @@ export default {
             const events_slug = this.$route.params.events_slug
 
             axios
-                .get(`/api/v1/events/${category_slug}/${events_slug}/`)
+                getAPI.get(`/events/${category_slug}/${events_slug}/`)
                 .then(response => {
                     this.events = response.data
                 })
