@@ -1,12 +1,10 @@
 
-import EventBox from '@/components/EventBox.vue';
-
 <template>
   <div class="home">
     <section class="hero is-medium is-dark mb-6">
           <div class="hero-body has-text-centered">
             <h1 class="title">
-               Looking For Something To Do?
+              Looking For Something To Do?
             </h1>
             <p class="subtitle">
                 Here are some upcoming events!
@@ -33,7 +31,7 @@ import EventBox from '@/components/EventBox.vue';
   </div>
 </template>
 
-<script>
+<!-- <script>
 import axios from 'axios'
 import EventBox from '@/components/EventBox'
 
@@ -63,4 +61,46 @@ export default {
     }
   }
 }
+</script> -->
+
+
+<script>
+  import { getAPI } from '@/plugins/axios';
+  import EventBox from '@/components/EventBox';
+  import {mapState} from 'vuex';
+
+  export default{
+    name: 'EventsViews',
+    data(){
+      return {
+        allEvents: []
+      }
+    },
+      components: {
+        EventBox
+      }, 
+      computed: mapState(['APIData']),
+      created(){
+        getAPI.get('/events/', {headers:{Authorization: `Bearer ${this.$store.state.accessToken}`}})
+        .then(response => {
+          console.log("Post API has received data")
+          this.allEvents = response.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      }
+      // created(){
+      //   getAPI.get('/events/')
+      //   .then(response => {
+      //     console.log("Post API has received data")
+      //     this.allEvents = response.data
+      //   })
+      //   .catch(error => {
+      //     console.log(error)
+      //   })
+      // },
+    }
+
+
 </script>

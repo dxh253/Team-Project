@@ -27,3 +27,4 @@ class CategorySerializer(serializers.ModelSerializer):
             "get_absolute_url",
             "events",
         )
+

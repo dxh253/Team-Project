@@ -1,32 +1,3 @@
-<!-- <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-</template>
-
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  //name: 'App',
-  //components: {
-  //  HelloWorld
-  }
-}
-</script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style> -->
-
-
-
 <script setup>
 import { RouterView } from "vue-router";
 </script>
@@ -52,7 +23,8 @@ import { RouterView } from "vue-router";
 
           <div class="navbar-item">
             <div class="buttons">
-              <router-link to="/log-in" class="button is-success">Log in</router-link>
+              <router-link to="/login" class="button is-success">Log in</router-link>
+              <router-link to="/" class="button is-success">Log out</router-link>
             </div>
           </div>
         </div>

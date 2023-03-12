@@ -4,7 +4,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .models import Events, Category
+from rest_framework import generics
 from .serializers import EventsSerializer, CategorySerializer
+from rest_framework.permissions import IsAuthenticated
 
 class EventsList(APIView):
     def get(self, request, format=None):
@@ -24,3 +26,12 @@ class EventsDetail(APIView):
         serializer = EventsSerializer(events)
         return Response(serializer.data)
         
+
+class EventsView(generics.RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = Events.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = EventsSerializer(queryset, many=True)
+        return Response(serializer.data)
