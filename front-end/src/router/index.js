@@ -1,24 +1,24 @@
 import { createRouter, createWebHistory} from "vue-router";
-import HomeView from "../views/HomeView.vue"
+// import {VueRouter} from "vue-router";
+import Login from "../views/Login.vue"
 import RegisterForm from "../views/RegisterForm.vue"
 import EventsView from "../views/EventsViews.vue"
 import EventsDetail from "../views/EventsDetail.vue"
-
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes: [
         {
-
             path: "/",
-            name: "HomeView",
-            component: HomeView
+            name: "Home",
+            component: Login
         },
-        // {
-        //     path: "help",
-        //     name: "HelpSection",
-        //     component: HelpSection
-        // },
+        {
+
+            path: "/login/",
+            name: "Login",
+            component: Login
+        },
         {
             path: "/register/",
             name: "RegisterForm",
@@ -27,7 +27,10 @@ const router = createRouter({
         {
             path: "/events/",
             name: "EventsView",
-            component: EventsView
+            component: EventsView,
+            meta: {
+                requiresLogin: true
+            }
         },
         {
             path: "/:category_slug/:events_slug/",
