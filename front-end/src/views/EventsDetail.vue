@@ -26,6 +26,7 @@
 <script>
 import axios from 'axios'
 import { getAPI } from '@/plugins/axios';
+
 export default {
     name: 'EventsDetail',
     data() {
@@ -43,6 +44,7 @@ export default {
 
             axios
                 getAPI.get(`/events/${category_slug}/${events_slug}/`)
+
                 .then(response => {
                     this.events = response.data
                 })
