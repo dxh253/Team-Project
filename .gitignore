@@ -2,3 +2,4 @@
 
 # don't add any pychache files
 __pycache__/
+/team_project/media
