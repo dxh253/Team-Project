@@ -46,6 +46,13 @@ export default {
                 username: this.username,
                 email: this.email,
                 password: this.password1,
+            },
+            {
+                headers:{
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
+                }
             })
                 .then(response => {
                     console.log(response.data);
