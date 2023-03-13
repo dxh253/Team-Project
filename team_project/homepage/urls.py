@@ -1,9 +1,9 @@
+from .views import register_user
+from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
-from . import views 
-from . views import homepage
+from . import views
 
 urlpatterns = [
-    path('homepage/', views.homepage, name='home'),
+    path('register/', views.register_user, name='register'),
     # path('homepage/', homepage, name='home'),
 ]
-
