@@ -36,6 +36,7 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost:8080",
     "http://localhost:8081",
     "https://team22-22.bham.team",
+    "https://team22-22.bham.team/register"
 ]
 
 default_headers = [
