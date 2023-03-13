@@ -15,6 +15,7 @@
                 <h2 class="subtitle">Information</h2>
 
                 <p><strong>Date: </strong>{{ events.date }}</p>
+                <p><strong>Venue: </strong>{{ events.venue }}</p>
 
             </div>
         </div>
