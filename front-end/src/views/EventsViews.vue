@@ -18,7 +18,9 @@
         <h2 class="title">Upcoming Events</h2>
       </div>
       <div class="column is-4 is-offset 8">
-        <button class="button is-primary is-light">Add Event</button>
+        <router-link to="/events_form">
+          <button class="button is-primary is-light">Add Event</button>
+        </router-link>
       </div>
   </div>
   <div class="columns is-multiline">

@@ -2,7 +2,7 @@
     <div class="column is-3">
         <div class="box">
             <figure class="image mb-4">
-                <img :src="events.get_thumbnail">
+                <img :src="events.get_thumbnail" class="event-thumbnail">
             </figure>
 
             <h3 class="is-size-4">{{ events.name }}</h3>
@@ -26,6 +26,12 @@ export default {
 .image {
     margin-top: -1.25rem;
     margin-left: -1.25rem;
-    margin-right: -1.25rem;                 
+    margin-right: -1.25rem;                
 }
+
+.event-thumbnail {
+    width: 150px;
+    height: 150px;
+}
+
 </style>

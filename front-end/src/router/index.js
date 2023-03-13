@@ -4,6 +4,7 @@ import Login from "../views/Login.vue"
 import RegisterForm from "../views/RegisterForm.vue"
 import EventsView from "../views/EventsViews.vue"
 import EventsDetail from "../views/EventsDetail.vue"
+import EventsForm from "../views/EventsForm.vue"
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -38,7 +39,18 @@ const router = createRouter({
         {
             path: "/:category_slug/:events_slug/",
             name: "EventsDetail",
-            component: EventsDetail
+            component: EventsDetail,
+            meta: {
+                requiresLogin: true
+            }
+        },
+        {
+            path: "/events_form/",
+            name: "EventsForm",
+            component: EventsForm,
+            meta: {
+                requiresLogin: true
+            }
         }
     ]
 })
