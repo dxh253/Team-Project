@@ -31,39 +31,6 @@
   </div>
 </template>
 
-<!-- <script>
-import axios from 'axios'
-import EventBox from '@/components/EventBox'
-
-export default {
-  name: 'EventsViews',
-  data() {
-    return {
-      allEvents: []
-    }
-  },
-  components: {
-    EventBox
-  },
-  mounted() {
-    this.getLatestEvents()
-  },
-  methods: {
-    async getLatestEvents() {
-      axios
-        .get('/api/v1/latest-events/')
-        .then(response => {
-          this.allEvents = response.data
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    }
-  }
-}
-</script> -->
-
-
 <script>
   import { getAPI } from '@/plugins/axios';
   import EventBox from '@/components/EventBox';
@@ -90,16 +57,6 @@ export default {
           console.log(error)
         })
       }
-      // created(){
-      //   getAPI.get('/events/')
-      //   .then(response => {
-      //     console.log("Post API has received data")
-      //     this.allEvents = response.data
-      //   })
-      //   .catch(error => {
-      //     console.log(error)
-      //   })
-      // },
     }
 
 
