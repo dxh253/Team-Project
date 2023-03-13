@@ -29,11 +29,13 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8081",
     "http://192.168.0.25:8081",
     "http://192.168.0.25:8080",
+    "https://team22-22.bham.team",
 ]
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:8080",
     "http://localhost:8081",
+    "https://team22-22.bham.team",
 ]
 
 default_headers = [
