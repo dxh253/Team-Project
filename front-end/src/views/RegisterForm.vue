@@ -68,6 +68,7 @@ export default {
     methods: {
         async registerUser() {
             try {
+                // const token = "Bearer " + localStorage.getItem("token");
                 const response = await axios.post(`${BASE_URL}register/`, {
                     
                     first_name: this.firstName,
