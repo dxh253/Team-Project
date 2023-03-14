@@ -43,13 +43,22 @@ CORS_ORIGIN_WHITELIST = [
     "http://0.0.0.0:8000/",
 ]
 
-default_headers = [
-    'accept',
-    'accept-encoding',
-]
-CORS_ALLOWED_HEADERS = list (default_headers) + [
-    'content-type',
-]
+# default_headers = [
+#     'accept',
+#     'accept-encoding',
+# ]
+# CORS_ALLOWED_HEADERS = list (default_headers) + [
+#     'content-type',
+# ]
+CORS_ALLOW_HEADERS = ['accept',
+                    'accept-encoding',
+                    'authorization',
+                    'content-type',
+                    'dnt',
+                    'origin',
+                    'user-agent',
+                    'x-csrftoken',
+                    'x-requested-with',]
 
 CORS_ALLOW_METHODS = [
     'DELETE',
