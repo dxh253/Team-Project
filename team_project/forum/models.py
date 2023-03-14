@@ -7,6 +7,12 @@ from django.core.files import File
 from io import BytesIO
 from PIL import Image
 
+class User(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
 class Category(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField()
@@ -31,6 +37,7 @@ class Forum(models.Model):
     upvotes = models.ManyToManyField(User, related_name='forum_upvotes', blank=True)
     downvotes = models.ManyToManyField(User, related_name='forum_downvotes', blank=True)
     thumbnail = models.ImageField(upload_to='uploads/', blank=True, null=True)
+    score = models.IntegerField(default=0)
 
     class Meta:
         ordering = ('-date_added',)
@@ -79,7 +86,42 @@ class Forum(models.Model):
                     self.slug = slugify(self.title)
 
                 self.slug = slugify(self.title)
-                
+
             super().save(*args, **kwargs)
+
+class Comment(models.Model):
+    forum = models.ForeignKey(Forum, related_name='comments', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    comment = models.TextField()
+    date_added = models.DateTimeField(auto_now_add=True)
+    upvotes = models.ManyToManyField(User, related_name='comment_upvotes', blank=True)
+    downvotes = models.ManyToManyField(User, related_name='comment_downvotes', blank=True)
+
+    class Meta:
+        ordering = ('-date_added',)
+
+    def __str__(self):
+        return self.comment
+
+    def get_absolute_url(self):
+        return f'/{self.forum.category.slug}/{self.forum.slug}/'
+
+class Reply(models.Model):
+    comment = models.ForeignKey(Comment, related_name='replies', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='replies')
+    reply = models.TextField()
+    date_added = models.DateTimeField(auto_now_add=True)
+    upvotes = models.ManyToManyField(User, related_name='reply_upvotes', blank=True)
+    downvotes = models.ManyToManyField(User, related_name='reply_downvotes', blank=True)
+
+    class Meta:
+        ordering = ('-date_added',)
+
+    def __str__(self):
+        return self.reply
+
+    def get_absolute_url(self):
+        return f'/{self.forum.category.slug}/{self.forum.slug}/'
+    
 
 
