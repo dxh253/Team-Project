@@ -19,6 +19,6 @@ def register_user(request):
         response = Response(data, status=status.HTTP_201_CREATED)
         response["Access-Control-Allow-Origin"] = "*"
         response["Access-Control-Allow-Methods"] = "POST"
-        response["Access-Control-Allow-Headers"] = "Content-Type"
+        response["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
         return Response(data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
