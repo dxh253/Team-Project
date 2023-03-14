@@ -18,9 +18,9 @@ const router = createRouter({
             path: "/login/",
             name: "Login",
             component: Login,
-            meta:{
-                requiresLogin: false
-            }
+            // meta:{
+            //     requiresLogin: false
+            // }
         },
         {
             path: "/register/",
@@ -31,9 +31,9 @@ const router = createRouter({
             path: "/events/",
             name: "EventsView",
             component: EventsView,
-            meta: {
-                requiresLogin: true
-            }
+            // meta: {
+            //     requiresLogin: true
+            // }
         },
         {
             path: "/:category_slug/:events_slug/",
