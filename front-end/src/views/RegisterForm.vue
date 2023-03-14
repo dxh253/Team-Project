@@ -38,31 +38,48 @@ export default {
             password2: '',
         };
     },
+    // methods: {
+    //     registerUser() {
+    //         axios.post('http://127.0.0.1:8000/api/v1/register/', {
+    //             withCredentials: true,
+    //             first_name: this.firstName,
+    //             last_name: this.surname,
+    //             username: this.username,
+    //             email: this.email,
+    //             password: this.password1,
+    //         },
+    //         {
+    //             headers:{
+    //                 'Access-Control-Allow-Origin': '*',
+    //                 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    //                 'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
+    //             }
+    //         })
+    //             .then(response => {
+    //                 console.log(response.data);
+    //                 this.$router.push({name: 'EventsView'});
+    //             })
+    //             .catch(error => {
+    //                 console.log(error.response.data);
+    //                 this.incorrectAuth = true;
+    //             });
+    //     },
+    // },
     methods: {
-        registerUser() {
-            axios.post('http://127.0.0.1:8000/api/v1/register/', {
-                withCredentials: true,
-                first_name: this.firstName,
-                last_name: this.surname,
-                username: this.username,
-                email: this.email,
-                password: this.password1,
-            },
-            {
-                headers:{
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
-                }
-            })
-                .then(response => {
-                    console.log(response.data);
-                    this.$router.push({name: 'EventsView'});
-                })
-                .catch(error => {
-                    console.log(error.response.data);
-                    this.incorrectAuth = true;
+        async registerUser() {
+            try {
+                const response = await axios.post(`${BASE_URL}/register/`, {
+                    first_name: this.firstName,
+                    surname: this.surname,
+                    username: this.username,
+                    email: this.email,
+                    password1: this.password1,
+                    password2: this.password2,
                 });
+                console.log(response.data);
+            } catch (error) {
+                console.error(error);
+            }
         },
     },
 };
