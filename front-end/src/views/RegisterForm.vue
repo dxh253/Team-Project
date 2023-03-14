@@ -4,8 +4,8 @@
         <form @submit.prevent="registerUser" method="post">
             <label for="first-name">First name:</label>
             <input type="text" name="first_name" id="first-name" v-model="firstName" required>
-            <label for="surname">Surname:</label>
-            <input type="text" name="surname" id="surname" v-model="surname" required>
+            <label for="last_name">Last Name:</label>
+            <input type="text" name="last_name" id="last_name" v-model="last_name" required>
             <label for="username">Username:</label>
             <input type="text" name="username" id="username" v-model="username" required>
             <label for="email">Email:</label>
@@ -32,7 +32,7 @@ export default {
     data() {
         return {
             firstName: 'asdf',
-            surname: 'asdf',
+            last_name: 'asdf',
             username: 'asdf',
             email: 'asdf@asdf.com',
             password: 'asdf',
@@ -44,7 +44,7 @@ export default {
     //         axios.post('http://127.0.0.1:8000/api/v1/register/', {
     //             withCredentials: true,
     //             first_name: this.firstName,
-    //             last_name: this.surname,
+    //             last_name: this.last_name,
     //             username: this.username,
     //             email: this.email,
     //             password: this.password1,
@@ -73,7 +73,7 @@ export default {
                 const response = await axios.post(`${BASE_URL}register/`, {
                     
                     first_name: this.firstName,
-                    surname: this.surname,
+                    last_name: this.last_name,
                     username: this.username,
                     email: this.email,
                     password: this.password,
