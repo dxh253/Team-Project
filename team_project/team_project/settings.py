@@ -30,7 +30,6 @@ CORS_ALLOWED_ORIGINS = [
     "http://192.168.0.25:8081",
     "http://192.168.0.25:8080",
     "https://team22-22.bham.team",
-    "https://team22-22.bham.team/register",
 ]
 
 CORS_ORIGIN_WHITELIST = [
