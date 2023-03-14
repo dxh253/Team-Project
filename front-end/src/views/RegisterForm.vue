@@ -25,7 +25,7 @@
 
 <script>
 import axios from 'axios';
-const BASE_URL = 'https://127.0.0.1/api/v1/';
+const BASE_URL = 'https://team22-22.bham.team/api/v1/';
 export default {
     name: 'RegisterForm',
     data() {
