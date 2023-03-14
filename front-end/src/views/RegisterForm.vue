@@ -69,6 +69,7 @@ export default {
         async registerUser() {
             try {
                 const response = await axios.post(`${BASE_URL}/register/`, {
+                    
                     first_name: this.firstName,
                     surname: this.surname,
                     username: this.username,
