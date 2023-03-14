@@ -41,10 +41,11 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:8080",
+    "http://localhost:8080/register",
     "http://localhost:8081",
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://team22-22.bham.team']
+CSRF_TRUSTED_ORIGINS = ['https://team22-22.bham.team', 'http://localhost:8080/register', 'http://localhost:8081', 'http://localhost:8000']
 
 default_headers = [
     'accept',
@@ -52,6 +53,12 @@ default_headers = [
 ]
 CORS_ALLOWED_HEADERS = list (default_headers) + [
     'content-type',
+    'Accept',
+    'Accept-Language',
+    'Authorization',
+    'Content-Type',
+    'Origin',
+    'X-Requested-With',
 ]
 
 

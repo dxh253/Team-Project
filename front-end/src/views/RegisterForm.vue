@@ -26,6 +26,7 @@
 <script>
 import axios from 'axios';
 const BASE_URL = 'https://team22-22.bham.team/api/v1/';
+// const BASE_URL = process.env.VUE_APP_BASE_URL;
 export default {
     name: 'RegisterForm',
     data() {
@@ -82,7 +83,7 @@ export default {
                     headers:{
                         'Access-Control-Allow-Origin': '*',
                         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-                        'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
+                        'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token, Authorization', 
                     }
                 });
                 console.log(response.data);

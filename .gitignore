@@ -1,4 +1,5 @@
 /.idea
-
+/front-end/.env.development
+/front-end/.env.production
 # don't add any pychache files
 __pycache__/
