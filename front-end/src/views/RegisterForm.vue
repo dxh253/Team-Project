@@ -25,7 +25,7 @@
 
 <script>
 import axios from 'axios';
-
+const BASE_URL = 'https://127.0.0.1/api/v1/register/';
 export default {
     name: 'RegisterForm',
     data() {
