@@ -25,7 +25,8 @@ def register_user(request):
         response["Access-Control-Allow-Origin"] = "*"
         response["Access-Control-Allow-Methods"] = "POST"
         response["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-        return Response(data, status=status.HTTP_201_CREATED)
+        # return Response(data, status=status.HTTP_201_CREATED)
+        return response
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # @csrf_exempt
