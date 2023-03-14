@@ -77,6 +77,13 @@ export default {
                     email: this.email,
                     password1: this.password1,
                     password2: this.password2,
+                },
+                {
+                    headers:{
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                        'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
+                    }
                 });
                 console.log(response.data);
             } catch (error) {

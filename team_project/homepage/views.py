@@ -10,7 +10,7 @@ from .serializers import UserSerializer
 @csrf_exempt
 def register_user(request):
     serializer = UserSerializer(data=request.data)
-    print("after serializer")
+    print(request.data)
     if serializer.is_valid():
         print("serializer is valid")
         user = serializer.save()
