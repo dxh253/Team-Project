@@ -5,6 +5,7 @@ import RegisterForm from "../views/RegisterForm.vue"
 import EventsView from "../views/EventsViews.vue"
 import EventsDetail from "../views/EventsDetail.vue"
 import EventsForm from "../views/EventsForm.vue"
+import PrivacyPolicy from "../views/PrivacyPolicy.vue"
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -50,6 +51,14 @@ const router = createRouter({
             component: EventsForm,
             meta: {
                 requiresLogin: true
+            }
+        },
+        {
+            path: "/privacy_policy/",
+            name: "PrivacyPolicy",
+            component: PrivacyPolicy,
+            meta: {
+                requiresLogin: false
             }
         }
     ]

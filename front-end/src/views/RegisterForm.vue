@@ -14,6 +14,14 @@
             <input type="password" name="password1" id="password1" v-model="password1" required>
             <label for="password2">Confirm Password:</label>
             <input type="password" name="password2" id="password2" v-model="password2" required>
+            <div class="field">
+                <div class="control">
+                <label class="checkbox">
+                    <input type="checkbox" name="privacy_policy" v-model="privacyPolicy" required>
+                    I agree to the <a href="/privacy_policy">privacy policy</a>.
+                </label>
+                </div>
+            </div>
             <button id="register-button" type="submit">Register</button>
         </form>
     </div>
