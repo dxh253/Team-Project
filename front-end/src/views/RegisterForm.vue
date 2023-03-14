@@ -10,10 +10,10 @@
             <input type="text" name="username" id="username" v-model="username" required>
             <label for="email">Email:</label>
             <input type="email" name="email" id="email" v-model="email" required>
-            <label for="password1">Password:</label>
-            <input type="password" name="password1" id="password1" v-model="password1" required>
-            <label for="password2">Confirm Password:</label>
-            <input type="password" name="password2" id="password2" v-model="password2" required>
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" v-model="password" required>
+            <!-- <label for="password2">Confirm Password:</label>
+            <input type="password" name="password2" id="password2" v-model="password2" required> -->
             <button id="register-button" type="submit">Register</button>
         </form>
     </div>
@@ -35,8 +35,8 @@ export default {
             surname: 'asdf',
             username: 'asdf',
             email: 'asdf@asdf.com',
-            password1: 'asdf',
-            password2: 'asdf',
+            password: 'asdf',
+            // password2: 'asdf',
         };
     },
     // methods: {
@@ -76,8 +76,8 @@ export default {
                     surname: this.surname,
                     username: this.username,
                     email: this.email,
-                    password1: this.password1,
-                    password2: this.password2,
+                    password: this.password,
+                    // password2: this.password2,
                 },
                 {
                     headers:{
