@@ -12,8 +12,6 @@
             <input type="email" name="email" id="email" v-model="email" required>
             <label for="password">Password:</label>
             <input type="password" name="password" id="password" v-model="password" required>
-            <!-- <label for="password2">Confirm Password:</label>
-            <input type="password" name="password2" id="password2" v-model="password2" required> -->
             <button id="register-button" type="submit">Register</button>
         </form>
     </div>
@@ -36,40 +34,11 @@ export default {
             username: 'asdf',
             email: 'asdf@asdf.com',
             password: 'asdf',
-            // password2: 'asdf',
         };
     },
-    // methods: {
-    //     registerUser() {
-    //         axios.post('http://127.0.0.1:8000/api/v1/register/', {
-    //             withCredentials: true,
-    //             first_name: this.firstName,
-    //             last_name: this.last_name,
-    //             username: this.username,
-    //             email: this.email,
-    //             password: this.password1,
-    //         },
-    //         {
-    //             headers:{
-    //                 'Access-Control-Allow-Origin': '*',
-    //                 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    //                 'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
-    //             }
-    //         })
-    //             .then(response => {
-    //                 console.log(response.data);
-    //                 this.$router.push({name: 'EventsView'});
-    //             })
-    //             .catch(error => {
-    //                 console.log(error.response.data);
-    //                 this.incorrectAuth = true;
-    //             });
-    //     },
-    // },
     methods: {
         async registerUser() {
             try {
-                // const token = "Bearer " + localStorage.getItem("token");
                 const response = await axios.post(`${BASE_URL}register/`, {
                     
                     first_name: this.firstName,
@@ -77,7 +46,6 @@ export default {
                     username: this.username,
                     email: this.email,
                     password: this.password,
-                    // password2: this.password2,
                 },
                 {
                     headers:{
