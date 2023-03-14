@@ -6,8 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from .serializers import UserSerializer
 
-# @api_view(['POST'])
-@csrf_exempt
+# @csrf_exempt
+@api_view(['POST'])
 def register_user(request):
     print(request.data)
     serializer = UserSerializer(data=request.data)
