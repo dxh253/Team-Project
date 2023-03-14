@@ -41,6 +41,7 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost:8080",
     "http://localhost:8081",
     "https://team22-22.bham.team/register",
+    "https://team22-22.bham.team/events",
     "http://0.0.0.0:8000/",
 ]
 
