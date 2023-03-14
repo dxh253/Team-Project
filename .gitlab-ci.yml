@@ -16,7 +16,7 @@ prerequisities:
   image: python:3.10
   stage: check
   only:
-    - master
+    - registration
 
   script:
     - pip install -r requirements.txt
@@ -27,7 +27,7 @@ django-test:
   image: python:3.10
   stage: test
   only:
-    - master
+    - registration
 
   script:
     - pip install -r requirements.txt
@@ -37,7 +37,7 @@ publish-docker:
   image: docker:stable
   stage: publish
   only:
-    - master
+    - registration
   
   services:
     - docker:dind
@@ -62,7 +62,7 @@ deploy-git:
   image: alpine:latest
   stage: deploy
   only:
-    - master
+    - registration
     
   when: on_success
   before_script:
