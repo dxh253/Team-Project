@@ -25,7 +25,7 @@
 
 <script>
 import axios from 'axios';
-const BASE_URL = 'https://127.0.0.1/api/v1/register/';
+const BASE_URL = 'https://127.0.0.1/api/v1/';
 export default {
     name: 'RegisterForm',
     data() {
@@ -68,7 +68,7 @@ export default {
     methods: {
         async registerUser() {
             try {
-                const response = await axios.post(`${BASE_URL}/register/`, {
+                const response = await axios.post(`${BASE_URL}register/`, {
                     
                     first_name: this.firstName,
                     surname: this.surname,
