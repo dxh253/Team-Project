@@ -34,6 +34,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ORIGIN_WHITELIST = [
+    "http://127.0.0.1:8080",
     "https://team22-22.bham.team",
     "http://192.168.0.25:8080",
     "http://192.168.0.25:8081",
