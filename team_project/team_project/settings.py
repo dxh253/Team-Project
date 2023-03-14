@@ -30,13 +30,16 @@ CORS_ALLOWED_ORIGINS = [
     "http://192.168.0.25:8081",
     "http://192.168.0.25:8080",
     "https://team22-22.bham.team",
+    "https://team22-22.bham.team/register",
 ]
 
 CORS_ORIGIN_WHITELIST = [
+    "http://192.168.0.25:8080",
+    "http://192.168.0.25:8081",
     "http://localhost:8080",
     "http://localhost:8081",
     "https://team22-22.bham.team",
-    "https://team22-22.bham.team/register"
+    "https://team22-22.bham.team/register",
 ]
 
 default_headers = [
@@ -45,6 +48,15 @@ default_headers = [
 ]
 CORS_ALLOWED_HEADERS = list (default_headers) + [
     'content-type',
+]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
 ]
 
 
@@ -175,3 +187,4 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
     '/var/www/static/',
 ]
+

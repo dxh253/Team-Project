@@ -41,6 +41,7 @@ export default {
     methods: {
         registerUser() {
             axios.post('http://127.0.0.1:8000/api/v1/register/', {
+                withCredentials: true,
                 first_name: this.firstName,
                 last_name: this.surname,
                 username: this.username,
