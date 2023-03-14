@@ -30,12 +30,12 @@ export default {
     name: 'RegisterForm',
     data() {
         return {
-            firstName: '',
-            surname: '',
-            username: '',
-            email: '',
-            password1: '',
-            password2: '',
+            firstName: 'asdf',
+            surname: 'asdf',
+            username: 'asdf',
+            email: 'asdf@asdf.com',
+            password1: 'asdf',
+            password2: 'asdf',
         };
     },
     // methods: {
