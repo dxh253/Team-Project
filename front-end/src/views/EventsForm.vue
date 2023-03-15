@@ -50,7 +50,6 @@
   <script>
   import { getAPI } from '@/plugins/axios'
   
-  
   export default {
     data() {
       return {
@@ -67,36 +66,44 @@
     },
     methods: {
       handleImageUpload(event) {
-        this.eventData.get_image = event.target.files[0]
+        if (event.target.files.length > 0) {
+          this.eventData.get_image = event.target.files[0]
+        }
       },
       handleThumbnailUpload(event) {
-      this.eventData.get_thumbnail = event.target.files[0]
+        if (event.target.files.length > 0) {
+          this.eventData.get_thumbnail = event.target.files[0]
+        }
       },
       submitForm() {
-        const formData = new FormData();
-        formData.append('id', this.eventData.id);
-        formData.append('name', this.eventData.name);
-        formData.append('description', this.eventData.description);
-        formData.append('venue', this.eventData.venue);
-        formData.append('date', this.eventData.date);
-        formData.append('get_image', this.eventData.get_image);
-        formData.append('get_thumbnail', this.eventData.get_thumbnail);
-        getAPI.post('api/v1/latest-events/', formData,{
+        const formData = new FormData()
+        formData.append('id', this.eventData.id)
+        formData.append('name', this.eventData.name)
+        formData.append('description', this.eventData.description)
+        formData.append('venue', this.eventData.venue)
+        formData.append('date', this.eventData.date)
+        if (this.eventData.get_image) {
+          formData.append('get_image', this.eventData.get_image)
+        }
+        if (this.eventData.get_thumbnail) {
+          formData.append('get_thumbnail', this.eventData.get_thumbnail)
+        }
+        getAPI
+          .post('api/v1/latest-events/', formData, {
             headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-        .then(response => {
-            console.log(response.data);
-            window.history.back();
-        })
-        .catch(error => {
-            console.log(error);
-            alert('Something went wrong. Please try again.');
-            
-
-        });
-      }
-    }
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((response) => {
+            console.log(response.data)
+            window.history.back()
+          })
+          .catch((error) => {
+            console.log(error)
+            alert('Something went wrong. Please try again.')
+          })
+      },
+    },
   }
   </script>
+  
