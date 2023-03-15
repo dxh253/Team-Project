@@ -50,7 +50,7 @@
       }, 
       computed: mapState(['APIData']),
       created(){
-        getAPI.get('/events/', {headers:{Authorization: `Bearer ${this.$store.state.accessToken}`}})
+        getAPI.get('/events/')
         .then(response => {
           console.log("Post API has received data")
           this.allEvents = response.data

@@ -55,7 +55,6 @@ class EventsDetail(APIView):
         
 
 class EventsView(generics.RetrieveAPIView):
-    permission_classes = (IsAuthenticated,)
     queryset = Events.objects.all()
 
     def get(self, request, *args, **kwargs):

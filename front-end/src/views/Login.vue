@@ -11,11 +11,13 @@
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" v-model = "password" required>
             </div>
-            <button id = "submit-button" type="submit" to = "/login">Login</button>
+            <!-- <button id = "submit-button" type="submit" to = "/login">Login</button> -->
+            <a id = "submit-button" href="/events" class="button">Login</a>
             <label for="dontHaveAccount">Don't have an account?</label>
-            <RouterLink to="/register">
+            <!-- <RouterLink to="/register">
                 <button id = "register-button" type="submit" formaction="register">Register</button>
-            </RouterLink>
+            </RouterLink> -->
+            <a id = "submit-button" href="/register" class="button">Register</a>
 
         </form>
     </div>

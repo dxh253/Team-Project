@@ -48,7 +48,8 @@
   
   
   <script>
-  import axios from 'axios'
+  import { getAPI } from '@/plugins/axios'
+  
   
   export default {
     data() {
@@ -80,11 +81,7 @@
         formData.append('date', this.eventData.date);
         formData.append('get_image', this.eventData.get_image);
         formData.append('get_thumbnail', this.eventData.get_thumbnail);
-        axios.post('http://localhost:8000/latest-events/', formData, {
-            headers: {
-            'Content-Type': 'multipart/form-data'
-            }
-        })
+        getAPI.post('/latest-events/', formData)
         .then(response => {
             console.log(response.data);
             window.history.back();
