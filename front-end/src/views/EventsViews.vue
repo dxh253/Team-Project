@@ -123,10 +123,10 @@
 <!-- </script> -->
 
 <script>
-// import { getAPI } from '@/plugins/axios';
+import { getAPI } from '@/plugins/axios';
 import EventBox from '@/components/EventBox';
-import axios from 'axios';
-const BASE_URL = 'https://team22-22.bham.team/';
+// import axios from 'axios';
+// const BASE_URL = 'https://team22-22.bham.team/';
 
 export default {
     name: 'EventsView',
