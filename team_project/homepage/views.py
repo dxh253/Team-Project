@@ -63,7 +63,6 @@ def register_user(request):
             data = JSONParser().parse(request)
         else:
             data = request.POST
-        print("Input data:", data)
         serializer = UserSerializer(data=data)
         if serializer.is_valid():
             user = serializer.save()
@@ -73,11 +72,13 @@ def register_user(request):
                 'access': str(refresh.access_token),
             }
             response = Response(data, status=status.HTTP_201_CREATED)
-            response["Access-Control-Allow-Origin"] = "*"
-            response["Access-Control-Allow-Methods"] = "POST"
-            response["Access-Control-Allow-Headers"] = "Content-Type, Authorization, X-Requested-With"
-            return response
         else:
-            print("Serializer errors:", serializer.errors)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            response = Response(serializer.errors,
+                                status=status.HTTP_400_BAD_REQUEST)
+
+        response["Access-Control-Allow-Origin"] = "*"
+        response["Access-Control-Allow-Methods"] = "POST"
+        response["Access-Control-Allow-Headers"] = "Content-Type, Authorization, X-Requested-With"
+        return response
+
     return Response({'message': 'Method not allowed'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
