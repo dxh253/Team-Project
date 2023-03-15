@@ -55,21 +55,37 @@ export default {
             incorrectAuth: false,
         }
     },
-    methods:{
-        login(){
-            this.$store.dispatch('userLogin', {
-                username: this.username,
-                password: this.password
-            })
-            .then(() => {
-                this.$router.push({name: 'EventsView'})
-            })
-            .catch((err) => {
-                console.log(err)
-                this.incorrectAuth = true;
-            })
-        }
-    }
+    methods: {
+        login() {
+            axios
+                .post(
+                    `${BASE_URL}api-token/`,
+                    {
+                        username: this.username,
+                        password: this.password,
+                    },
+                    {
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                            'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token, Authorization',
+                        },
+                    }
+                )
+                .then((response) => {
+                    console.log(response.data);
+                    this.$store.dispatch('userLogin', {
+                        token: response.data.access,
+                    });
+                    this.$router.push({ name: 'EventsView' });
+                })
+                .catch((error) => {
+                    console.error(error);
+                    this.incorrectAuth = true;
+                });
+        },
+    },
+
 }   
 </script>
 
