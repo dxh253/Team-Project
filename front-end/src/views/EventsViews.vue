@@ -139,10 +139,19 @@ export default {
   created() {
     // First, get the token
     getAPI
-      .post('/api-token/', {
-        username: 'abc',
-        password: 'abc',
-      })
+      .post(
+        '/api-token/', {
+        username: this.username,
+        password: this.password,
+      },
+      {
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token, Authorization',
+          },
+      },
+      )
       .then((response) => {
         // Use the token to make a request to get the events
         const token = response.data.token;
