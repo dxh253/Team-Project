@@ -37,9 +37,9 @@ class EventsSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         if instance.image:
-            representation['get_image'] = f"{settings.BASE_URL}{instance.image.url}"
+            representation['get_image'] = f"{settings.SERVER_URL}{instance.image.url}"
         if instance.thumbnail:
-            representation['get_thumbnail'] = f"{settings.BASE_URL}{instance.thumbnail.url}"
+            representation['get_thumbnail'] = f"{settings.SERVER_URL}{instance.thumbnail.url}"
         return representation
 
         

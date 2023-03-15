@@ -168,6 +168,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 BASE_URL = 'http://localhost:8000'
+SERVER_URL = 'https://team22-22.bham.team'
 
 
 STATICFILES_DIRS = [
