@@ -137,14 +137,24 @@ export default {
     EventBox,
   },
   created() {
+    // First, get the token
     getAPI
       .post('/api-token/', {
         username: 'abc',
         password: 'abc',
       })
       .then((response) => {
-        console.log('Token API has received data');
+        // Use the token to make a request to get the events
+        const token = response.data.token;
+        return getAPI.get('/api/events/', {
+          headers: { Authorization: `Token ${token}` },
+        });
+      })
+      .then((response) => {
+        // Update the allEvents data property with the events data
+        console.log('Events API has received data');
         console.log(response);
+        this.allEvents = response.data;
       })
       .catch((error) => {
         console.log(error);
