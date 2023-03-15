@@ -81,7 +81,11 @@
         formData.append('date', this.eventData.date);
         formData.append('get_image', this.eventData.get_image);
         formData.append('get_thumbnail', this.eventData.get_thumbnail);
-        getAPI.post('api/v1/latest-events/', formData)
+        getAPI.post('api/v1/latest-events/', formData,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
         .then(response => {
             console.log(response.data);
             window.history.back();
