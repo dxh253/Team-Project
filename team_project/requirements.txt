@@ -1,7 +1,7 @@
 django==4.1.7
 psycopg2-binary
 djoser
-django-rest_framework
+django-rest-framework
 django-cors-headers
 pillow
 pyjwt

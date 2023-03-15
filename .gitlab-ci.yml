@@ -1,4 +1,4 @@
-image: python:3.7.16
+image: python:3.10
 
 variables:
   CI_IMG: "\"${CI_REGISTRY_IMAGE}:latest\""
@@ -13,22 +13,21 @@ stages:
   - deploy
 
 prerequisities:
-  image: python:3.7.16
+  image: python:3.10
   stage: check
   only:
-    - production
+    - master
 
   script:
-    - /usr/local/bin/python -m pip install --upgrade pip
     - pip install -r requirements.txt
     - python team_project/manage.py check
 
 
 django-test:
-  image: python:3.7.16
+  image: python:3.10
   stage: test
   only:
-    - production
+    - master
 
   script:
     - pip install -r requirements.txt
@@ -38,7 +37,7 @@ publish-docker:
   image: docker:stable
   stage: publish
   only:
-    - production
+    - master
   
   services:
     - docker:dind
@@ -63,7 +62,7 @@ deploy-git:
   image: alpine:latest
   stage: deploy
   only:
-    - production
+    - master
     
   when: on_success
   before_script:
