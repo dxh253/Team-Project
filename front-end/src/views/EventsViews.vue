@@ -36,6 +36,7 @@
   import EventBox from '@/components/EventBox';
   import {mapState} from 'vuex';
 
+
   export default{
     name: 'EventsViews',
     data(){
