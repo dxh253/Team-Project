@@ -22,46 +22,26 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-    ]
 }
-
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
     "http://localhost:8081",
     "http://192.168.0.25:8081",
     "http://192.168.0.25:8080",
-    "http://127.0.0.1:8000",
-    "https://team22-22.bham.team",
 ]
-
-
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:8080",
-    "http://localhost:8080/register",
     "http://localhost:8081",
 ]
-
-CSRF_TRUSTED_ORIGINS = ['https://team22-22.bham.team', 'http://localhost:8080/register', 'http://localhost:8081', 'http://localhost:8000']
 
 default_headers = [
     'accept',
     'accept-encoding',
 ]
-CORS_ALLOWED_HEADERS = list (default_headers) + [
+CORS_ALLOWED_HEADERS = list(default_headers) + [
     'content-type',
-    'Accept',
-    'Accept-Language',
-    'Authorization',
-    'Content-Type',
-    'Origin',
-    'X-Requested-With',
 ]
 
 
@@ -172,7 +152,6 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
@@ -187,6 +166,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+BASE_URL = 'http://localhost:8000'
+
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
