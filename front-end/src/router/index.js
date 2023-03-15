@@ -33,25 +33,19 @@ const router = createRouter({
             path: "/events/",
             name: "EventsView",
             component: EventsView,
-            meta: {
-                requiresLogin: true
-            }
+
         },
         {
             path: "/:category_slug/:events_slug/",
             name: "EventsDetail",
             component: EventsDetail,
-            meta: {
-                requiresLogin: true
-            }
+
         },
         {
             path: "/events_form/",
             name: "EventsForm",
             component: EventsForm,
-            meta: {
-                requiresLogin: true
-            }
+
         },
         {
             path: "/privacy_policy/",
