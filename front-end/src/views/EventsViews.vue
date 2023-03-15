@@ -50,7 +50,7 @@
       }, 
       computed: mapState(['APIData']),
       created(){
-        getAPI.get('/events/')
+        getAPI.get('api/v1/events/')
         .then(response => {
           console.log("Post API has received data")
           this.allEvents = response.data
