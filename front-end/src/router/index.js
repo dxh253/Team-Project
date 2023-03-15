@@ -20,9 +20,7 @@ const router = createRouter({
             path: "/login/",
             name: "Login",
             component: Login,
-            meta:{
-                requiresLogin: false
-            }
+
         },
         {
             path: "/register/",
@@ -51,9 +49,7 @@ const router = createRouter({
             path: "/privacy_policy/",
             name: "PrivacyPolicy",
             component: PrivacyPolicy,
-            meta: {
-                requiresLogin: false
-            }
+
         }
     ]
 })
