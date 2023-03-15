@@ -138,19 +138,19 @@ export default {
     components: {
         EventBox
     },
-    created(){
-        axios.get(`${BASE_URL}events/`, {
-            headers: {
-                'Authorization': `Bearer ${this.$store.state.accessToken}`
-            }
-        })
-        .then(response => {
-            console.log("API has received data")
-            this.allEvents = response.data
-        })
-        .catch(error => {
-            console.log(error)
-        })
-    }
+    created() {
+    getAPI
+      .post('/api-token/', {
+        username: 'abc',
+        password: 'abc',
+      })
+      .then((response) => {
+        console.log('Token API has received data');
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
 }   
 </script>
