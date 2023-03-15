@@ -28,13 +28,13 @@
         <div class="field">
           <label class="label" for="image">Image:</label>
           <div class="control">
-            <input class="input" type="file" accept="image/*" id="image" @change="handleImageUpload" required>
+            <input class="input" type="file" accept="image/*" id="image">
           </div>
         </div>
         <div class="field">
             <label class="label" for="thumbnail">Thumbnail:</label>
             <div class="control">
-            <input class="input" type="file" accept="image/*" id="thumbnail" @change="handleThumbnailUpload" required>
+            <input class="input" type="file" accept="image/*" id="thumbnail">
             </div>  
         </div>
         <div class="field">
