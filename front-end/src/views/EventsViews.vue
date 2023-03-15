@@ -90,34 +90,65 @@
   </div>
 </template>
 
+<!-- <script> -->
+// import { getAPI } from '@/plugins/axios';
+// import EventBox from '@/components/EventBox';
+// import { mapState } from 'vuex';
+
+// export default {
+//   name: 'EventsViews',
+//   data() {
+//     return {
+//       allEvents: [],
+//     };
+//   },
+//   components: {
+//     EventBox,
+//   },
+//   computed: mapState(['APIData']),
+//   created() {
+//     getAPI
+//       .get('/events/', {
+//         headers: { Authorization: `Bearer ${this.$store.state.accessToken}` },
+//       })
+//       .then((response) => {
+//         console.log('Post API has received data');
+//         this.allEvents = response.data;
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//       });
+//   },
+// };
+<!-- </script> -->
+
 <script>
-import { getAPI } from '@/plugins/axios';
-import EventBox from '@/components/EventBox';
-import { mapState } from 'vuex';
+import axios from 'axios';
+const BASE_URL = 'https://team22-22.bham.team/';
 
 export default {
-  name: 'EventsViews',
-  data() {
-    return {
-      allEvents: [],
-    };
-  },
-  components: {
-    EventBox,
-  },
-  computed: mapState(['APIData']),
-  created() {
-    getAPI
-      .get('/events/', {
-        headers: { Authorization: `Bearer ${this.$store.state.accessToken}` },
-      })
-      .then((response) => {
-        console.log('Post API has received data');
-        this.allEvents = response.data;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  },
-};
+    name: 'EventsView',
+    data(){
+        return{
+            allEvents: []
+        }
+    },
+    components: {
+        EventBox
+    },
+    created(){
+        axios.get(`${BASE_URL}events/`, {
+            headers: {
+                'Authorization': `Bearer ${this.$store.state.accessToken}`
+            }
+        })
+        .then(response => {
+            console.log("API has received data")
+            this.allEvents = response.data
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+}   
 </script>
