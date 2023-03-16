@@ -26,7 +26,7 @@ class Category(models.Model):
     def get_absolute_url(self):
         return f'/{self.slug}/'
     
-class Forum(models.Model):
+class Thread(models.Model):
     category = models.ForeignKey(Category, related_name='forums', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, editable=False)
@@ -76,52 +76,33 @@ class Forum(models.Model):
             thumb_name = f'{self.image.name.split(".")[0]}_thumb.jpg'
             self.thumbnail.save(thumb_name, File(thumb_io), save=False)
         
-        def save(self, *args, **kwargs):
-            if not self.slug:
-                last_event = Forum.objects.filter(category=self.category).last()
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            last_event = Thread.objects.filter(category=self.category).last()
 
-                if last_event:
-                    self.slug = f'{slugify(self.title)}-{last_event.pk + 1}'
-                else:
-                    self.slug = slugify(self.title)
-
+            if last_event:
+                self.slug = f'{slugify(self.title)}-{last_event.pk + 1}'
+            else:
                 self.slug = slugify(self.title)
 
-            super().save(*args, **kwargs)
+            self.slug = slugify(self.title)
 
-class Comment(models.Model):
-    forum = models.ForeignKey(Forum, related_name='comments', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
-    comment = models.TextField()
-    date_added = models.DateTimeField(auto_now_add=True)
-    upvotes = models.ManyToManyField(User, related_name='comment_upvotes', blank=True)
-    downvotes = models.ManyToManyField(User, related_name='comment_downvotes', blank=True)
+        super().save(*args, **kwargs)
 
-    class Meta:
-        ordering = ('-date_added',)
 
-    def __str__(self):
-        return self.comment
+class Post(models.Model):
+    thread = models.ForeignKey(Thread, related_name='posts', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
+    content = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    upvotes = models.ManyToManyField(User, related_name='post_upvotes', blank=True)
+    downvotes = models.ManyToManyField(User, related_name='post_downvotes', blank=True)
 
-    def get_absolute_url(self):
-        return f'/{self.forum.category.slug}/{self.forum.slug}/'
-
-class Reply(models.Model):
-    comment = models.ForeignKey(Comment, related_name='replies', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='replies')
-    reply = models.TextField()
-    date_added = models.DateTimeField(auto_now_add=True)
-    upvotes = models.ManyToManyField(User, related_name='reply_upvotes', blank=True)
-    downvotes = models.ManyToManyField(User, related_name='reply_downvotes', blank=True)
-
-    class Meta:
-        ordering = ('-date_added',)
+    class ordering:
+        ordering = ('-created',)
 
     def __str__(self):
-        return self.reply
-
-    def get_absolute_url(self):
-        return f'/{self.forum.category.slug}/{self.forum.slug}/'
+        return self.content
     
-
-
+    def get_absolute_url(self):
+        return f'/{self.thread.forum.category.slug}/{self.thread.forum.slug}/{self.thread.slug}/'
