@@ -25,7 +25,7 @@ class Thread(models.Model):
     score = models.IntegerField(default=0)
 
     class Meta:
-        ordering = ('-date_added',)
+        ordering = ('-created_at',)
     
     def __str__(self):
         return self.title
@@ -68,7 +68,7 @@ class Thread(models.Model):
                 new_id = 1
             
             self.slug = f'{slugify(self.title)}-{new_id}'
-            
+
         super().save(*args, **kwargs)
 
 class Post(models.Model):
