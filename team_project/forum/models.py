@@ -7,47 +7,31 @@ from django.core.files import File
 from io import BytesIO
 from PIL import Image
 
-class User(models.Model):
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
-
-class Category(models.Model):
+class Forum(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField()
 
-    class Meta:
-        ordering = ('name',)
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return f'/{self.slug}/'
-    
 class Thread(models.Model):
-    category = models.ForeignKey(Category, related_name='forums', on_delete=models.CASCADE)
+    forum = models.ForeignKey(Forum, related_name='threads', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True, editable=False)
+    author = models.ForeignKey(User, related_name='threads', on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True)
-    date_added = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='forums')
     image = models.ImageField(upload_to='uploads/', blank=True, null=True)
-    upvotes = models.ManyToManyField(User, related_name='forum_upvotes', blank=True)
-    downvotes = models.ManyToManyField(User, related_name='forum_downvotes', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     thumbnail = models.ImageField(upload_to='uploads/', blank=True, null=True)
+    upvotes = models.ManyToManyField(User, related_name='upvotes', blank=True)
+    downvotes = models.ManyToManyField(User, related_name='downvotes', blank=True)
+    slug = models.SlugField()
     score = models.IntegerField(default=0)
 
     class Meta:
         ordering = ('-date_added',)
-        verbose_name_plural = 'forums'
     
     def __str__(self):
         return self.title
     
     def get_absolute_url(self):
-        return f'/{self.category.slug}/{self.slug}/'
+        return f'/{self.slug}/'
     
     def get_image_url(self):
         if self.image:
@@ -69,32 +53,29 @@ class Thread(models.Model):
         with self.image.open() as img:
             img = img.convert('RGB')
             img.thumbnail(size)
-
             thumb_io = BytesIO()
             img.save(thumb_io, 'JPEG', quality=85)
-
             thumb_name = f'{self.image.name.split(".")[0]}_thumb.jpg'
             self.thumbnail.save(thumb_name, File(thumb_io), save=False)
-        
+
     def save(self, *args, **kwargs):
         if not self.slug:
-            last_event = Thread.objects.filter(category=self.category).last()
+            last_thread = Thread.objects.last()
 
-            if last_event:
-                self.slug = f'{slugify(self.title)}-{last_event.pk + 1}'
+            if last_thread:
+                new_id = last_thread.id + 1
             else:
-                self.slug = slugify(self.title)
-
-            self.slug = slugify(self.title)
-
+                new_id = 1
+            
+            self.slug = f'{slugify(self.title)}-{new_id}'
+            
         super().save(*args, **kwargs)
-
 
 class Post(models.Model):
     thread = models.ForeignKey(Thread, related_name='posts', on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     content = models.TextField()
-    created = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     upvotes = models.ManyToManyField(User, related_name='post_upvotes', blank=True)
     downvotes = models.ManyToManyField(User, related_name='post_downvotes', blank=True)
 
@@ -105,4 +86,4 @@ class Post(models.Model):
         return self.content
     
     def get_absolute_url(self):
-        return f'/{self.thread.forum.category.slug}/{self.thread.forum.slug}/{self.thread.slug}/'
+        return f'/{self.thread.slug}/'

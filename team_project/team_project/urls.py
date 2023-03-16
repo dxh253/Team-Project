@@ -11,6 +11,7 @@ urlpatterns = [
     path('api/v1/events/', include('events.urls')),
     path('api/v1/register/', register_user),
     path('', include('events.urls')),
+    path('', include('forum.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

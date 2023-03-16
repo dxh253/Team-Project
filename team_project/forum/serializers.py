@@ -1,28 +1,38 @@
 from rest_framework import serializers
 
-from .models import Category, Thread, Post
+from .models import Forum, Thread, Post
 
 from django.conf import settings
+
+class ForumSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Forum
+        fields = '__all__'
 
 class ThreadSerializer(serializers.ModelSerializer):
     get_image = serializers.ImageField(max_length=None, use_url=True, required=False)
     get_thumbnail = serializers.ImageField(max_length=None, use_url=True, required=False)
+    author_name = serializers.CharField(source='author.username', read_only=True)
+    forum_name = serializers.CharField(source='forum.name', read_only=True)
+    posts = serializers.SerializerMethodField()
 
     class Meta:
         model = Thread
         fields = (
             "id",
+            "forum",
+            "forum_name",
+            "author",
+            "author_name",
             "title",
-            "get_absolute_url",
-            "description",
-            "venue",
+            "content",
             "date_added",
+            "upvotes",
+            "downvotes",
+            "score",
             "get_image",
             "get_thumbnail",
-            "category",
-            "slug",
-            "author",
-            "score",
+            "posts",
         )
 
     def create(self, validated_data):
@@ -44,19 +54,16 @@ class ThreadSerializer(serializers.ModelSerializer):
             representation['get_thumbnail'] = f"{settings.BASE_URL}{instance.thumbnail.url}"
         return representation
     
-class CategorySerializer(serializers.ModelSerializer):
-    threads = ThreadSerializer(many=True)
-
-    class Meta:
-        model = Category
-        fields = (
-            "id",
-            "name",
-            "get_absolute_url",
-            "threads",
-        )
-
+    def get_posts(self, obj):
+        posts = Post.objects.filter(thread=obj)
+        serializer = PostSerializer(posts, many=True)
+        return serializer.data
+    
 class PostSerializer(serializers.ModelSerializer):
+    author_name = serializers.CharField(source='author.username', read_only=True)
+    thread_title = serializers.CharField(source='thread.title', read_only=True)
+    thread_forum = serializers.CharField(source='thread.forum.name', read_only=True)
+    
     class Meta:
         model = Post
         fields = (

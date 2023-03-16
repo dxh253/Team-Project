@@ -62,7 +62,7 @@ class EventsView(generics.RetrieveAPIView):
         queryset = self.get_queryset()
         serializer = EventsSerializer(queryset, many=True)
         return Response(serializer.data)
-    
+     
     
 class CreateEventView(generics.CreateAPIView):
     serializer_class = EventsSerializer
