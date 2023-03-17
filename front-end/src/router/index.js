@@ -5,6 +5,7 @@ import RegisterForm from "../views/RegisterForm.vue"
 import EventsView from "../views/EventsViews.vue"
 import EventsDetail from "../views/EventsDetail.vue"
 import EventsForm from "../views/EventsForm.vue"
+import ForumViews from "../views/ForumViews.vue"
 import PrivacyPolicy from "../views/PrivacyPolicy.vue"
 
 const router = createRouter({
@@ -60,7 +61,12 @@ const router = createRouter({
             meta: {
                 requiresLogin: false
             }
-        }
+        },
+        {
+            path: "/forums/",
+            name: "ForumViews",
+            component: ForumViews,
+        },
     ]
 })
 
