@@ -14,23 +14,11 @@ from django.utils.datastructures import MultiValueDict
 from django.shortcuts import get_object_or_404
 
 class ForumDetail(generics.RetrieveAPIView):
-    def get(self, request, category_slug, forum_slug, format=None):
-        forum = get_object_or_404(Forum, category__slug=category_slug, slug=forum_slug)
+    def get(self, request, pk, format=None):
+        forum = get_object_or_404(Forum, pk=pk)
         serializer = ForumSerializer(forum)
         return Response(serializer.data)
     
-class ForumView(generics.RetrieveAPIView):
-    serializer_class = ThreadSerializer
-
-    def get_queryset(self):
-        forum_slug = self.kwargs['forum_slug']
-        forum = Forum.objects.get(slug=forum_slug)
-        return Thread.objects.filter(forum=forum)
-
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context['forum'] = ForumSerializer(Forum.objects.get(slug=self.kwargs['forum_slug'])).data
-        return context
     
 class ThreadList(generics.ListCreateAPIView):
     def get(self, request, forum_slug, format=None):

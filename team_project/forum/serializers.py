@@ -63,7 +63,7 @@ class PostSerializer(serializers.ModelSerializer):
     author_name = serializers.CharField(source='author.username', read_only=True)
     thread_title = serializers.CharField(source='thread.title', read_only=True)
     thread_forum = serializers.CharField(source='thread.forum.name', read_only=True)
-    
+
     class Meta:
         model = Post
         fields = (
