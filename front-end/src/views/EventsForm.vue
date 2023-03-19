@@ -1,4 +1,5 @@
-<template>
+
+   <template>
     <div class="container">
       <form @submit.prevent="submitForm">
         <div class="field">
@@ -28,15 +29,16 @@
         <div class="field">
           <label class="label" for="image">Image:</label>
           <div class="control">
-            <input class="input" type="file" accept="image/*" id="image">
+            <input class="input" type="file" accept="image/*" id="get_image" v-on:change="handleImageUpload">
           </div>
         </div>
         <div class="field">
-            <label class="label" for="thumbnail">Thumbnail:</label>
-            <div class="control">
-            <input class="input" type="file" accept="image/*" id="thumbnail">
-            </div>  
+          <label class="label" for="thumbnail">Thumbnail:</label>
+          <div class="control">
+            <input class="input" type="file" accept="image/*" id="get_thumbnail" v-on:change="handleThumbnailUpload">
+          </div>  
         </div>
+
         <div class="field">
           <div class="control">
             <button class="button is-primary" type="submit">Submit</button>
@@ -46,8 +48,7 @@
     </div>
   </template>
   
-  
-  <script>
+<script>
   import { getAPI } from '@/plugins/axios'
   
   export default {
@@ -59,22 +60,25 @@
           description: '',
           venue: '',
           date: '',
-          get_image: null,
-          get_thumbnail: null,
+          image: null,
+          thumbnail: null,
         },
       }
     },
     methods: {
       handleImageUpload(event) {
         if (event.target.files.length > 0) {
+          console.log(event.target.files[0])
           this.eventData.get_image = event.target.files[0]
         }
       },
       handleThumbnailUpload(event) {
         if (event.target.files.length > 0) {
+          console.log(event.target.files[0])
           this.eventData.get_thumbnail = event.target.files[0]
         }
       },
+
       submitForm() {
         const formData = new FormData()
         formData.append('id', this.eventData.id)
@@ -82,12 +86,8 @@
         formData.append('description', this.eventData.description)
         formData.append('venue', this.eventData.venue)
         formData.append('date', this.eventData.date)
-        if (this.eventData.get_image) {
-          formData.append('get_image', this.eventData.get_image)
-        }
-        if (this.eventData.get_thumbnail) {
-          formData.append('get_thumbnail', this.eventData.get_thumbnail)
-        }
+        formData.append('get_image', this.eventData.get_image);
+        formData.append('get_thumbnail', this.eventData.get_thumbnail);
         getAPI
           .post('api/v1/latest-events/', formData, {
             headers: {
@@ -106,4 +106,3 @@
     },
   }
   </script>
-  

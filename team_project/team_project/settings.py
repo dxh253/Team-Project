@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'djoser',
     'rest_framework_simplejwt.token_blacklist',
+    'storages',
 ]
 
 
@@ -167,12 +168,18 @@ CORS_ALLOW_CREDENTIALS = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 BASE_URL = 'http://localhost:8000'
 SERVER_URL = 'https://team22-22.bham.team'
 
+AZURE_ACCOUNT_NAME = 'teamproject'
+AZURE_ACCOUNT_KEY = 'TvugZzDaTGkdgnZKQwzOsSjgdLcWongNPR433WCqOwLI+jN4GRV/R1gRUapBbbkD4VGm47QaVON0+AStdea6TA=='
+AZURE_CONTAINER = 'events'
+AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
 
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static'),
