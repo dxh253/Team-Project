@@ -18,10 +18,10 @@ ALLOWED_HOSTS = ['team22-22.bham.team', '127.0.0.1', 'localhost']
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
+    ]
 }
 
 CORS_ALLOWED_ORIGINS = [
@@ -33,13 +33,16 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:8080",
+    "http://192.168.0.25:8080",
     "http://localhost:8081",
+    "http://192.168.0.25:8081",
 ]
 
 default_headers = [
-    'accept',
-    'accept-encoding',
+#     'accept',
+#     'accept-encoding',
 ]
+
 CORS_ALLOWED_HEADERS = list (default_headers) + [
     'content-type',
 ]
@@ -171,7 +174,7 @@ BASE_URL = 'http://localhost:8000'
 SERVER_URL = 'https://team22-22.bham.team'
 
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-    '/var/www/static/',
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+#     '/var/www/static/',
+# ]

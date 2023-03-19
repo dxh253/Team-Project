@@ -16,7 +16,7 @@ prerequisities:
   image: python:3.10
   stage: check
   only:
-    - addevents_noauth
+    - master
 
   script:
     - pip install -r requirements.txt
@@ -27,7 +27,7 @@ django-test:
   image: python:3.10
   stage: test
   only:
-    - addevents_noauth
+    - master
 
   script:
     - pip install -r requirements.txt
@@ -37,7 +37,7 @@ publish-docker:
   image: docker:stable
   stage: publish
   only:
-    - addevents_noauth
+    - master
   
   services:
     - docker:dind
@@ -55,14 +55,11 @@ publish-docker:
     - docker build -t ${CI_REGISTRY_IMAGE}:tpvuejs front-end/
     - docker push ${CI_REGISTRY_IMAGE}:tpvuejs 
 
-#vue-compile:
-# docker 
-
 deploy-git:
   image: alpine:latest
   stage: deploy
   only:
-    - addevents_noauth
+    - master
     
   when: on_success
   before_script:

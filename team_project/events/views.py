@@ -5,12 +5,12 @@ from rest_framework.response import Response
 
 from .models import Events, Category
 from rest_framework import generics
-from .serializers import EventsSerializer, CategorySerializer
+from .serializers import EventsSerializer
 from rest_framework.permissions import IsAuthenticated
-from django.views.decorators.csrf import csrf_exempt
+# from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from django.utils.text import slugify
-from django.utils.datastructures import MultiValueDict
+# from django.utils.datastructures import MultiValueDict
 class EventsList(APIView):
     def get(self, request, format=None):
         events = Events.objects.all()
@@ -55,6 +55,7 @@ class EventsDetail(APIView):
         
 
 class EventsView(generics.RetrieveAPIView):
+    permission_classes = ()
     queryset = Events.objects.all()
 
     def get(self, request, *args, **kwargs):
