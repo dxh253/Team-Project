@@ -25,24 +25,37 @@ const router = createRouter({
         {
             path: "/register/",
             name: "RegisterForm",
-            component: RegisterForm
+            component: RegisterForm,
+            meta: {
+                requiresLogin: false
+            }
+
         },
         {
             path: "/events/",
             name: "EventsView",
             component: EventsView,
+            meta: {
+                requiresLogin: true
+            }
 
         },
         {
             path: "/:category_slug/:events_slug/",
             name: "EventsDetail",
             component: EventsDetail,
+            meta: {
+                requiresLogin: true
+            }
 
         },
         {
             path: "/events_form/",
             name: "EventsForm",
             component: EventsForm,
+            meta: {
+                requiresLogin: true
+            }
 
         },
         {
