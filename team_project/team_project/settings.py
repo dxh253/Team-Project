@@ -65,7 +65,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'djoser',
     'rest_framework_simplejwt.token_blacklist',
-    'storages',
+    'azure.storage.blob',
 ]
 
 
