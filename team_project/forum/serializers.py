@@ -1,54 +1,136 @@
-from rest_framework import serializers
-from .models import Subreddit, Post, PostVotes
-
-from django.contrib.auth.models import User
-
 from django.contrib.auth import get_user_model
+from rest_framework import serializers
+from .models import Subreddit, Post, PostVotes, PostComment
 
-class SubredditSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Subreddit
-        fields = (
-            "id",
-            "name",
-            "description",
-            "slug"
-        )
+User = get_user_model()
 
 class PostSerializer(serializers.ModelSerializer):
+    subreddit = serializers.PrimaryKeyRelatedField(
+        queryset=Subreddit.objects.all()
+    )
+
     class Meta:
         model = Post
-        fields = (
+        fields = [
             "id",
+            "created",
+            "modified",
+            'time_since_post',
             "title",
-            "content",
+            "link",
+            "description",
+            "description_br",
+            "owner",
+            'score',
+            "username",
+            "owner_url",
             "subreddit",
-            "author",
-            "slug"
-        )
-    
+            "subreddit_name",
+            'slug',
+            'subreddit_slug',
+            'full_url',
+            'user_vote',
+        ]
+        extra_kwargs = {
+            "url": {"view_name": "api:posts", "lookup_field": "title"}
+        }
+        # extra_kwargs = {
+        #     "url": {"view_name": "api:user-detail", "lookup_field": "username"}
+        # }
+
+
 class PostVotesSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = PostVotes
-        fields = (
-            "id",
-            "post",
-            "user",
-            "vote"
-        )
+        fields = ['post_id', 'user_id', 'vote', 'id',
+                  ]
 
-class UserSerializer(serializers.ModelSerializer):
+
+class AllPostsSerializer(serializers.ModelSerializer):
+    subreddit = serializers.PrimaryKeyRelatedField(
+        queryset=Subreddit.objects.all()
+    )
+    queryset = Post.objects.all()
+
     class Meta:
-        model = get_user_model()
-        fields = (
+        model = Post
+        fields = [
             "id",
+            "created",
+            "modified",
+            'time_since_post',
+            "title",
+            "link",
+            "description",
+            "description_br",
+            "owner",
             "username",
-            "email",
-            "password"
-        )
-        extra_kwargs = {'password': {'write_only': True, 'required': True}}
+            "owner_url",
+            "subreddit",
+            "subreddit_name",
+            'slug',
+            'subreddit_slug',
+            'score',
+            'full_url',
+            'user_vote',
+            'user_up_style',
+            'user_down_style',
+            'weighted_score',
+            'age_in_days',
+            'number_of_comments',
+        ]
+        extra_kwargs = {
+            "url": {"view_name": "api:allposts", "lookup_field": "title"}
+        }
+        # extra_kwargs = {
+        #     "url": {"view_name": "api:user-detail", "lookup_field": "username"}
+        # }
 
-    def create(self, validated_data):
-        user = get_user_model().objects.create_user(**validated_data)
-        return user
-    
+
+class CommentSerializer(serializers.ModelSerializer):
+    children = serializers.SerializerMethodField(
+        read_only=True, method_name="get_children")
+
+    post_id = serializers.PrimaryKeyRelatedField(
+        queryset=Post.objects.all()
+    )
+    user_id = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    parent = serializers.PrimaryKeyRelatedField(
+        queryset=PostComment.objects.all(), allow_null=True)
+
+    class Meta:
+        model = PostComment
+        fields = [
+            "id",
+            "post_id",
+            "created",
+            "modified",
+            'time_since_comment',
+            "comment",
+            "comment_br",
+            "user_id",
+            "username",
+            "owner_url",
+            'score',
+            'user_vote',
+            'user_up_style',
+            'user_down_style',
+            'level',
+            'parent',
+            'children',
+            'tldr',
+        ]
+
+        extra_kwargs = {
+            "url": {"view_name": "api:allposts", "lookup_field": "title"}
+        }
+
+    def get_children(self, obj):
+        """ self referral field """
+        serializer = CommentSerializer(
+            instance=obj.comment_reply.all(),
+            many=True
+        )
+        return serializer.data
