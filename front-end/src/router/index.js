@@ -6,6 +6,8 @@ import EventsView from "../views/EventsViews.vue"
 import EventsDetail from "../views/EventsDetail.vue"
 import EventsForm from "../views/EventsForm.vue"
 import PrivacyPolicy from "../views/PrivacyPolicy.vue"
+import ForumView from "../views/ForumViews.vue"
+
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -50,6 +52,11 @@ const router = createRouter({
             name: "PrivacyPolicy",
             component: PrivacyPolicy,
 
+        },
+        {
+            path: "/forum/",
+            name: "Forum",
+            component: ForumView,
         }
     ]
 })
