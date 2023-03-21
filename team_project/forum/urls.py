@@ -1,15 +1,14 @@
-from django.urls import include, path
-# from .views import PostView, SubredditView, AllSubredditsView, FrontPageView
-from .views import PostAPIView, AllPostsAPIView, CommentAPIView 
 
-app_name = 'reddit'
+
+from django.urls import path
+from . import views
 
 urlpatterns = [
-    # path("frontpage/", FrontPageView.as_view()),
-    # path("all/", AllSubredditsView.as_view(), name='all' ),
-    # path(route='<slug:slug>/', view=SubredditView.as_view(), name='subreddit'),
-    # path(route='<slug:subreddit_slug>/<slug:slug>', view=PostView.as_view(), name='post'),
-    path('api/v1/forums', PostAPIView.as_view()),
-    path('api/v1/allforums', AllPostsAPIView.as_view()),
-    path('', include('forum.urls')),
+    path('posts/', views.PostList.as_view(), name='posts'),
+    path('posts/<slug:title>/', views.PostDetail.as_view(), name='post-detail'),
+    path('posts/<int:pk>/votes/', views.PostVotesList.as_view(), name='post-votes'),
+    path('posts/<int:pk>/votes/<int:id>/', views.PostVotesDetail.as_view(), name='post-vote-detail'),
+    path('allposts/', views.AllPostsList.as_view(), name='allposts'),
+    path('comments/', views.CommentList.as_view(), name='comments'),
+    path('comments/<int:pk>/', views.CommentDetail.as_view(), name='comment-detail'),
 ]
