@@ -50,6 +50,11 @@ const router = createRouter({
             name: "PrivacyPolicy",
             component: PrivacyPolicy,
 
+        },
+        {
+            path: "/posts/",
+            name: "Posts",
+            component: () => import("../views/PostsList.vue")
         }
     ]
 })
