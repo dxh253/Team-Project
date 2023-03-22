@@ -20,13 +20,13 @@ import { RouterView } from "vue-router";
         <div class="navbar-end">
           <router-link to="/events" class="navbar-item">Events</router-link>
           <router-link to="" class="navbar-item">Discussion</router-link>
-
-          <div class="navbar-item">
-            <div class="buttons">
-              <router-link to="/login" class="button is-success">Log in</router-link>
-              <router-link to="/" class="button is-success">Log out</router-link>
-            </div>
-          </div>
+          
+      <div class="navbar-item">
+        <div class="buttons">
+          <router-link v-if="!accessToken" to="/login" class="button is-success">Log in</router-link>
+          <button v-if="accessToken" @click="logout" class="button is-success">Log out</button>
+        </div>
+      </div>
         </div>
       </div>
 
@@ -47,12 +47,17 @@ import { RouterView } from "vue-router";
   @import '../node_modules/bulma/bulma.sass'
 </style>
 
-<script>
+
+  <script>
+  import { mapState } from 'vuex'
   export default {
-    data(){
-      return {
-        showMobileMenu: false
-      }
-    }
+    computed: mapState(['accessToken']),
+
+    methods: {
+      logout() {
+        this.$store.dispatch('userLogout')
+        this.$router.push('/')
+      },
+    },
   }
-</script>
+  </script>

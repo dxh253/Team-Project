@@ -5,13 +5,11 @@ from rest_framework.response import Response
 
 from .models import Events, Category
 from rest_framework import generics
-from .serializers import EventsSerializer, CategorySerializer
+from .serializers import EventsSerializer
 from rest_framework.permissions import IsAuthenticated
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from django.utils.text import slugify
-from django.utils.datastructures import MultiValueDict
-
+from django.core.files.storage import default_storage as storage
 
 class EventsList(APIView):
     def get(self, request, format=None):
@@ -27,19 +25,28 @@ class EventsList(APIView):
             instance = serializer.save()
             instance.slug = slugify(f"{instance.id}-{instance.name}")
             instance.save()
-
             # Save the image file if it exists in the request.FILES dictionary
             if 'image' in request.FILES:
                 image = request.FILES['image']
                 image_name = f"{instance.slug}-{image.name}"
-                with open(image_name, 'wb+') as f:
-                    for chunk in image.chunks():
-                        f.write(chunk)
-                instance.image = image_name
-                instance.save()
+                storage.save(image_name, image)
+                instance.image.name = image_name
+
+            # Save the thumbnail file if it exists in the request.FILES dictionary
+            if 'thumbnail' in request.FILES:
+                thumbnail = request.FILES['thumbnail']
+                thumbnail_name = f"{instance.slug}-thumbnail-{thumbnail.name}"
+                storage.save(thumbnail_name, thumbnail)
+                instance.thumbnail.name = thumbnail_name
+
+            # Update the serializer with the generated slug
+            serializer = EventsSerializer(instance)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 
 class EventsDetail(APIView):
@@ -48,14 +55,15 @@ class EventsDetail(APIView):
             return Events.objects.filter(category__slug=category_slug).get(slug=events_slug)
         except Events.DoesNotExist:
             raise Http404
-
+    
     def get(self, request, category_slug, events_slug, format=None):
         events = self.get_object(category_slug, events_slug)
         serializer = EventsSerializer(events)
         return Response(serializer.data)
-
+        
 
 class EventsView(generics.RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
     queryset = Events.objects.all()
 
     def get(self, request, *args, **kwargs):
@@ -63,7 +71,3 @@ class EventsView(generics.RetrieveAPIView):
         serializer = EventsSerializer(queryset, many=True)
         return Response(serializer.data)
 
-
-class CreateEventView(generics.CreateAPIView):
-    serializer_class = EventsSerializer
-    queryset = Events.objects.all()

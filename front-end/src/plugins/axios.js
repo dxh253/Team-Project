@@ -63,10 +63,21 @@
 // team22-22.bham.team/register
 
 
+// import axios from "axios";
+
+// const getAPI = axios.create({
+//     baseURL: "http://127.0.0.1:8000",
+//     timeout: 1000,
+// })
+
+// export {getAPI}
+
 import axios from "axios";
 
 const getAPI = axios.create({
-    baseURL: "http://team22-22.bham.team:8000",
+    baseURL: "https://team22-22.bham.team",
+    //baseURL: "http://127.0.0.1:8000",
+    // timeout: 1000,
 })
 
 export {getAPI}

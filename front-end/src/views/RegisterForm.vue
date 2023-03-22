@@ -4,14 +4,24 @@
         <form @submit.prevent="registerUser" method="post">
             <label for="first-name">First name:</label>
             <input type="text" name="first_name" id="first-name" v-model="firstName" required>
-            <label for="last_name">Last Name:</label>
-            <input type="text" name="last_name" id="last_name" v-model="last_name" required>
+            <label for="surname">Surname:</label>
+            <input type="text" name="surname" id="surname" v-model="surname" required>
             <label for="username">Username:</label>
             <input type="text" name="username" id="username" v-model="username" required>
             <label for="email">Email:</label>
             <input type="email" name="email" id="email" v-model="email" required>
-            <label for="password">Password:</label>
-            <input type="password" name="password" id="password" v-model="password" required>
+            <label for="password1">Password:</label>
+            <input type="password" name="password1" id="password1" v-model="password1" required>
+            <label for="password2">Confirm Password:</label>
+            <input type="password" name="password2" id="password2" v-model="password2" required>
+            <div class="field">
+                <div class="control">
+                <label class="checkbox">
+                    <input type="checkbox" name="privacy_policy" v-model="privacyPolicy" required>
+                    I agree to the <a href="/privacy_policy">privacy policy</a>.
+                </label>
+                </div>
+            </div>
             <button id="register-button" type="submit">Register</button>
         </form>
     </div>
@@ -23,41 +33,36 @@
 
 <script>
 import axios from 'axios';
-const BASE_URL = 'https://team22-22.bham.team/api/v1/';
-// const BASE_URL = process.env.VUE_APP_BASE_URL;
+
 export default {
     name: 'RegisterForm',
     data() {
         return {
             firstName: 'asdf',
-            last_name: 'asdf',
+            surname: 'asdf',
             username: 'asdf',
             email: 'asdf@asdf.com',
-            password: 'asdf',
+            password1: 'asdf',
+            password2: 'asdf',
         };
     },
     methods: {
-        async registerUser() {
-            try {
-                const response = await axios.post(`${BASE_URL}register/`, {
-                    
-                    first_name: this.firstName,
-                    last_name: this.last_name,
-                    username: this.username,
-                    email: this.email,
-                    password: this.password,
-                },
-                {
-                    headers:{
-                        'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-                        'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token, Authorization', 
-                    }
+        registerUser() {
+            axios.post('http://127.0.0.1:8000/api/v1/register/', {
+                first_name: this.firstName,
+                last_name: this.surname,
+                username: this.username,
+                email: this.email,
+                password: this.password1,
+            })
+                .then(response => {
+                    console.log(response.data);
+                    this.$router.push({name: 'EventsView'});
+                })
+                .catch(error => {
+                    console.log(error.response.data);
+                    this.incorrectAuth = true;
                 });
-                console.log(response.data);
-            } catch (error) {
-                console.error(error);
-            }
         },
     },
 };

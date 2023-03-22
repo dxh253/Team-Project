@@ -29,6 +29,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8081",
     "http://192.168.0.25:8081",
     "http://192.168.0.25:8080",
+    "https://team22-22.bham.team",
 ]
 
 CORS_ORIGIN_WHITELIST = [
@@ -40,7 +41,7 @@ default_headers = [
     'accept',
     'accept-encoding',
 ]
-CORS_ALLOWED_HEADERS = list(default_headers) + [
+CORS_ALLOWED_HEADERS = list (default_headers) + [
     'content-type',
 ]
 
@@ -65,6 +66,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'djoser',
     'rest_framework_simplejwt.token_blacklist',
+    'storages',
 ]
 
 
@@ -152,6 +154,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
@@ -163,13 +166,20 @@ CORS_ALLOW_CREDENTIALS = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 BASE_URL = 'http://localhost:8000'
+SERVER_URL = 'https://team22-22.bham.team'
 
+AZURE_ACCOUNT_NAME = 'teamproject'
+AZURE_ACCOUNT_KEY = 'TvugZzDaTGkdgnZKQwzOsSjgdLcWongNPR433WCqOwLI+jN4GRV/R1gRUapBbbkD4VGm47QaVON0+AStdea6TA=='
+AZURE_CONTAINER = 'events'
+AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-    '/var/www/static/',
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+#     '/var/www/static/',
+# ]

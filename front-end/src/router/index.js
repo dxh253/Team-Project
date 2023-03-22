@@ -31,18 +31,27 @@ const router = createRouter({
             path: "/events/",
             name: "EventsView",
             component: EventsView,
+            meta: {
+                requiresAuth: true
+            }
 
         },
         {
             path: "/:category_slug/:events_slug/",
             name: "EventsDetail",
             component: EventsDetail,
+            meta: {
+                requiresAuth: true
+            }
 
         },
         {
             path: "/events_form/",
             name: "EventsForm",
             component: EventsForm,
+            meta: {
+                requiresAuth: true
+            }
 
         },
         {
@@ -52,6 +61,7 @@ const router = createRouter({
 
         }
     ]
-})
+});
+
 
 export default router 
