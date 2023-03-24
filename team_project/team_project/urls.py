@@ -5,7 +5,7 @@ from django.urls import path, include
 from homepage.views import register_user
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('api/v1/', include('djoser.urls')),
     path('api/v1/', include('djoser.urls.authtoken')),
     path('events/', include('events.urls')),

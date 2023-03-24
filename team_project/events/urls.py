@@ -9,7 +9,7 @@ urlpatterns = [
     path('api-token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api-token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('events/', EventsView.as_view(), name = 'eventsView'),
-    path('latest-events/', views.EventsList.as_view()),
+    path('latest-events/', views.EventsList.as_view(), name = 'latestEvents'),
     path('events/<slug:category_slug>/<slug:events_slug>/', views.EventsDetail.as_view()),
 ]
 
