@@ -36,7 +36,7 @@ const app = createApp(App)
 app.use(router)
 
 const myAxios = axios.create({
-    baseURL: 'http://127.0.0.1:8000'
+    baseURL: 'https://team22-22.bham.team'
 })
 
 app.config.globalProperties.$axios = myAxios
