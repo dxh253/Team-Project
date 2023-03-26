@@ -154,7 +154,7 @@
         const data = {
           score: this.score
         }
-        axios.post(`/posts/${this.post.id}/votes`, data)
+        axios.post('/posts/' + this.post.id + '/votes', data)
           .then(response => {
             this.score = response.data.score
           })

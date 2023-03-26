@@ -47,13 +47,14 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-class PostScore(generics.RetrieveAPIView):
-    queryset = Post.objects.all()
-    serializer_class = ScoreSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    lookup_field = 'id'
+# class PostScore(generics.RetrieveAPIView):
+#     queryset = Post.objects.all()
+#     serializer_class = ScoreSerializer
+#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+#     lookup_field = 'id'
 
-    def retrieve(self, request, *args, **kwargs):
-        post = self.get_object()
-        score = post.score()
-        return Response({'score': score})
+#     def retrieve(self, request, *args, **kwargs):
+#         post = self.get_object()
+#         score = post.score()
+#         return Response({'score': score})
+    

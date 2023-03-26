@@ -50,10 +50,18 @@
           <span class="post-box-time-since">{{ post.time_since_post }}</span>
         </div>
       </div>
+      <div>
+        <button @click="upvote">Upvote</button>
+        <span>{{ post.score }}</span>
+        <button @click="downvote">Downvote</button>
+      </div>
     </div>
   </template>
   
   <script>
+  import { getAPI } from '@/plugins/axios';
+
+
   export default {
     props: {
       post: {
@@ -61,13 +69,42 @@
         required: true,
       },
     },
+    data(){
+      return{
+        vote: 0,
+      }
+    },
     methods: {
       upvote() {
-        this.$emit('upvote', this.post);
+        this.vote = 1;
+        this.updateVote();  
       },
       downvote() {
-        this.$emit('downvote', this.post);
+        this.vote = -1;
+        this.updateVote();
       },
+      updateVote() { //TODO: update the vote on the server
+      const data = {
+        post_id: this.post.id,
+        user_id: 3,
+        vote: this.vote,
+        id: 5,
+      };
+      // axios.post('/posts/' + this.post.id + '/votes', data)
+      //   .then(response => {
+      //     console.log(response.data);
+      //   })
+      //   .catch(error => {
+      //     console.log(error);
+      //   });
+      getAPI.post('/posts/' + this.post.id + '/votes', data)
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     },
   };
   </script>
