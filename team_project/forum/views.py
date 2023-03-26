@@ -1,7 +1,10 @@
 from rest_framework import generics, permissions
 from rest_framework.response import Response
-from .serializers import PostSerializer, AllPostsSerializer, PostVotesSerializer, CommentSerializer
+from .serializers import PostSerializer, ScoreSerializer, AllPostsSerializer, PostVotesSerializer, CommentSerializer
 from .models import Subreddit, Post, PostVotes, PostComment
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+
 
 class PostList(generics.ListCreateAPIView):
     queryset = Post.objects.all()
@@ -43,3 +46,14 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = PostComment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+class PostScore(generics.RetrieveAPIView):
+    queryset = Post.objects.all()
+    serializer_class = ScoreSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    lookup_field = 'id'
+
+    def retrieve(self, request, *args, **kwargs):
+        post = self.get_object()
+        score = post.score()
+        return Response({'score': score})

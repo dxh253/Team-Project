@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from .models import Subreddit, Post, PostVotes, PostComment
+from rest_framework.response import Response
 
 User = get_user_model()
 
@@ -38,6 +39,12 @@ class PostSerializer(serializers.ModelSerializer):
         #     "url": {"view_name": "api:user-detail", "lookup_field": "username"}
         # }
 
+class ScoreSerializer(serializers.ModelSerializer):
+    score = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Post
+        fields = ['score']
 
 class PostVotesSerializer(serializers.ModelSerializer):
 
