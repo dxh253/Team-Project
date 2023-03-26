@@ -13,6 +13,7 @@ from django.core.files.storage import default_storage as storage
 
 class EventsList(APIView):
     permission_classes = (IsAuthenticated,)
+    ALLOWED_METHODS = ['GET', 'POST']
     def get(self, request, format=None):
         events = Events.objects.all()
         serializer = EventsSerializer(events, many=True)
@@ -45,9 +46,6 @@ class EventsList(APIView):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
 
 
 class EventsDetail(APIView):
