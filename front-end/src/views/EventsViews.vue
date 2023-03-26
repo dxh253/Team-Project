@@ -1,4 +1,3 @@
-
 <template>
   <div class="home">
     <section class="hero is-medium is-dark mb-6">
@@ -22,17 +21,16 @@
           <button class="button is-primary is-light">Add Event</button>
         </router-link>
       </div>
-  </div>
+    </div>
   
   
-<div class="columns is-multiline">
-  <EventBox
-      v-for="events in allEvents"
-      v-bind:key="events.id"
-      v-bind:events="events"
-    />
-</div>
-
+    <div class="columns is-multiline">
+      <EventBox
+          v-for="events in allEvents"
+          v-bind:key="events.id"
+          v-bind:events="events"
+        />
+    </div>
   </div>
 </template>
 
@@ -65,6 +63,4 @@
         });
   }
     }
-
-
 </script>
