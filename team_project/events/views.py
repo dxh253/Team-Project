@@ -12,6 +12,7 @@ from django.utils.text import slugify
 from django.core.files.storage import default_storage as storage
 
 class EventsList(APIView):
+    permission_classes = (IsAuthenticated,)
     def get(self, request, format=None):
         events = Events.objects.all()
         serializer = EventsSerializer(events, many=True)
