@@ -89,19 +89,22 @@
         formData.append('get_image', this.eventData.get_image);
         formData.append('get_thumbnail', this.eventData.get_thumbnail);
         getAPI
-          .post('latest-events/', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          }, { headers: { Authorization: `Bearer ${this.$store.state.accessToken}` } })
-          .then((response) => {
-            console.log(response.data)
-            window.history.back()
-          })
-          .catch((error) => {
-            console.log(error)
-            alert('Something went wrong. Please try again.')
-          })
+        .post('latest-events/', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          method: 'POST'
+        },
+          { headers: { Authorization: `Bearer ${this.$store.state.accessToken}` } })
+        .then((response) => {
+          console.log(response.data)
+          window.history.back()
+        })
+        .catch((error) => {
+          console.log(error)
+          alert('Something went wrong. Please try again.')
+        })
+
       },
     },
   }
