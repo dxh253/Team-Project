@@ -111,6 +111,8 @@
   </template>
   
   <script>
+  import axios from 'axios'
+
   export default {
     name: 'PostVote',
     props: {
@@ -128,6 +130,17 @@
         score: this.initialScore
       }
     },
+    created() {
+    // make GET request to load the initial score data from the API
+    axios.get('/posts/' + this.$route.params.slug + '/votes')
+      .then(response => {
+        this.score = response.data.score;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    
+    },
     methods: {
       upvote() {
         this.score++
@@ -137,12 +150,22 @@
         this.score--
         this.updateScore()
       },
-      updateScore() {
-        // make an API call to update the post's score
-        // using the postId and the new score value
+      updateScore() {//api call to update the score
+        const data = {
+          score: this.score
+        }
+        axios.post(`/posts/${this.post.id}/votes`, data)
+          .then(response => {
+            this.score = response.data.score
+          })
+          .catch(error => {
+            console.log(error)
+          })
       }
-    }
+    },
+    
   }
+
   </script>
   
   <style>
