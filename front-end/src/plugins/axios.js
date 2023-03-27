@@ -72,12 +72,36 @@
 
 // export {getAPI}
 
-import axios from "axios";
+// import axios from "axios";
 
-const getAPI = axios.create({
-    baseURL: "https://team22-22.bham.team",
-    // baseURL: "http://127.0.0.1:8000",
-    // timeout: 1000,
-})
+// const getAPI = axios.create({
+//     baseURL: "https://team22-22.bham.team",
+//     // baseURL: "http://127.0.0.1:8000",
+//     // timeout: 1000,
+// })
 
-export {getAPI}
+import axios from 'axios';
+
+    const getCsrfToken = () => {
+    let csrfToken = null;
+    const csrfTokenCookie = document.cookie.match('(^|;)\\s*csrftoken\\s*=\\s*([^;]+)');
+    if (csrfTokenCookie) {
+        csrfToken = csrfTokenCookie.pop();
+    } else {
+        // Generate new CSRF token
+        csrfToken = Math.random().toString(36).slice(-12);
+        document.cookie = `csrftoken=${csrfToken}; path=/; SameSite=Strict`;
+    }
+    return csrfToken;
+    };
+
+    const getAPI = axios.create({
+    baseURL: 'https://team22-22.bham.team',
+    headers: {
+        'X-CSRFToken': getCsrfToken(),
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+    },
+    });
+
+export default getAPI;
