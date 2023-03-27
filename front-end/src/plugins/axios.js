@@ -83,11 +83,6 @@
 import axios from 'axios';
     const getAPI = axios.create({
     baseURL: 'https://team22-22.bham.team',
-    // headers: {
-    //     'X-CSRFToken': getCsrfToken(),
-    //     'Content-Type': 'application/json',
-    //     Accept: 'application/json',
-    // },
     });
 
 export { getAPI };
