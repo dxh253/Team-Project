@@ -80,6 +80,7 @@
       },
 
       submitForm() {
+        console.log('submitForm method is executed');
         const formData = new FormData()
         formData.append('id', this.eventData.id)
         formData.append('name', this.eventData.name)
@@ -97,12 +98,13 @@
         },
           { headers: { Authorization: `Bearer ${this.$store.state.accessToken}` } })
         .then((response) => {
-          console.log(response.data)
+          console.log('API response data:', response.data);
+          // console.log(response.data)
           window.history.back()
         })
         .catch((error) => {
           console.log(error)
-          alert('Something went wrong. Please try again.')
+          // alert('Something went wrong. Please try again.')
         })
 
       },
