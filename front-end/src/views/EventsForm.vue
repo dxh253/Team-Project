@@ -81,22 +81,22 @@
 
       submitForm() {
       console.log('submitForm method is executed');
-      const formData = new FormData()
-      formData.append('id', this.eventData.id)
-      formData.append('name', this.eventData.name)
-      formData.append('description', this.eventData.description)
-      formData.append('venue', this.eventData.venue)
-      formData.append('date', this.eventData.date)
+      const formData = new FormData();
+      formData.append('id', this.eventData.id);
+      formData.append('name', this.eventData.name);
+      formData.append('description', this.eventData.description);
+      formData.append('venue', this.eventData.venue);
+      formData.append('date', this.eventData.date);
       formData.append('get_image', this.eventData.get_image);
       formData.append('get_thumbnail', this.eventData.get_thumbnail);
       getAPI
         .post('api/v1/latest-events/', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${this.$store.state.accessToken}`, // Add the Authorization header here
           },
           method: 'POST'
-        },
-          { headers: { Authorization: `Bearer ${this.$store.state.accessToken}` } })
+        })
         .then((response) => {
           console.log('API response data:', response.data);
           // console.log(response.data)
@@ -107,6 +107,7 @@
           // alert('Something went wrong. Please try again.')
         })
     },
+
 
     },
   }

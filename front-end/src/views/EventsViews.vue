@@ -52,7 +52,7 @@
       computed: mapState(['APIData']),
       created() {
         console.log('created method is executed');
-        getAPI.get('/api/events/', { headers: { Authorization: `Bearer ${this.$store.state.accessToken}` } })
+        getAPI.get('/api/v1/events/', { headers: { Authorization: `Bearer ${this.$store.state.accessToken}` } })
         .then(response => {
           console.log('API response data:', response.data);
           this.allEvents = response.data;
