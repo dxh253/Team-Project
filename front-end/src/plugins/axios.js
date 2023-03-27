@@ -104,4 +104,4 @@ import axios from 'axios';
     },
     });
 
-export default getAPI;
+export { getAPI };
