@@ -51,6 +51,7 @@ from django.core.files.storage import default_storage as storage
 class EventsList(APIView):
     permission_classes = (IsAuthenticated,)
     ALLOWED_METHODS = ['GET', 'POST']
+    http_method_names = ['get', 'post']
 
     def get(self, request, format=None):
         events = Events.objects.all()
