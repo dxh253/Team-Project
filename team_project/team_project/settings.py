@@ -45,6 +45,9 @@ CORS_ALLOWED_HEADERS = list (default_headers) + [
     'content-type',
 ]
 
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = 'Strict'
 
 # Application definition
 
@@ -178,8 +181,3 @@ AZURE_ACCOUNT_NAME = 'teamproject'
 AZURE_ACCOUNT_KEY = 'TvugZzDaTGkdgnZKQwzOsSjgdLcWongNPR433WCqOwLI+jN4GRV/R1gRUapBbbkD4VGm47QaVON0+AStdea6TA=='
 AZURE_CONTAINER = 'events'
 AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
-
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static'),
-#     '/var/www/static/',
-# ]

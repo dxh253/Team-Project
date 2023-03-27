@@ -1,5 +1,5 @@
 
-   <template>
+  <!-- <template>
     <div class="container">
       <form @submit.prevent="submitForm">
         <div class="field">
@@ -46,9 +46,9 @@
         </div>
       </form>
     </div>
-  </template>
+  </template> -->
   
-<script>
+<!-- <script>
   import { getAPI } from '@/plugins/axios'
   
   export default {
@@ -108,4 +108,103 @@
       },
     },
   }
-  </script>
+  </script> -->
+
+
+  <template>
+    <div class="container">
+      <form @submit.prevent="submitForm">
+        {% csrf_token %}
+        <div class="field">
+          <label class="label" for="name">Name:</label>
+          <div class="control">
+            <input class="input" type="text" id="name" v-model="eventData.name" required>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label" for="description">Description:</label>
+          <div class="control">
+            <textarea class="textarea" id="description" v-model="eventData.description" required></textarea>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label" for="venue">Venue:</label>
+          <div class="control">
+            <textarea class="textarea" id="venue" v-model="eventData.venue" required></textarea>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label" for="date">Date:</label>
+          <div class="control">
+            <input class="input" type="date" id="date" v-model="eventData.date" required>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label" for="image">Image:</label>
+          <div class="control">
+            <input class="input" type="file" accept="image/*" id="get_image" v-on:change="handleImageUpload">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label" for="thumbnail">Thumbnail:</label>
+          <div class="control">
+            <input class="input" type="file" accept="image/*" id="get_thumbnail" v-on:change="handleThumbnailUpload">
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="control">
+            <button class="button is-primary" type="submit">Submit</button>
+          </div>
+        </div>
+      </form>
+    </div>
+</template>
+
+<script>
+import { getAPI } from '@/plugins/axios'
+
+export default {
+  data() {
+    return {
+      eventData: {
+        id: '',
+        name: '',
+        description: '',
+        venue: '',
+        date: '',
+        image: null,
+        thumbnail: null,
+      },
+      csrfToken: null,
+    }
+  },
+  mounted() {
+    this.getCsrfToken()
+  },
+  methods: {
+    handleImageUpload(event) {
+      if (event.target.files.length > 0) {
+        console.log(event.target.files[0])
+        this.eventData.get_image = event.target.files[0]
+      }
+    },
+    handleThumbnailUpload(event) {
+      if (event.target.files.length > 0) {
+        console.log(event.target.files[0])
+        this.eventData.get_thumbnail = event.target.files[0]
+      }
+    },
+    getCsrfToken() {
+      const csrfTokenCookie = document.cookie.match('(^|;)\\s*csrftoken\\s*=\\s*([^;]+)')
+      if (csrfTokenCookie) {
+        this.csrfToken = csrfTokenCookie.pop()
+      }
+    },
+    submitForm() {
+      const formData = new FormData()
+      formData.append('id', this.eventData.id)
+      formData.append('name', this.eventData.name)
+      formData.append('description', this.eventData.description)
+      formData.append('venue', this.eventData.venue)
+      formData.append('date', this.event
