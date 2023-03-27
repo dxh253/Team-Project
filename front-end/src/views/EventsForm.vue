@@ -207,4 +207,38 @@ export default {
       formData.append('name', this.eventData.name)
       formData.append('description', this.eventData.description)
       formData.append('venue', this.eventData.venue)
-      formData.append('date', this.event
+      formData.append('date', this.eventData.date)
+      formData.append('get_image', this.eventData.get_image)
+      formData.append('get_thumbnail', this.eventData.get_thumbnail)
+
+      const headers = {
+        'Content-Type': 'multipart/form-data',
+        'X-CSRFToken': this.getCsrfToken()
+      }
+
+      getAPI.post('latest-events/', formData, { headers })
+        .then((response) => {
+          console.log(response.data)
+          window.history.back()
+        })
+        .catch((error) => {
+          console.log(error)
+          alert('Something went wrong. Please try again.')
+        })
+    },
+    methods: {
+      getCsrfToken() {
+        let csrfToken = null
+        const csrfTokenCookie = document.cookie.match('(^|;)\\s*csrftoken\\s*=\\s*([^;]+)')
+        if (csrfTokenCookie) {
+          csrfToken = csrfTokenCookie.pop()
+        } else {
+          // Generate new CSRF token
+          csrfToken = Math.random().toString(36).slice(-12)
+          document.cookie = `csrftoken=${csrfToken}; path=/; SameSite=Strict`
+        }
+        return csrfToken
+      }
+    },
+  }
+}
