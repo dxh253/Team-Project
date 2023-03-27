@@ -80,16 +80,16 @@
       },
 
       submitForm() {
-        console.log('submitForm method is executed');
-        const formData = new FormData()
-        formData.append('id', this.eventData.id)
-        formData.append('name', this.eventData.name)
-        formData.append('description', this.eventData.description)
-        formData.append('venue', this.eventData.venue)
-        formData.append('date', this.eventData.date)
-        formData.append('get_image', this.eventData.get_image);
-        formData.append('get_thumbnail', this.eventData.get_thumbnail);
-        getAPI
+      console.log('submitForm method is executed');
+      const formData = new FormData()
+      formData.append('id', this.eventData.id)
+      formData.append('name', this.eventData.name)
+      formData.append('description', this.eventData.description)
+      formData.append('venue', this.eventData.venue)
+      formData.append('date', this.eventData.date)
+      formData.append('get_image', this.eventData.get_image);
+      formData.append('get_thumbnail', this.eventData.get_thumbnail);
+      getAPI
         .post('latest-events/', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -103,11 +103,11 @@
           window.history.back()
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error.response.data); // <-- log the error message
           // alert('Something went wrong. Please try again.')
         })
+    },
 
-      },
     },
   }
   </script>
