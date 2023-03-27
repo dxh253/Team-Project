@@ -90,7 +90,7 @@
       formData.append('get_image', this.eventData.get_image);
       formData.append('get_thumbnail', this.eventData.get_thumbnail);
       getAPI
-        .post('latest-events/', formData, {
+        .post('api/v1/latest-events/', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
