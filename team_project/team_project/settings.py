@@ -45,9 +45,9 @@ CORS_ALLOWED_HEADERS = list (default_headers) + [
     'content-type',
 ]
 
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_HTTPONLY = True
-CSRF_COOKIE_SAMESITE = 'Strict'
+# CSRF_COOKIE_SECURE = True
+# CSRF_COOKIE_HTTPONLY = True
+# CSRF_COOKIE_SAMESITE = 'Strict'
 
 # Application definition
 

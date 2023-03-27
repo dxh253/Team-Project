@@ -1,5 +1,5 @@
 
-  <!-- <template>
+  <template>
     <div class="container">
       <form @submit.prevent="submitForm">
         <div class="field">
@@ -46,9 +46,9 @@
         </div>
       </form>
     </div>
-  </template> -->
+  </template>
   
-<!-- <script>
+<script>
   import { getAPI } from '@/plugins/axios'
   
   export default {
@@ -108,10 +108,10 @@
       },
     },
   }
-  </script> -->
+  </script>
 
 
-  <template>
+  <!-- <template>
     <div class="container">
       <form @submit.prevent="submitForm">
         {% csrf_token %}
@@ -243,4 +243,6 @@ export default {
   }
 }
 
-</script>
+
+
+</script> -->
