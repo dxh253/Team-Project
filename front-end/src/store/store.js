@@ -7,17 +7,20 @@ export default createStore({
       // Retrieve the access and refresh tokens from local storage, or set them to null if not present
       accessToken: localStorage.getItem('access') || null,
       refreshToken: localStorage.getItem('refresh') || null,
+      tokenExpiration: localStorage.getItem('expiration') || null,
       APIData: ''
     }
   },
   mutations: {
     // Update the state and local storage with the new access and refresh tokens
-    updateStorage(state, { access, refresh }) {
-      state.accessToken = access
-      state.refreshToken = refresh
-      localStorage.setItem('access', access)
-      localStorage.setItem('refresh', refresh)
-    },
+    updateStorage(state, { access, refresh, expiration }) {
+    state.accessToken = access
+    state.refreshToken = refresh
+    state.tokenExpiration = expiration
+    localStorage.setItem('access', access)
+    localStorage.setItem('refresh', refresh)
+    localStorage.setItem('expiration', expiration)
+  },
     // Clear the access and refresh tokens from the state and local storage
     destroyToken(state) {
       state.accessToken = null
@@ -45,6 +48,18 @@ export default createStore({
       })
       return response
     },
+
+    async refreshAccessToken(context) {
+    const response = await getAPI.post('/api/token/refresh/', {
+      refresh: context.state.refreshToken
+    })
+    context.commit('updateStorage', {
+      access: response.data.access,
+      refresh: context.state.refreshToken, // Keep the same refresh token
+      expiration: response.data.expires_in // Set the new expiration time
+    })
+    return response
+  },
     // Clear the access and refresh tokens from the state and local storage
     userLogout(context) {
       context.commit('destroyToken')
