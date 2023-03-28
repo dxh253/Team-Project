@@ -1,5 +1,3 @@
-
-
 from django.urls import path
 from . import views
 
@@ -11,6 +9,5 @@ urlpatterns = [
     path('allposts/', views.AllPostsList.as_view(), name='allposts'),
     path('comments/', views.CommentList.as_view(), name='comments'),
     path('comments/<int:pk>/', views.CommentDetail.as_view(), name='comment-detail'),
-    # path('posts/<int:id>/score/', views.PostScore.as_view(), name='post-score'),
 
 ]

@@ -139,13 +139,8 @@ class Post(TimeStampedModel):
 
 
 class PostVotes(Model):
-    class Meta:
-        unique_together = (('post_id', 'user_id'),)
     post_id = ForeignKey('Post', related_name='post', on_delete=models.CASCADE)
-    user_id = ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        null=False)
+    user_id = ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False)
     VOTE_CHOICES = [(-1, 'downvote'), (0, 'no vote'), (1, 'upvote')]
     vote = IntegerField(choices=VOTE_CHOICES, default=None)
 
@@ -158,7 +153,7 @@ class PostVotes(Model):
         if self.vote == -1:
             return 'blue'
         return 'grey'
-
+    
 
 class PostComment(TimeStampedModel):
     class Meta:

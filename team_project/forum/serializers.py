@@ -39,19 +39,29 @@ class PostSerializer(serializers.ModelSerializer):
         #     "url": {"view_name": "api:user-detail", "lookup_field": "username"}
         # }
 
-class ScoreSerializer(serializers.ModelSerializer):
-    score = serializers.ReadOnlyField()
-
-    class Meta:
-        model = Post
-        fields = ['score']
 
 class PostVotesSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = PostVotes
-        fields = ['post_id', 'user_id', 'vote', 'id',
-                  ]
+        fields = ['post_id', 'user_id', 'vote', 'id']
+
+    def validate(self, data): 
+        post_id = data.get('post_id')
+        user_id = data.get('user_id')
+        vote = data.get('vote')
+
+        # Check if the user has already voted for the post
+        if PostVotes.objects.filter(post_id=post_id, user_id=user_id).exists():
+            # If the user has already voted, allow them to change their vote
+            post_vote = PostVotes.objects.get(post_id=post_id, user_id=user_id)
+            if vote == post_vote.vote:
+                return data
+
+        # Check if the vote is valid
+        if vote not in [choice[0] for choice in PostVotes.VOTE_CHOICES]:
+            raise serializers.ValidationError('Invalid vote')
+
+        return data
 
 
 class AllPostsSerializer(serializers.ModelSerializer):
