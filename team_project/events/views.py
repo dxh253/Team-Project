@@ -5,11 +5,13 @@ from rest_framework.response import Response
 
 from .models import Events, Category
 from rest_framework import generics
-from .serializers import EventsSerializer
+from .serializers import EventsSerializer, CategorySerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.utils.text import slugify
 from django.core.files.storage import default_storage as storage
+from django.db import IntegrityError
+
 
 # class EventsList(APIView):
 #     permission_classes = (IsAuthenticated,)
@@ -49,7 +51,7 @@ from django.core.files.storage import default_storage as storage
 
 
 class EventsList(APIView):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     ALLOWED_METHODS = ['GET', 'POST']
     http_method_names = ['get', 'post']
 
@@ -60,12 +62,18 @@ class EventsList(APIView):
 
     def post(self, request, format=None):
         data = request.data.copy()  # Create a mutable copy of the QueryDict
-        data['category'] = 1  # Modify the category field
+        # data['category'] = 1  # Modify the category field
         serializer = EventsSerializer(data=data)
         if serializer.is_valid():
             instance = serializer.save()
-            instance.slug = slugify(f"{instance.id}-{instance.name}")
-            instance.save()
+            try:
+                instance.slug = slugify(f"{instance.id}-{instance.name}")
+                instance.save()
+            except IntegrityError:
+                # If the slug already exists, generate a new unique slug
+                instance.slug = generate_unique_slug(instance.name)
+                instance.save()
+                
             # Save the image file if it exists in the request.FILES dictionary
             if 'image' in request.FILES:
                 image = request.FILES['image']
@@ -109,3 +117,15 @@ class EventsView(generics.RetrieveAPIView):
         serializer = EventsSerializer(queryset, many=True)
         return Response(serializer.data)
 
+
+class CategoryDetail(APIView):
+    def get_object(self, category_slug):
+        try:
+            return Category.objects.get(slug=category_slug)
+        except Category.DoesNotExist:
+            raise Http404
+    
+    def get(self, request, category_slug, format=None):
+        category = self.get_object(category_slug)
+        serializer = CategorySerializer(category)
+        return Response(serializer.data)
