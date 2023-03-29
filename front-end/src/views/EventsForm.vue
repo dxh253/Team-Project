@@ -9,6 +9,18 @@
           </div>
         </div>
         <div class="field">
+        <label class="label" for="category">Category:</label>
+        <div class="control">
+          <div class="select">
+            <select id="category" v-model="eventData.category" required>
+              <option value="">Select category</option>
+              <option value="1">Party</option>
+              <option value="2">Group Study</option>
+            </select>
+          </div>
+        </div>
+      </div>
+        <div class="field">
           <label class="label" for="description">Description:</label>
           <div class="control">
             <textarea class="textarea" id="description" v-model="eventData.description" required></textarea>
@@ -62,6 +74,7 @@
           date: '',
           image: null,
           thumbnail: null,
+          category: '',
         },
       }
     },
@@ -89,6 +102,7 @@
       formData.append('date', this.eventData.date);
       formData.append('get_image', this.eventData.get_image);
       formData.append('get_thumbnail', this.eventData.get_thumbnail);
+      formData.append('category', this.eventData.category);
       getAPI
         .post('api/v1/latest-events/', formData, {
           headers: {

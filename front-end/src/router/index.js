@@ -6,6 +6,7 @@ import EventsView from "../views/EventsViews.vue"
 import EventsDetail from "../views/EventsDetail.vue"
 import EventsForm from "../views/EventsForm.vue"
 import PrivacyPolicy from "../views/PrivacyPolicy.vue"
+import EventsCategory from "../views/EventsCategory.vue"
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -37,9 +38,18 @@ const router = createRouter({
 
         },
         {
-            path: "/:category_slug/:events_slug/",
+            path: "/events/:category_slug/:events_slug/",
             name: "EventsDetail",
             component: EventsDetail,
+            meta: {
+                requiresAuth: true
+            }
+
+        },
+        {
+            path: "/events/:category_slug/",
+            name: "EventsCategory",
+            component: EventsCategory,
             meta: {
                 requiresAuth: true
             }
