@@ -33,6 +33,27 @@ class PostVotesList(generics.ListCreateAPIView):
             queryset = PostVotes.objects.filter(post_id=pk)
         return queryset
     
+    def post(self, request, pk):
+        user_id = request.data.get('user_id')
+        vote_value = request.data.get('vote')
+        if user_id is None or vote_value is None:
+            return Response({'error': 'Invalid request.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            vote = PostVotes.objects.get(user_id=user_id, post_id=pk)
+            vote.vote = vote_value
+            vote.save()
+            serializer = PostVotesSerializer(vote)
+        except PostVotes.DoesNotExist:
+            data = {'user_id': user_id, 'vote': vote_value, 'post_id': pk}
+            serializer = PostVotesSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                return Response({'error': 'Invalid request.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(serializer.data)
+    
 
 class PostVotesDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = PostVotes.objects.all()

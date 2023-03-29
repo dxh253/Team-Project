@@ -9,6 +9,7 @@ from datetime import datetime, timedelta, timezone
 from dateutil.relativedelta import relativedelta
 
 
+
 class Subreddit(TimeStampedModel):
     name = CharField(max_length=56, help_text='Enter subreddit name')
     path = CharField(max_length=20, help_text='Enter subreddit url path')
@@ -54,6 +55,7 @@ class Post(TimeStampedModel):
     user_vote = 0
     user_up_style = ''
     user_down_style = ''
+
     # Metadata
     class Meta:
         ordering = ['-modified']
