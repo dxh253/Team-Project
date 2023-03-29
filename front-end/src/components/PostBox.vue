@@ -1,34 +1,3 @@
-<!-- <template>
-    <div class="post-box">
-      <router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">
-        <h3>{{ post.title }}</h3>
-      </router-link>
-      <p>{{ post.description }}</p>
-      <p>Subreddit: {{ post.subreddit_name }}</p>
-      <p>Score: {{ post.score }}</p>
-      <p>Posted {{ post.time_since_post }}</p>
-    </div>
-</template>
-  
-<script>
-  export default {
-    props: {
-      post: {
-        type: Object,
-        required: true,
-      },
-    },
-  };
-  </script>
-  
-  <style>
-  .post-box {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-</style> -->
-
 <template>
     <div class="post-box">
       <router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">
@@ -57,58 +26,112 @@
       </div>
     </div>
   </template>
-  
-  <script>
-  import { getAPI } from '@/plugins/axios';
+
+ <script>
+import { getAPI } from '@/plugins/axios';
+import { reactive } from '@vue/reactivity';
 
 
-  export default {
-    props: {
-      post: {
-        type: Object,
-        required: true,
-      },
+export default {
+  props: {
+    post: {
+      type: Object,
+      required: true,
     },
-    data(){
-      return{
-        vote: 0,
+  },
+  data() {
+    return {
+      vote: 0,
+      userVote: null,
+    };
+  },
+  created() {
+    // Send a GET request to retrieve the user's existing vote for the post.
+    getAPI.get(`/posts/${this.post.id}/votes/?user_id=1`)
+      .then(response => {
+        // If the user has already voted, extract the existing vote from the response data.
+        const existingVote = response.data.find(vote => vote.post_id === this.post.id && vote.user_id === 1);
+
+        if (existingVote) {
+          this.userVote =  reactive(existingVote);
+
+          // Set the vote to the user's existing vote.
+          this.vote = existingVote.vote;
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  },
+  methods: {
+    upvote() {
+      // If the user has already upvoted, remove their vote.
+      if (this.userVote && this.userVote.vote === 1) {
+        this.vote = 0;
+      } else {
+        // If the user has already downvoted, switch their vote.
+        if (this.userVote && this.userVote.vote === -1) {
+          this.vote = 1;
+        } else {
+          // If the user hasn't voted yet or has removed their vote, upvote.
+          this.vote = 1;
+        }
       }
+
+      this.updateVote();
     },
-    methods: {
-      upvote() {
-        this.vote = 1;
-        this.updateVote();  
-      },
-      downvote() {
-        this.vote = -1;
-        this.updateVote();
-      },
-      updateVote() { //TODO: update the vote on the server
+    downvote() {
+      // If the user has already downvoted, remove their vote.
+      if (this.userVote && this.userVote.vote === -1) {
+        this.vote = 0;
+      } else {
+        // If the user has already upvoted, switch their vote.
+        if (this.userVote && this.userVote.vote === 1) {
+          this.vote = -1;
+        } else {
+          // If the user hasn't voted yet or has removed their vote, downvote.
+          this.vote = -1;
+        }
+      }
+
+      this.updateVote();
+    },
+    updateVote() {
       const data = {
         post_id: this.post.id,
-        user_id: 3,
+        user_id: 1,
         vote: this.vote,
-        id: 5,
+        id: this.userVote ? this.userVote.id : null,
       };
-      // axios.post('/posts/' + this.post.id + '/votes', data)
-      //   .then(response => {
-      //     console.log(response.data);
-      //   })
-      //   .catch(error => {
-      //     console.log(error);
-      //   });
-      getAPI.post('/posts/' + this.post.id + '/votes', data)
-        .then(response => {
-          console.log(response.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+
+      if (data.id) {
+        // If the user has already voted, make a PUT request to update the existing vote.
+        getAPI.put(`/posts/${this.post.id}/votes/${this.userVote.id}/`, data)
+          .then(response => {
+            console.log(response.data);
+            this.userVote = reactive(response.data);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      } else {
+        // If the user hasn't voted yet, make a POST request to create a new vote.
+        getAPI.post(`/posts/${this.post.id}/votes/`, data)
+          .then(response => {
+            console.log(response.data);
+            this.userVote = reactive(response.data);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
     },
-    },
-  };
-  </script>
-  
+  },
+};
+
+</script>
+
+
   <style>
   .post-box {
     background-color: white;

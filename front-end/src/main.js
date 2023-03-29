@@ -31,6 +31,11 @@ import App from './App.vue'
 import store from './store/store.js'
 import axios from 'axios'
 import router from './router/index.js'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+
+
 
 const app = createApp(App)
 app.use(router)
@@ -57,4 +62,4 @@ router.beforeEach((to, from, next) => {
 
 // app.mount('#app')
 
-createApp(App).use(store).use(router,axios).mount('#app')
+createApp(App).use(store).use(router,axios).mount('#app').component('font-awesome-icon', FontAwesomeIcon)

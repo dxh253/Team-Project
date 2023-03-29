@@ -12,13 +12,11 @@
 import { getAPI } from '@/plugins/axios';
 import PostBox from '../components/PostBox.vue';
 import { mapState } from 'vuex';
-import Vote from '../components/Vote.vue';
 
 export default {
   name: 'PostsList',
   components: {
     'post-box': PostBox,
-    Vote
   },
   data() {
     return {

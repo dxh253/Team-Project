@@ -19,7 +19,7 @@ import { RouterView } from "vue-router";
       <div class="navbar-menu" id="navbar-menu" v-bind:class="{'is-active': showMobileMenu }">
         <div class="navbar-end">
           <router-link to="/events" class="navbar-item">Events</router-link>
-          <router-link to="" class="navbar-item">Discussion</router-link>
+          <router-link to="/posts" class="navbar-item">Discussion</router-link>
 
           <div class="navbar-item">
             <div class="buttons">
