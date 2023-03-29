@@ -31,7 +31,7 @@ import App from './App.vue'
 import store from './store/store.js'
 import axios from 'axios'
 import router from './router/index.js'
-import { library } from '@fortawesome/fontawesome-svg-core'
+// import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 

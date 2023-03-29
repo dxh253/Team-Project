@@ -1,9 +1,9 @@
 <template>
-    <div class="post-box">
-      <router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">
-        <h3 class="post-box-title">{{ post.title }}</h3>
-      </router-link>
-      <p class="post-box-description">{{ post.description }}</p>
+  <div>
+    <div class="post-box" v-show="!isHidden">
+        <h3 class="post-box-title"><router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">{{ post.title }}</router-link>
+        </h3>
+            <p class="post-box-description">{{ post.description }}</p>
       <div class="post-box-details">
         <div class="post-box-subreddit">
           <i class="fas fa-rss"></i>
@@ -11,7 +11,6 @@
         </div>
         <div class="post-box-score">
           <i class="fas fa-arrow-up post-box-upvote" @click="upvote"></i>
-          <span class="post-box-score-value">{{ post.score }}</span>
           <i class="fas fa-arrow-down post-box-downvote" @click="downvote"></i>
         </div>
         <div class="post-box-time">
@@ -20,17 +19,28 @@
         </div>
       </div>
       <div>
+      <div class="post-box-interactions">
         <button @click="upvote">Upvote</button>
         <span>{{ post.score }}</span>
         <button @click="downvote">Downvote</button>
+        <span style="margin-left: 10px;"><router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">{{ post.number_of_comments }} Comments</router-link></span>
+        <button v-on:click="isHidden = !isHidden">Hide</button>
+      </div>
       </div>
     </div>
+    <div v-show="isHidden">
+      <div class="post-box">
+        <div style="justify-content: center; display: flex;">
+          <button v-on:click="isHidden = !isHidden">Unhide</button>
+        </div>
+      </div>
+    </div>
+  </div>
   </template>
 
  <script>
 import { getAPI } from '@/plugins/axios';
 import { reactive } from '@vue/reactivity';
-
 
 export default {
   props: {
@@ -43,6 +53,7 @@ export default {
     return {
       vote: 0,
       userVote: null,
+      isHidden: false,
     };
   },
   created() {
@@ -144,6 +155,7 @@ export default {
   
   .post-box-title {
     margin-top: 0;
+    display: flex;
   }
   
   .post-box-description {
@@ -158,6 +170,12 @@ export default {
     align-items: center;
     margin-top: 10px;
   }
+
+  .post-box-interactions{
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
   
   .post-box-subreddit {
     display: flex;
@@ -167,7 +185,6 @@ export default {
   }
   
   .post-box-subreddit-name {
-    margin-left: 5px;
   }
   
   .post-box-score {
