@@ -87,6 +87,7 @@ class CommentList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user_id=self.request.user)
 
+
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = PostComment.objects.all()
     serializer_class = CommentSerializer
