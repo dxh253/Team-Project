@@ -89,6 +89,8 @@ class EventsList(APIView):
 
 class EventsDetail(APIView):
     def get_object(self, category_slug, events_slug):
+        print(self.request.user)
+        # print(APIView.request.user)
         try:
             return Events.objects.filter(category__slug=category_slug).get(slug=events_slug)
         except Events.DoesNotExist:

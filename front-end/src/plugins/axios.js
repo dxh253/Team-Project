@@ -82,7 +82,8 @@
 
 import axios from 'axios';
     const getAPI = axios.create({
-    baseURL: 'https://team22-22.bham.team',
+    // baseURL: 'https://team22-22.bham.team',
+    baseURL: 'http://127.0.0.1:8000'
     });
 
 export { getAPI };

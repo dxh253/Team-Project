@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'authentication',
     'events',
     'forum',
     'help_section',
@@ -82,7 +83,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'path.to.middleware.AddTokenHeaderMiddleware',
+    'authentication.middleware.AddTokenHeaderMiddleware',
 ]
 
 ROOT_URLCONF = 'team_project.urls'
