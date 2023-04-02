@@ -32,7 +32,8 @@
 </style>
 
 <script>
-import axios from 'axios';
+// import axios from 'axios';
+import { getAPI } from '@/plugins/axios'
 
 export default {
     name: 'RegisterForm',
@@ -48,7 +49,7 @@ export default {
     },
     methods: {
         registerUser() {
-            axios.post('https://team22-22.bham.team/api/v1/register/', {
+            getAPI.post('api/v1/register/', {
                 first_name: this.firstName,
                 last_name: this.surname,
                 username: this.username,
