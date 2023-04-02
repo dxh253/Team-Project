@@ -32,16 +32,7 @@ const router = createRouter({
             name: "EventsView",
             component: EventsView,
             meta: {
-                requiresAuth: true
-            }
-
-        },
-        {
-            path: "/:category_slug/:events_slug/",
-            name: "EventsDetail",
-            component: EventsDetail,
-            meta: {
-                requiresAuth: true
+                requiresLogin: true
             }
 
         },
@@ -50,7 +41,25 @@ const router = createRouter({
             name: "EventsForm",
             component: EventsForm,
             meta: {
-                requiresAuth: true
+                requiresLogin: true
+            }
+        },
+
+        {
+            path: "/:category_slug/:events_slug/",
+            name: "EventsDetail",
+            component: EventsDetail,
+            meta: {
+                requiresLogin: true
+            }
+
+        },
+        {
+            path: "/events_form/",
+            name: "EventsForm",
+            component: EventsForm,
+            meta: {
+                requiresLogin: true
             }
 
         },
