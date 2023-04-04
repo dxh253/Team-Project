@@ -28,11 +28,19 @@ export default createStore({
       localStorage.removeItem('access')
       localStorage.removeItem('refresh')
     },
+    setAPIData(state, data) {
+      console.log('setting APIData:', data);
+      state.APIData = data;
+    },
   },
   getters: {
     // Check if the user is logged in based on the presence of the access token
     loggedIn(state) {
       return state.accessToken !== null
+    },
+    events(state) {
+      console.log('getting APIData:', state.APIData);
+      return state.APIData
     },
   },
   actions: {

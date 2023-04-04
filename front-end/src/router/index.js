@@ -5,6 +5,7 @@ import RegisterForm from "../views/RegisterForm.vue"
 import EventsView from "../views/EventsViews.vue"
 import EventsDetail from "../views/EventsDetail.vue"
 import EventsForm from "../views/EventsForm.vue"
+import Dashboard from "../views/DashBoard.vue"
 import PrivacyPolicy from "../views/PrivacyPolicy.vue"
 
 const router = createRouter({
@@ -68,6 +69,14 @@ const router = createRouter({
             name: "PrivacyPolicy",
             component: PrivacyPolicy,
 
+        },
+        {
+            path: "/dashboard/",
+            name: "Dashboard",
+            component: Dashboard,
+            meta: {
+                requiresLogin: true
+            }
         }
     ]
 });

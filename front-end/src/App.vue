@@ -20,7 +20,8 @@ import { RouterView } from "vue-router";
         <div class="navbar-end">
           <router-link to="/events" class="navbar-item">Events</router-link>
           <router-link to="" class="navbar-item">Discussion</router-link>
-          
+          <router-link to="/dashboard" class="navbar-item">Dashboard</router-link>
+
       <div class="navbar-item">
         <div class="buttons">
           <router-link v-if="!accessToken" to="/login" class="button is-success">Log in</router-link>

@@ -64,7 +64,7 @@ export default {
                 password: this.password
             })
             .then(() => {
-                this.$router.push({name: 'EventsView'})
+                this.$router.push({name: 'Dashboard'})
             })
             .catch((err) => {
                 console.log(err)
