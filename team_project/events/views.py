@@ -3,7 +3,7 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import Events, Category
+from .models import Events, UserEvent
 from rest_framework import generics
 from .serializers import EventsSerializer, UserEventSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -74,16 +74,41 @@ class EventsView(generics.RetrieveAPIView):
         serializer = EventsSerializer(queryset, many=True)
         return Response(serializer.data)
 
-class SaveEventView(generics.CreateAPIView):
+from .models import UserEvent
+
+# Add this import at the top of the file
+from django.shortcuts import get_object_or_404
+
+# ...
+
+class SaveEvent(APIView):
     permission_classes = (IsAuthenticated,)
-    serializer_class = UserEventSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    def post(self, request, format=None):
+        user = request.user
+        event_id = request.data.get('event_id')
 
-class UserSavedEventsView(generics.ListAPIView):
+        if not event_id:
+            return Response({"error": "Event ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        event = get_object_or_404(Events, id=event_id)
+        user_event = UserEvent.objects.filter(user=user, event=event).first()
+        
+        if user_event:  # Event is already saved, unsave it
+            user_event.delete()
+            return Response({"message": "Event is unsaved."}, status=status.HTTP_200_OK)
+        else:  # Event is not saved, save it
+            user_event = UserEvent(user=user, event=event, name=event.name, date=event.date, category=event.category)
+            user_event.save()
+            serializer = UserEventSerializer(user_event)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class SavedEventsView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = UserEventSerializer
 
     def get_queryset(self):
-        return self.request.user.saved_events.all()
+        user = self.request.user
+        queryset = UserEvent.objects.filter(user=user)
+        return queryset
