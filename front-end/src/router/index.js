@@ -44,6 +44,7 @@ const router = createRouter({
             meta: {
                 requiresLogin: true
             }
+
         },
 
         {
@@ -53,6 +54,7 @@ const router = createRouter({
             meta: {
                 requiresLogin: true
             }
+
 
         },
         {
@@ -71,12 +73,23 @@ const router = createRouter({
 
         },
         {
+
             path: "/dashboard/",
             name: "Dashboard",
             component: Dashboard,
             meta: {
                 requiresLogin: true
             }
+        },
+        {
+            path: "/posts/",
+            name: "Posts",
+            component: () => import("../views/PostsList.vue")
+        },
+        {
+            path: "/posts/:slug/",
+            name: "post-detail",
+            component: () => import("../views/PostDetail.vue")
         }
     ]
 });

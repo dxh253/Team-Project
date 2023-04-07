@@ -12,10 +12,12 @@ urlpatterns = [
     path('api-token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/', include('djoser.urls')),
     path('api/v1/', include('djoser.urls.authtoken')),
-    path('', include('events.urls')),
     path('', include('authentication.urls')),
     path('events/', include('events.urls')),
     # path('api/admin/', admin.site.urls, name='admin'),
+    path('api/admin/', admin.site.urls, name='admin'),
+    path('api/v1/forums', include('forum.urls')),
+    path('', include('forum.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
