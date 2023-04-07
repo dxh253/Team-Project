@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Category, Events
+from .models import Category, Events, UserEvent
 
 from django.conf import settings
 
@@ -63,3 +63,16 @@ class CategorySerializer(serializers.ModelSerializer):
             "get_absolute_url",
             "events",
         )
+
+class UserEventSerializer(serializers.ModelSerializer):
+    event = EventsSerializer()
+    
+    class Meta:
+        model = UserEvent
+        fields = ('id', 'name', 'date', 'category', 'event')
+
+    def create(self, validated_data):
+        event_data = validated_data.pop('event')
+        event = Events.objects.get_or_create(**event_data)[0]
+        user_event = UserEvent.objects.create(event=event, **validated_data)
+        return user_event

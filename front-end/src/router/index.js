@@ -5,6 +5,7 @@ import RegisterForm from "../views/RegisterForm.vue"
 import EventsView from "../views/EventsViews.vue"
 import EventsDetail from "../views/EventsDetail.vue"
 import EventsForm from "../views/EventsForm.vue"
+import Dashboard from "../views/DashBoard.vue"
 import PrivacyPolicy from "../views/PrivacyPolicy.vue"
 
 const router = createRouter({
@@ -31,18 +32,38 @@ const router = createRouter({
             path: "/events/",
             name: "EventsView",
             component: EventsView,
-
-        },
-        {
-            path: "/:category_slug/:events_slug/",
-            name: "EventsDetail",
-            component: EventsDetail,
+            meta: {
+                requiresLogin: true
+            }
 
         },
         {
             path: "/events_form/",
             name: "EventsForm",
             component: EventsForm,
+            meta: {
+                requiresLogin: true
+            }
+
+        },
+
+        {
+            path: "/:category_slug/:events_slug/",
+            name: "EventsDetail",
+            component: EventsDetail,
+            meta: {
+                requiresLogin: true
+            }
+
+
+        },
+        {
+            path: "/events_form/",
+            name: "EventsForm",
+            component: EventsForm,
+            meta: {
+                requiresLogin: true
+            }
 
         },
         {
@@ -50,6 +71,15 @@ const router = createRouter({
             name: "PrivacyPolicy",
             component: PrivacyPolicy,
 
+        },
+        {
+
+            path: "/dashboard/",
+            name: "Dashboard",
+            component: Dashboard,
+            meta: {
+                requiresLogin: true
+            }
         },
         {
             path: "/posts/",
@@ -62,6 +92,7 @@ const router = createRouter({
             component: () => import("../views/PostDetail.vue")
         }
     ]
-})
+});
+
 
 export default router 

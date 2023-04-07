@@ -32,36 +32,29 @@
 </style>
 
 <script>
-import axios from 'axios';
+// import axios from 'axios';
+import { getAPI } from '@/plugins/axios'
 
 export default {
     name: 'RegisterForm',
     data() {
         return {
-            firstName: '',
-            surname: '',
-            username: '',
-            email: '',
-            password1: '',
-            password2: '',
+            firstName: 'asdf',
+            surname: 'asdf',
+            username: 'asdf',
+            email: 'asdf@asdf.com',
+            password1: 'asdf',
+            password2: 'asdf',
         };
     },
     methods: {
         registerUser() {
-            axios.post('http://127.0.0.1:8000/api/v1/register/', {
-                withCredentials: true,
+            getAPI.post('api/v1/register/', {
                 first_name: this.firstName,
                 last_name: this.surname,
                 username: this.username,
                 email: this.email,
                 password: this.password1,
-            },
-            {
-                headers:{
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
-                }
             })
                 .then(response => {
                     console.log(response.data);

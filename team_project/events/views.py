@@ -167,17 +167,19 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import Events, Category
+from .models import Events, UserEvent
 from rest_framework import generics
-from .serializers import EventsSerializer, CategorySerializer
+from .serializers import EventsSerializer, UserEventSerializer
 from rest_framework.permissions import IsAuthenticated
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from django.utils.text import slugify
-from django.utils.datastructures import MultiValueDict
 from django.core.files.storage import default_storage as storage
 
 class EventsList(APIView):
+    permission_classes = (IsAuthenticated,)
+    ALLOWED_METHODS = ['GET', 'POST']
+    http_method_names = ['get', 'post']
+
     def get(self, request, format=None):
         events = Events.objects.all()
         serializer = EventsSerializer(events, many=True)
@@ -212,11 +214,10 @@ class EventsList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
-
 class EventsDetail(APIView):
     def get_object(self, category_slug, events_slug):
+        print(self.request.user)
+        # print(APIView.request.user)
         try:
             return Events.objects.filter(category__slug=category_slug).get(slug=events_slug)
         except Events.DoesNotExist:
@@ -236,3 +237,41 @@ class EventsView(generics.RetrieveAPIView):
         serializer = EventsSerializer(queryset, many=True)
         return Response(serializer.data)
 
+from .models import UserEvent
+
+# Add this import at the top of the file
+from django.shortcuts import get_object_or_404
+
+# ...
+
+class SaveEvent(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, format=None):
+        user = request.user
+        event_id = request.data.get('event_id')
+
+        if not event_id:
+            return Response({"error": "Event ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        event = get_object_or_404(Events, id=event_id)
+        user_event = UserEvent.objects.filter(user=user, event=event).first()
+        
+        if user_event:  # Event is already saved, unsave it
+            user_event.delete()
+            return Response({"message": "Event is unsaved."}, status=status.HTTP_200_OK)
+        else:  # Event is not saved, save it
+            user_event = UserEvent(user=user, event=event, name=event.name, date=event.date, category=event.category)
+            user_event.save()
+            serializer = UserEventSerializer(user_event)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class SavedEventsView(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserEventSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = UserEvent.objects.filter(user=user)
+        return queryset

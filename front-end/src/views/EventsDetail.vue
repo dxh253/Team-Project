@@ -57,7 +57,7 @@ export default {
           const events_slug = this.$route.params.events_slug
 
           axios
-              getAPI.get(`api/v1/events/${category_slug}/${events_slug}/`)
+              getAPI.get(`api/v1/events/${category_slug}/${events_slug}/`, { headers: { Authorization: `Bearer ${this.$store.state.accessToken}` } })
               .then(response => {
                   this.events = response.data
               })

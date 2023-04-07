@@ -4,6 +4,7 @@ from PIL import Image
 from django.core.files.base import ContentFile
 from django.db import models
 from django.utils.text import slugify
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -70,3 +71,17 @@ class Events(models.Model):
             self.slug = slugify(f"{new_id}-{self.name}")
 
         super().save(*args, **kwargs)
+        
+class UserEvent(models.Model):
+    user = models.ForeignKey(User, related_name='saved_events', on_delete=models.CASCADE)
+    event = models.ForeignKey(Events, related_name='saved_by_users', on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    date = models.DateField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    saved_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'event')
+
+    def __str__(self):
+        return f'{self.user.username} saved {self.event.name}'
