@@ -3,7 +3,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from homepage.views import register_user
-from authentication.views import obtain_token, refresh_token
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView)
 
 urlpatterns = [
@@ -13,12 +12,10 @@ urlpatterns = [
     path('api-token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/', include('djoser.urls')),
     path('api/v1/', include('djoser.urls.authtoken')),
+    path('', include('events.urls')),
     path('', include('authentication.urls')),
     path('events/', include('events.urls')),
     # path('api/admin/', admin.site.urls, name='admin'),
-    path('api/admin/', admin.site.urls, name='admin'),
-    path('api/v1/forums', include('forum.urls')),
-    path('', include('forum.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

@@ -27,7 +27,6 @@
         v-for="event in allEvents"
         v-bind:key="event.id"
         v-bind:event="event"
-
       />
     </div>
   </div>
@@ -55,17 +54,7 @@ export default {
       // User is not logged in
       return;
     }
-
-    if (new Date().getTime() > this.$store.state.tokenExpiration * 1000) {
-      // Access token has expired
-      try {
-        await this.$store.dispatch('refreshAccessToken');
-      } catch (error) {
-        console.log(error);
-        return;
-      }
-    }
-
+    
     getAPI
       .get('/api/v1/events/', {
         headers: { Authorization: `Bearer ${this.$store.state.accessToken}` },
@@ -82,79 +71,3 @@ export default {
 };
 </script>
 
-<!--<template>-->
-<!--  <div class="home">-->
-<!--    <section class="hero is-medium is-dark mb-6">-->
-<!--      <div class="hero-body has-text-centered">-->
-<!--        <h1 class="title">-->
-<!--          Looking For Something To Do?-->
-<!--        </h1>-->
-<!--        <p class="subtitle">-->
-<!--          Here are some upcoming events!-->
-<!--        </p>-->
-<!--      </div>-->
-<!--    </section>-->
-
-<!--    <div class="columns">-->
-<!--      <div class="column is-10 ">-->
-<!--        <h2 class="title">Upcoming Events</h2>-->
-<!--      </div>-->
-<!--      <div class="column is-4 is-offset 8">-->
-<!--        <router-link to="/events_form">-->
-<!--          <button class="button is-primary is-light">Add Event</button>-->
-<!--        </router-link>-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!--    <div class="columns is-multiline">-->
-<!--      <EventBox-->
-<!--        v-for="events in allEvents"-->
-<!--        v-bind:key="events.id"-->
-<!--        v-bind:events="events"-->
-<!--        :access-token="accessToken"-->
-<!--        @event-saved="loadEvents"-->
-<!--      />-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</template>-->
-
-<!--<script>-->
-<!--import { mapState } from 'vuex';-->
-<!--import { getAPI } from '@/plugins/axios';-->
-<!--import EventBox from '@/components/EventBox';-->
-
-
-<!--export default {-->
-<!--  name: 'EventsViews',-->
-<!--    data(){-->
-<!--    return {-->
-<!--      allEvents: [],-->
-<!--    };-->
-<!--    },-->
-<!--    components: {-->
-<!--      EventBox,-->
-<!--    },-->
-<!--    computed: mapState(['APIData', 'accessToken']),-->
-<!--    methods: {-->
-<!--      async loadEvents() {-->
-<!--          console.log('loadEvents action called');-->
-<!--        await this.$store.dispatch('loadEvents');-->
-<!--      },-->
-<!--      async created() {-->
-<!--        console.log('created method is executed');-->
-<!--        getAPI.get('/api/v1/events/', { headers: { Authorization: `Bearer ${this.$store.state.accessToken}` } })-->
-<!--        .then(response => {-->
-<!--          console.log('API response data:', response.data);-->
-<!--          this.allEvents = response.data;-->
-<!--          this.$store.state.APIData = response.data;-->
-<!--        })-->
-<!--        .catch(error => {-->
-<!--          console.log('API error:', error);-->
-<!--        });-->
-<!--  }-->
-<!--    },-->
-<!--};-->
-<!--</script>-->
-
-<!--<style scoped>-->
-<!--</style>-->

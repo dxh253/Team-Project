@@ -6,27 +6,26 @@ export default createStore({
     return {
       // Retrieve the access and refresh tokens from local storage, or set them to null if not present
       accessToken: localStorage.getItem('access') || null,
-      refreshToken: localStorage.getItem('refresh') || null,
-      tokenExpiration: localStorage.getItem('expiration') || null,
+      // refreshToken: localStorage.getItem('refresh') || null,
       APIData: ''
     }
   },
   mutations: {
     // Update the state and local storage with the new access and refresh tokens
-    updateStorage(state, { access, refresh, expiration }) {
+    updateStorage(state, { access,
+      //  refresh
+       }) {
     state.accessToken = access
-    state.refreshToken = refresh
-    state.tokenExpiration = expiration
+    // state.refreshToken = refresh
     localStorage.setItem('access', access)
-    localStorage.setItem('refresh', refresh)
-    localStorage.setItem('expiration', expiration)
+    // localStorage.setItem('refresh', refresh)
   },
     // Clear the access and refresh tokens from the state and local storage
     destroyToken(state) {
       state.accessToken = null
-      state.refreshToken = null
+      // state.refreshToken = null
       localStorage.removeItem('access')
-      localStorage.removeItem('refresh')
+      // localStorage.removeItem('refresh')
     },
     setAPIData(state, data) {
       console.log('setting APIData:', data);
@@ -52,22 +51,10 @@ export default createStore({
       })
       context.commit('updateStorage', {
         access: response.data.access,
-        refresh: response.data.refresh,
+        // refresh: response.data.refresh,
       })
       return response
     },
-
-    async refreshAccessToken(context) {
-    const response = await getAPI.post('/api/token/refresh/', {
-      refresh: context.state.refreshToken
-    })
-    context.commit('updateStorage', {
-      access: response.data.access,
-      refresh: context.state.refreshToken, // Keep the same refresh token
-      expiration: response.data.expires_in // Set the new expiration time
-    })
-    return response
-  },
     // Clear the access and refresh tokens from the state and local storage
     userLogout(context) {
       context.commit('destroyToken')
