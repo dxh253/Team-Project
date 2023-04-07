@@ -76,7 +76,7 @@ class UserEvent(models.Model):
     user = models.ForeignKey(User, related_name='saved_events', on_delete=models.CASCADE)
     event = models.ForeignKey(Events, related_name='saved_by_users', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    date = models.DateField()
+    date = models.DateTimeField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     saved_at = models.DateTimeField(auto_now_add=True)
 

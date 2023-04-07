@@ -1,3 +1,47 @@
+<!-- <template>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <div class="column is-3">
+    <div class="box">
+      <figure class="image mb-4">
+        <img :src="events.get_thumbnail" class="event-thumbnail">
+      </figure>
+
+      <h3 class="is-size-4">{{ events.name }}</h3>
+      <p class="is-size-6 has-text-grey">{{ events.date }}</p>
+
+      <router-link :to="events.get_absolute_url" class="button is-dark mt-4">View details</router-link>
+
+      <span class="icon is-large is-clickable" @click="saveEvent">
+          <font-awesome-icon class="right" icon="fa-solid fa-bookmark" />
+      </span>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'EventBox',
+  props: {
+    events: Object
+  }
+}
+</script>
+
+<style scoped>
+.image {
+  margin-top: -1.25rem;
+  margin-left: -1.25rem;
+  margin-right: -1.25rem;
+}
+
+.event-thumbnail {
+  width: 150px;
+  height: 150px;
+}
+
+</style> -->
+
+
 <template>
   <div class="column is-3">
     <div class="box">
@@ -7,7 +51,7 @@
       <h3 class="is-size-4">{{ event.name }}</h3>
       <p class="is-size-6 has-text-grey">{{ event.date }}</p>
       <router-link :to="event.get_absolute_url" class="button is-dark mt-4">View details</router-link>
-      <span class="icon is-large is-clickable" @click="saveEvent(event.id)">
+      <span class="icon is-large is-clickable" @click="saveEvent">
         <font-awesome-icon class="right" icon="bookmark" />
       </span>
     </div>
@@ -16,35 +60,35 @@
 
 <script>
 import { getAPI } from '@/plugins/axios';
-import {notyf} from '@/plugins/notyf';
 
 export default {
   name: 'EventBox',
-  props: ['event'],
+  props: {
+    event: {
+      type: Object,
+      required: true,
+    },
+  },
   methods: {
-    async saveEvent(eventId) {
-      try {
-        const token = localStorage.getItem('access');
-        const headers = {
-          Authorization: `Bearer ${token}`,
-        };
-        
-        const data = {
-          event_id: eventId,
-        };
-        
-        const response = await getAPI.post('/api/v1/save-event/', data, { headers });
+    async saveEvent() {
+      if (!this.$store.getters.loggedIn) {
+        console.log('User not logged in');
+        return;
+      }
 
-        if (response.status === 201) {
-          notyf.success('Event saved to your profile.');
-        } else if (response.status === 200){
-          notyf.success('You have removed this item from your saved list');
-        } else {
-          notyf.error('Error saving the event.');
-        }
+      const formData = new FormData();
+      formData.append('event', this.event.id);
+      formData.append('name', this.event.name);
+      formData.append('date', this.event.date);
+      formData.append('category', this.event.category);
+
+      try {
+        await getAPI.post('/api/v1/save_event/', formData, {
+          headers: { Authorization: `Bearer ${this.$store.state.accessToken}` },
+        });
+      console.log('Event saved');
       } catch (error) {
-        console.error('Error saving event:', error);
-        alert('Error saving the event. Please try again.');
+      console.log('Failed to save event:', error);
       }
     },
   },

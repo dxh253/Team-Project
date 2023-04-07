@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from homepage.views import register_user
+from authentication.views import obtain_token, refresh_token
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView)
 
 urlpatterns = [
