@@ -5,9 +5,9 @@
         </h3>
             <p class="post-box-description">{{ post.description }}</p>
       <div class="post-box-details">
-        <div class="post-box-subreddit">
+        <div class="post-box-category">
           <i class="fas fa-rss"></i>
-          <span class="post-box-subreddit-name">{{ post.subreddit_name }}</span>
+          <span class="post-box-category-name">{{ post.category_name }}</span>
         </div>
         <div class="post-box-score">
           <i class="fas fa-arrow-up post-box-upvote" @click="upvote"></i>
@@ -24,7 +24,7 @@
         <span>{{ post.score }}</span>
         <button @click="downvote">Downvote</button>
         <span style="margin-left: 10px;"><router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">{{ post.number_of_comments }} Comments</router-link></span>
-        <button v-on:click="isHidden = !isHidden">Hide</button>
+        <button v-on:click="isHidden = !isHidden" style="margin-left: 10px;">Hide</button>
       </div>
       </div>
     </div>
@@ -177,14 +177,14 @@ export default {
     margin-top: 10px;
   }
   
-  .post-box-subreddit {
+  .post-box-category {
     display: flex;
     align-items: center;
     font-size: 14px;
     color: #999;
   }
   
-  .post-box-subreddit-name {
+  .post-box-category-name {
   }
   
   .post-box-score {
