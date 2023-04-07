@@ -10,15 +10,15 @@ from dateutil.relativedelta import relativedelta
 
 
 
-class Subreddit(TimeStampedModel):
-    name = CharField(max_length=56, help_text='Enter subreddit name')
-    path = CharField(max_length=20, help_text='Enter subreddit url path')
+class Category(TimeStampedModel):
+    name = CharField(max_length=56, help_text='Enter category name')
+    path = CharField(max_length=20, help_text='Enter category url path')
     slug = AutoSlugField(
-        "subreddit url slug",
+        "category url slug",
         unique=True,
         always_update=False,
         populate_from="path")
-    description = TextField("Subreddit Description", blank=True)
+    description = TextField("Category Description", blank=True)
     owner = ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -30,7 +30,7 @@ class Subreddit(TimeStampedModel):
 
     # Methods
     def get_absolute_url(self):
-        return reverse('reddit:subreddit', kwargs={'slug': self.slug})
+        return reverse('reddit:category', kwargs={'slug': self.slug})
 
     def __str__(self):
         return str(self.slug)
@@ -43,7 +43,7 @@ class Post(TimeStampedModel):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         null=False)
-    subreddit = ForeignKey(Subreddit,
+    category = ForeignKey(Category,
                         on_delete=models.CASCADE,
                         null=False)
 
@@ -62,22 +62,22 @@ class Post(TimeStampedModel):
 
     # Methods
     def get_absolute_url(self):
-        return reverse('reddit:post', kwargs={'slug': self.slug, 'subreddit_slug': self.subreddit_slug})
+        return reverse('reddit:post', kwargs={'slug': self.slug, 'category_slug': self.category_slug})
 
     def __str__(self):
         return self.title
 
-    def get_subreddit(self):
-        return self.subreddit.slug
+    def get_category(self):
+        return self.category.slug
 
     def get_full_url(self):
-        return '/r/' + self.subreddit.slug + '/' + self.slug
+        return '/r/' + self.category.slug + '/' + self.slug
 
     def username(self):
         return self.owner.username
 
-    def subreddit_name(self):
-        return self.subreddit.name
+    def category_name(self):
+        return self.category.name
 
     def time_since_post(self):
         e = ''
@@ -136,7 +136,7 @@ class Post(TimeStampedModel):
         days_since_post_float = secs_since_post / 86400 + days_since_post
         return self.score() / days_since_post_float
 
-    subreddit_slug = get_subreddit
+    category_slug = get_category
     full_url = get_full_url
 
 

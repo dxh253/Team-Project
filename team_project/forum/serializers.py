@@ -1,13 +1,13 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Subreddit, Post, PostVotes, PostComment
+from .models import Category, Post, PostVotes, PostComment
 from rest_framework.response import Response
 
 User = get_user_model()
 
 class PostSerializer(serializers.ModelSerializer):
-    subreddit = serializers.PrimaryKeyRelatedField(
-        queryset=Subreddit.objects.all()
+    category = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all()
     )
 
     class Meta:
@@ -25,10 +25,10 @@ class PostSerializer(serializers.ModelSerializer):
             'score',
             "username",
             "owner_url",
-            "subreddit",
-            "subreddit_name",
+            "category",
+            "category_name",
             'slug',
-            'subreddit_slug',
+            'category_slug',
             'full_url',
             'user_vote',
         ]
@@ -65,8 +65,8 @@ class PostVotesSerializer(serializers.ModelSerializer):
 
 
 class AllPostsSerializer(serializers.ModelSerializer):
-    subreddit = serializers.PrimaryKeyRelatedField(
-        queryset=Subreddit.objects.all()
+    category = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all()
     )
     queryset = Post.objects.all()
 
@@ -84,10 +84,10 @@ class AllPostsSerializer(serializers.ModelSerializer):
             "owner",
             "username",
             "owner_url",
-            "subreddit",
-            "subreddit_name",
+            "category",
+            "category_name",
             'slug',
-            'subreddit_slug',
+            'category_slug',
             'score',
             'full_url',
             'user_vote',

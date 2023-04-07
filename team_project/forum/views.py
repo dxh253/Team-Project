@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from .serializers import PostSerializer, AllPostsSerializer, PostVotesSerializer, CommentSerializer
-from .models import Subreddit, Post, PostVotes, PostComment
+from .models import Category, Post, PostVotes, PostComment
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
