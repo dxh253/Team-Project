@@ -30,45 +30,24 @@ CORS_ALLOWED_ORIGINS = [
     "http://192.168.0.25:8081",
     "http://192.168.0.25:8080",
     "https://team22-22.bham.team",
-    "http://0.0.0.0:8000",
 ]
 
 CORS_ORIGIN_WHITELIST = [
-    "https://team22-22.bham.team",
-    "http://192.168.0.25:8080",
-    "http://192.168.0.25:8081",
     "http://localhost:8080",
     "http://localhost:8081",
-    "https://team22-22.bham.team/register",
-    "http://0.0.0.0:8000/",
 ]
 
-# default_headers = [
-#     'accept',
-#     'accept-encoding',
-# ]
-# CORS_ALLOWED_HEADERS = list (default_headers) + [
-#     'content-type',
-# ]
-CORS_ALLOW_HEADERS = ['accept',
-                    'accept-encoding',
-                    'authorization',
-                    'content-type',
-                    'dnt',
-                    'origin',
-                    'user-agent',
-                    'x-csrftoken',
-                    'x-requested-with',]
-
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
+default_headers = [
+    'accept',
+    'accept-encoding',
+]
+CORS_ALLOWED_HEADERS = list (default_headers) + [
+    'content-type',
 ]
 
+# CSRF_COOKIE_SECURE = True
+# CSRF_COOKIE_HTTPONLY = True
+# CSRF_COOKIE_SAMESITE = 'Strict'
 
 # Application definition
 
@@ -79,6 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'authentication',
     'events',
     'forum',
     'help_section',
@@ -90,7 +70,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'djoser',
     'rest_framework_simplejwt.token_blacklist',
-    'azure.storage.blob',
+    'storages',
 ]
 
 
@@ -103,6 +83,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'authentication.middleware.AddTokenHeaderMiddleware',
 ]
 
 ROOT_URLCONF = 'team_project.urls'
@@ -173,7 +154,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -202,9 +183,3 @@ AZURE_ACCOUNT_NAME = 'teamproject'
 AZURE_ACCOUNT_KEY = 'TvugZzDaTGkdgnZKQwzOsSjgdLcWongNPR433WCqOwLI+jN4GRV/R1gRUapBbbkD4VGm47QaVON0+AStdea6TA=='
 AZURE_CONTAINER = 'events'
 AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-    '/var/www/static/',
-]
-

@@ -7,7 +7,7 @@ class MyClassAdmin(admin.ModelAdmin):
 
 class MyChildren(admin.ModelAdmin):
     readonly_fields = ('children', )
-
+    
 admin.site.register(Category, MyClassAdmin)
 admin.site.register(Post, MyClassAdmin)
 admin.site.register(PostVotes)

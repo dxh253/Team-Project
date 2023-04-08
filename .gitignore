@@ -1,5 +1,5 @@
 /.idea
-
-# don't add any pychache files
+notes.txt
 __pycache__/
 /team_project/media
+.DS_Store

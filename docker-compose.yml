@@ -47,7 +47,7 @@ services:
         max-size: "10k"
         max-file: "3"
   frontend:
-    image:  "git.cs.bham.ac.uk:5050/team-projects-2022-23/team22-22:tpvuejs"
+    image:  git.cs.bham.ac.uk:5050/team-projects-2022-23/team22-22:tpvuejs
     restart: 'always'
     logging:
       driver: "json-file"

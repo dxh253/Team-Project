@@ -1,4 +1,3 @@
-from django.db.models import CharField, TextField, Model, ForeignKey, URLField, IntegerField, ManyToManyField
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
