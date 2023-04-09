@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from .serializers import PostSerializer, AllPostsSerializer, PostVotesSerializer, CommentSerializer
+from .serializers import PostSerializer, AllPostsSerializer, PostVotesSerializer, CommentSerializer, CategorySerializer
 from .models import Category, Post, PostVotes, PostComment
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -93,4 +93,14 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CommentSerializer
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+class CategoryList(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def post(self, request):
+        serializer = CategorySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

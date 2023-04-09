@@ -9,5 +9,6 @@ urlpatterns = [
     path('allposts/', views.AllPostsList.as_view(), name='allposts'),
     path('comments/', views.CommentList.as_view(), name='comments'),
     path('comments/<int:pk>/', views.CommentDetail.as_view(), name='comment-detail'),
+    path('categories/', views.CategoryList.as_view(), name='categories'),
 
 ]

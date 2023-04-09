@@ -7,11 +7,11 @@
       <div class="post-box-details">
         <div class="post-box-subreddit">
           <i class="fas fa-rss"></i>
-          <span class="post-box-subreddit-name">{{ post.subreddit_name }}</span>
+          <span class="post-box-subreddit-name">{{ post.category_name }}</span>
         </div>
         <div class="post-box-score">
-          <i class="fas fa-arrow-up post-box-upvote" @click="upvote"></i>
-          <i class="fas fa-arrow-down post-box-downvote" @click="downvote"></i>
+          
+          
         </div>
         <div class="post-box-time">
           <i class="far fa-clock"></i>
@@ -20,18 +20,18 @@
       </div>
       <div>
       <div class="post-box-interactions">
-        <button @click="upvote">Upvote</button>
+        <i class="fas fa-arrow-up post-box-upvote fa-lg" @click="upvote" :style="{ color: upColor }"></i>
         <span>{{ post.score }}</span>
-        <button @click="downvote">Downvote</button>
-        <span style="margin-left: 10px;"><router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">{{ post.number_of_comments }} Comments</router-link></span>
-        <button v-on:click="isHidden = !isHidden">Hide</button>
+        <i class="fas fa-arrow-down post-box-downvote fa-lg" @click="downvote" :style="{ color: downColor }"></i>
+        <span style="margin-left: 10px;"><i class="fa-sharp fa-solid fa-comments fa-lg"></i><router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">&nbsp;{{ post.number_of_comments }}Comments</router-link></span>
+        <i class="fa-sharp fa-solid fa-eye-slash fa-lg" v-on:click="isHidden = !isHidden" style="margin-left: 10px;"></i>
       </div>
       </div>
     </div>
     <div v-show="isHidden">
       <div class="post-box">
         <div style="justify-content: center; display: flex;">
-          <button v-on:click="isHidden = !isHidden">Unhide</button>
+          <i class="fa-solid fa-eye fa-lg" v-on:click="isHidden = !isHidden"></i>
         </div>
       </div>
     </div>
@@ -55,6 +55,23 @@ export default {
       userVote: null,
       isHidden: false,
     };
+  },
+  computed: {
+    totalScore() {
+      // Calculate the total score based on the current vote and the existing votes from the API response.
+      let score = this.post.score;
+      if (this.userVote) {
+        score -= this.userVote.vote;
+      }
+      score += this.vote;
+      return score;
+    },
+    upColor() {
+      return this.vote === 1 ? 'orange' : 'grey';
+    },
+    downColor() {
+      return this.vote === -1 ? 'blue' : 'grey';
+    },
   },
   created() {
     // Send a GET request to retrieve the user's existing vote for the post.
@@ -147,7 +164,7 @@ export default {
   .post-box {
     background-color: white;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 25px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
     margin-bottom: 20px;
@@ -214,6 +231,7 @@ export default {
   .post-box-time-since {
     margin-left: 5px;
   }
+
   </style>
   
   

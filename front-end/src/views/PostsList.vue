@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h2>Posts</h2>
+  <div class="post-background">
+    <h2 style="color: black; margin-bottom: 10px;">Posts</h2>
     <div v-for="post in allposts" :key="post.id">
       <post-box :post="post" />
       <vote :post-id="post.id" :initial-score="post.score"></vote>
@@ -36,3 +36,11 @@ export default {
   }
 }
 </script>
+
+<style>
+.post-background {
+  background-color: #c5aaf0;
+  padding: 20px;
+  border-radius: 25px;
+}
+</style>

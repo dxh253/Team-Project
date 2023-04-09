@@ -33,6 +33,8 @@ import axios from 'axios'
 import router from './router/index.js'
 // import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import '@fortawesome/fontawesome-free/css/all.css'
+
 
 
 

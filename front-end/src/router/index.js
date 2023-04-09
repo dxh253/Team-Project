@@ -6,6 +6,7 @@ import EventsView from "../views/EventsViews.vue"
 import EventsDetail from "../views/EventsDetail.vue"
 import EventsForm from "../views/EventsForm.vue"
 import PrivacyPolicy from "../views/PrivacyPolicy.vue"
+import PostCreate from "../views/PostCreate.vue"
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -60,7 +61,13 @@ const router = createRouter({
             path: "/posts/:slug/",
             name: "post-detail",
             component: () => import("../views/PostDetail.vue")
-        }
+        },
+        {
+            path: "/create/",
+            name: "create",
+            component: PostCreate
+        },
+        
     ]
 })
 
