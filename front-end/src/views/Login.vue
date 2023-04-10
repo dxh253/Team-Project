@@ -1,6 +1,7 @@
 <template>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <div class="main3">
+        <p v-if="sessionExpired" class="session-expired">Your session has expired, please log in again.</p>
         <p v-if="incorrectAuth"> Incorrect username and/or password entered. Please try again.</p>
         <form @submit.prevent="login" class="login-form">
             <div class="form-group">
@@ -55,8 +56,15 @@ export default {
             username: '',
             password: '',
             incorrectAuth: false,
+            sessionExpired: false,
         }
     },
+    mounted(){
+        if (this.$route.query.sessionExpired) {
+            this.sessionExpired = true;
+  }
+    },
+    // Add the props section in your script
     methods:{
         login(){
             this.$store.dispatch('userLogin', {

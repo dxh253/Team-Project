@@ -6,6 +6,11 @@ body {
     margin: 0%;
 }
 
+.session-expired {
+    color: red;
+    font-weight: bold;
+  }
+  
 .topnav {
     overflow: hidden;
     background-color: #423264;

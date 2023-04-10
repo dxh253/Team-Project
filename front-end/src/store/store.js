@@ -1,5 +1,7 @@
 import { createStore } from 'vuex'
 import { getAPI } from '@/plugins/axios'
+import jwtDecode from "jwt-decode";
+import router from '@/router/index.js'
 
 export default createStore({
   state() {
@@ -51,13 +53,29 @@ export default createStore({
       })
       context.commit('updateStorage', {
         access: response.data.access,
-        // refresh: response.data.refresh,
       })
+      context.dispatch("waitForTokenExpiration");
       return response
     },
+    
     // Clear the access and refresh tokens from the state and local storage
     userLogout(context) {
-      context.commit('destroyToken')
+      context.commit("destroyToken");
+      router.push({ name: "Home", query: { sessionExpired: true } });
+    },    
+
+    async waitForTokenExpiration(context) {
+      const token = context.state.accessToken;
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+        const expiresIn = (decodedToken.exp - currentTime) * 1000;
+        await new Promise((resolve) => setTimeout(resolve, expiresIn));
+        if (context.state.accessToken === token) {
+          context.dispatch("userLogout");
+        }
+      }
     },
+    
   },
 })
