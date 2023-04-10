@@ -17,6 +17,7 @@ prerequisities:
   stage: check
   only:
     - master
+    - newAuth
 
   script:
     - pip install -r requirements.txt
@@ -28,6 +29,7 @@ django-test:
   stage: test
   only:
     - master
+    - newAuth
 
   script:
     - pip install -r requirements.txt
@@ -38,6 +40,7 @@ publish-docker:
   stage: publish
   only:
     - master
+    - newAuth
   
   services:
     - docker:dind
@@ -63,6 +66,7 @@ deploy-git:
   stage: deploy
   only:
     - master
+    - newAuth
     
   when: on_success
   before_script:
