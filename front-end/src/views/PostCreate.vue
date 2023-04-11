@@ -1,24 +1,22 @@
 <template>
-  <body class="post">
-    <div>
-      <h1>Create a Post</h1>
-      <form @submit.prevent="handleSubmit">
-        <input class="input" id="title" v-model="title" type="text" required placeholder="Title">
-        <br>
-        <textarea class="description" id="description" v-model="description" placeholder="Description" rows="10"></textarea>
-        <br>
-        <div class="bottom">
-          <button type="submit">Create Post</button>
-          <br>
-          <select class="category" id="category" v-model="category" required>
-          <option value="" disabled>Category</option>
-          <option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}</option>
-        </select>
-        </div>
-      </form>
-    </div>
-  </body>
-  </template>
+      <div class="post">
+          <h1>Create a Post</h1>
+            <form @submit.prevent="handleSubmit">
+              <input class="input" id="title" v-model="title" type="text" required placeholder="Title">
+              <br>
+              <textarea class="description" id="description" v-model="description" placeholder="Description" rows="10"></textarea>
+              <br>
+              <div class="bottom">
+                <button type="submit">Create Post</button>
+                <br>
+                <select class="category" id="category" v-model="category" required>
+                <option value="" disabled>Category</option>
+                <option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}</option>
+                </select>
+              </div>
+            </form>
+      </div>
+</template>
   
   <script>
   import { getAPI } from '@/plugins/axios';

@@ -8,9 +8,6 @@ from model_utils.models import TimeStampedModel
 from datetime import datetime, timedelta, timezone
 from dateutil.relativedelta import relativedelta
 
-
-
-
 class Category(TimeStampedModel):
     name = CharField(max_length=56, help_text='Enter category name')
     path = CharField(max_length=20, help_text='Enter category url path')
