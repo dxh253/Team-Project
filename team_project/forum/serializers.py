@@ -9,6 +9,15 @@ class PostSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all()
     )
+    # get_image = serializers.ImageField(max_length=None, use_url=True, required=False)
+    # def __init__(self, instance=None, data=..., **kwargs):
+    #     super().__init__(instance, data, **kwargs)
+    #     print('init')
+    #     print(self)
+    #     print(instance)
+    #     print(data)
+    #     print(kwargs)
+    #     data['owner'] = get_user_model().objects.get(id=1)
 
     class Meta:
         model = Post
@@ -18,7 +27,6 @@ class PostSerializer(serializers.ModelSerializer):
             "modified",
             'time_since_post',
             "title",
-            "link",
             "description",
             "description_br",
             "owner",
@@ -31,13 +39,29 @@ class PostSerializer(serializers.ModelSerializer):
             'category_slug',
             'full_url',
             'user_vote',
+            # 'get_image',
         ]
         extra_kwargs = {
             "url": {"view_name": "api:posts", "lookup_field": "title"}
         }
-        # extra_kwargs = {
-        #     "url": {"view_name": "api:user-detail", "lookup_field": "username"}
-        # }
+        
+
+    def create(self, validated_data):
+        owner = validated_data.pop('owner', None)
+        if owner:
+            validated_data['owner_id'] = owner.pk
+        return super().create(validated_data)
+    
+        # def create(self, validated_data):
+        #     image = validated_data.pop('get_image', None)
+        #     post = Post.objects.create(image=image, **validated_data)
+        #     return post
+        
+        # def to_representation(self, instance):
+        #     representation = super().to_representation(instance)
+        #     if instance.image and instance.image.storage.exists(instance.image.name):
+        #         representation['get_image'] = instance.image.url
+        #     return representation
 
 
 class PostVotesSerializer(serializers.ModelSerializer):
@@ -78,7 +102,6 @@ class AllPostsSerializer(serializers.ModelSerializer):
             "modified",
             'time_since_post',
             "title",
-            "link",
             "description",
             "description_br",
             "owner",

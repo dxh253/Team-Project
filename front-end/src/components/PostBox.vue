@@ -20,18 +20,18 @@
       </div>
       <div>
       <div class="post-box-interactions">
-        <i class="fas fa-arrow-up post-box-upvote fa-lg" @click="upvote" :style="{ color: upColor }"></i>
+        <i class="fas fa-arrow-up post-box-upvote fa-xl" @click="upvote" :style="{ color: upColor }"></i>
         <span>{{ post.score }}</span>
-        <i class="fas fa-arrow-down post-box-downvote fa-lg" @click="downvote" :style="{ color: downColor }"></i>
-        <span style="margin-left: 10px;"><i class="fa-sharp fa-solid fa-comments fa-lg"></i><router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">&nbsp;{{ post.number_of_comments }}Comments</router-link></span>
-        <i class="fa-sharp fa-solid fa-eye-slash fa-lg" v-on:click="isHidden = !isHidden" style="margin-left: 10px;"></i>
+        <i class="fas fa-arrow-down post-box-downvote fa-xl" @click="downvote" :style="{ color: downColor }"></i>
+        <span style="margin-left: 10px;"><i class="fa-sharp fa-solid fa-comments fa-xl"></i><router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">&nbsp;{{ post.number_of_comments }}Comments</router-link></span>
+        <i class="fa-sharp fa-solid fa-eye-slash fa-xl" v-on:click="isHidden = !isHidden" style="margin-left: 10px;"></i>
       </div>
       </div>
     </div>
     <div v-show="isHidden">
       <div class="post-box">
         <div style="justify-content: center; display: flex;">
-          <i class="fa-solid fa-eye fa-lg" v-on:click="isHidden = !isHidden"></i>
+          <i class="fa-solid fa-eye fa-xl" v-on:click="isHidden = !isHidden"></i>
         </div>
       </div>
     </div>

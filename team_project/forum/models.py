@@ -10,6 +10,7 @@ from dateutil.relativedelta import relativedelta
 
 
 
+
 class Category(TimeStampedModel):
     name = CharField(max_length=56, help_text='Enter category name')
     path = CharField(max_length=20, help_text='Enter category url path')
@@ -37,7 +38,6 @@ class Category(TimeStampedModel):
 
 class Post(TimeStampedModel):
     title = CharField(max_length=32, help_text='Enter Post Title')
-    link = URLField("Submit link to content", blank=True)
     description = TextField("Post Description", blank=True)
     owner = ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -46,7 +46,7 @@ class Post(TimeStampedModel):
     category = ForeignKey(Category,
                         on_delete=models.CASCADE,
                         null=False)
-
+    # image = models.ImageField(upload_to='images/', default='default.png')   
     slug = AutoSlugField(
         "Post url slug",
         unique=True,
@@ -135,6 +135,11 @@ class Post(TimeStampedModel):
         days_since_post, secs_since_post = diff_time.days, diff_time.seconds
         days_since_post_float = secs_since_post / 86400 + days_since_post
         return self.score() / days_since_post_float
+    
+    # def get_image(self):
+    #     if self.image:
+    #         return self.image.url
+    #     return ''
 
     category_slug = get_category
     full_url = get_full_url

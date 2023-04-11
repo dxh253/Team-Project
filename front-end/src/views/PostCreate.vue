@@ -1,25 +1,23 @@
 <template>
+  <body class="post">
     <div>
       <h1>Create a Post</h1>
       <form @submit.prevent="handleSubmit">
-        <label for="title">Title:</label>
-        <input id="title" v-model="title" type="text" required>
+        <input class="input" id="title" v-model="title" type="text" required placeholder="Title">
         <br>
-        <label for="link">Link:</label>
-        <input id="link" v-model="link" type="url">
+        <textarea class="description" id="description" v-model="description" placeholder="Description" rows="10"></textarea>
         <br>
-        <label for="description">Description:</label>
-        <textarea id="description" v-model="description" rows="5"></textarea>
-        <br>
-        <label for="category">Category:</label>
-        <select id="category" v-model="category" required>
-          <option value="" disabled>Select a category</option>
+        <div class="bottom">
+          <button type="submit">Create Post</button>
+          <br>
+          <select class="category" id="category" v-model="category" required>
+          <option value="" disabled>Category</option>
           <option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}</option>
         </select>
-        <br>
-        <button type="submit">Create Post</button>
+        </div>
       </form>
     </div>
+  </body>
   </template>
   
   <script>
@@ -29,7 +27,6 @@
     data() {
       return {
         title: '',
-        link: '',
         description: '',
         owner: '',
         category: '',
@@ -52,7 +49,6 @@
       handleSubmit() {
         const payload = {
           title: this.title,
-          link: this.link,
           description: this.description,
           category: this.category,
           owner: 1,
@@ -62,11 +58,14 @@
           alert('Post created successfully!');
           this.$router.push('/'); // Redirect to homepage or wherever you want
         }).catch((error) => {
-          alert(`Error creating post: ${error.response.data}`);
+          console.log(error);
         });
       },
-      
     },
   };
   </script>
+
+  <style>
+  @import url('./../assets/PostCreate.css');
+  </style>
   

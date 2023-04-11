@@ -4,12 +4,18 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
-psycopg2 = "*"
+django = "==4.1.7"
+psycopg2-binary = "*"
+djoser = "*"
+django-rest-framework = "*"
+django-cors-headers = "*"
+pillow = "*"
 pyjwt = "*"
+azure-storage-blob = "*"
+azure-identity = "*"
+django-storages = "*"
 
 [dev-packages]
-autopep8 = "*"
 
 [requires]
 python_version = "3.11"

@@ -91,6 +91,7 @@ INSTALLED_APPS = [
     'djoser',
     'rest_framework_simplejwt.token_blacklist',
     'azure.storage.blob',
+    'storages',
 ]
 
 
