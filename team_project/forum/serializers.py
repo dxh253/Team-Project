@@ -9,15 +9,7 @@ class PostSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all()
     )
-    # get_image = serializers.ImageField(max_length=None, use_url=True, required=False)
-    # def __init__(self, instance=None, data=..., **kwargs):
-    #     super().__init__(instance, data, **kwargs)
-    #     print('init')
-    #     print(self)
-    #     print(instance)
-    #     print(data)
-    #     print(kwargs)
-    #     data['owner'] = get_user_model().objects.get(id=1)
+    get_image = serializers.ImageField(max_length=None, use_url=True, required=False)
 
     class Meta:
         model = Post
@@ -39,7 +31,7 @@ class PostSerializer(serializers.ModelSerializer):
             'category_slug',
             'full_url',
             'user_vote',
-            # 'get_image',
+            'get_image',
         ]
         extra_kwargs = {
             "url": {"view_name": "api:posts", "lookup_field": "title"}
@@ -52,16 +44,16 @@ class PostSerializer(serializers.ModelSerializer):
             validated_data['owner_id'] = owner.pk
         return super().create(validated_data)
     
-        # def create(self, validated_data):
-        #     image = validated_data.pop('get_image', None)
-        #     post = Post.objects.create(image=image, **validated_data)
-        #     return post
+    def create(self, validated_data):
+        image = validated_data.pop('get_image', None)
+        post = Post.objects.create(image=image, **validated_data)
+        return post
         
-        # def to_representation(self, instance):
-        #     representation = super().to_representation(instance)
-        #     if instance.image and instance.image.storage.exists(instance.image.name):
-        #         representation['get_image'] = instance.image.url
-        #     return representation
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if instance.image and instance.image.storage.exists(instance.image.name):
+            representation['get_image'] = instance.image.url
+        return representation
 
 
 class PostVotesSerializer(serializers.ModelSerializer):

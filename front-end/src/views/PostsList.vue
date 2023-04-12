@@ -35,7 +35,7 @@ export default {
   },
   computed: mapState(['APIData']),
   created() {
-    getAPI.get('/allposts/')
+    getAPI.get('/posts/')
       .then(response => {
         console.log("Post API has received data")
         this.allposts = response.data
@@ -52,8 +52,8 @@ export default {
   background-color: #c5aaf0;
   padding: 20px;
   border-radius: 25px;
-  float:left;
-  width:85%;
+  float: left;
+  width:45%;
 }
 
 
@@ -87,5 +87,6 @@ export default {
     width: 15%;
     float: left;
     padding-right: 25px;
+    margin-left: 280px;
   }
 </style>

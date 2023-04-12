@@ -10,8 +10,6 @@
           <span class="post-box-subreddit-name">{{ post.category_name }}</span>
         </div>
         <div class="post-box-score">
-          
-          
         </div>
         <div class="post-box-time">
           <i class="far fa-clock"></i>
@@ -19,13 +17,16 @@
         </div>
       </div>
       <div>
+        <figure>
+          <img :src="post.get_image" class="image">
+        </figure>
+      </div>
       <div class="post-box-interactions">
         <i class="fas fa-arrow-up post-box-upvote fa-xl" @click="upvote" :style="{ color: upColor }"></i>
         <span>{{ post.score }}</span>
         <i class="fas fa-arrow-down post-box-downvote fa-xl" @click="downvote" :style="{ color: downColor }"></i>
         <span style="margin-left: 10px;"><i class="fa-sharp fa-solid fa-comments fa-xl"></i><router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">&nbsp;{{ post.number_of_comments }}Comments</router-link></span>
         <i class="fa-sharp fa-solid fa-eye-slash fa-xl" v-on:click="isHidden = !isHidden" style="margin-left: 10px;"></i>
-      </div>
       </div>
     </div>
     <div v-show="isHidden">
@@ -232,6 +233,9 @@ export default {
     margin-left: 5px;
   }
 
+  .image {
+    max-width: 400px; max-height:400px; width:auto; height: auto; object-fit: contain; align-items: center; display: block; margin-left: auto; margin-right: auto;
+  }
   </style>
   
   
