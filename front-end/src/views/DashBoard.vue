@@ -1,40 +1,38 @@
 <template>
-
-    <div>
-      <div class="main2">
-        <div class="event-card">
-          <router-link to="/events">Events</router-link>
-        </div>
-        <div class="event-card">
-          <router-link to="/discussions">Discussions</router-link>
-        </div>
-        <div class="event-card">
-          <router-link to="/resources">Resources</router-link>
-        </div>
-        <div class="event-card">
-          <router-link to="/study-group">Study group</router-link>
-        </div>
-        <div class="event-card">
-          <router-link to="/help">Help</router-link>
-        </div>
+  <div>
+    <div class="main2">
+      <div class="event-card">
+        <router-link v-a11y-link="'Events'" to="/events">Events</router-link>
       </div>
-      <div class="your-events">
-        <h3>Your saved events:</h3>
-        <ul>
-            <li v-for="event in userEvents" :key="event.id">
-            <router-link :to="'' + event.event.get_absolute_url">
-            {{ event.event.name }}
-            </router-link>
-            </li>
-        </ul>
-
-
+      <div class="event-card">
+        <router-link v-a11y-link="'Discussions'" to="/discussions">Discussions</router-link>
+      </div>
+      <div class="event-card">
+        <router-link v-a11y-link="'Resources'" to="/resources">Resources</router-link>
+      </div>
+      <div class="event-card">
+        <router-link v-a11y-link="'Study group'" to="/study-group">Study group</router-link>
+      </div>
+      <div class="event-card">
+        <router-link v-a11y-link="'Help'" to="/help">Help</router-link>
       </div>
     </div>
-  </template>
+    <div class="your-events">
+      <h3>Your saved events:</h3>
+      <ul>
+        <li v-for="event in userEvents" :key="event.id">
+          <router-link :to="'' + event.event.get_absolute_url" v-a11y-link="event.event.name">
+            {{ event.event.name }}
+          </router-link>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
   
   <script>
- import { getAPI } from '@/plugins/axios'
+  // import Vue from 'vue';
+  import { getAPI } from '@/plugins/axios'
   
   export default {
     name: 'DashBoard',

@@ -21,6 +21,7 @@ import { RouterView } from "vue-router";
           <router-link to="/events" class="navbar-item">Events</router-link>
           <router-link to="" class="navbar-item">Discussion</router-link>
           <router-link to="/dashboard" class="navbar-item">Dashboard</router-link>
+          <Accessibility/>
 
       <div class="navbar-item">
         <div class="buttons">
@@ -46,19 +47,23 @@ import { RouterView } from "vue-router";
 </template>
 
 <style lang="scss">
-  @import '../node_modules/bulma/bulma.sass'
+  @import '../node_modules/bulma/bulma.sass';
 </style>
 
 
   <script>
-  import { mapState } from 'vuex'
+  import { mapState } from 'vuex';
+  import Accessibility from '@/components/AccessibilityPage.vue';
+
   export default {
     computed: mapState(['accessToken']),
-
+    components:{
+      Accessibility
+    },
     methods: {
       logout() {
-        this.$store.dispatch('userLogout')
-        this.$router.push('/')
+        this.$store.dispatch('userLogout');
+        this.$router.push('/');
       },
     },
   }
