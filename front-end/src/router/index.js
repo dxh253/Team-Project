@@ -8,6 +8,7 @@ import EventsDetail from "../views/EventsDetail.vue"
 import EventsForm from "../views/EventsForm.vue"
 import Dashboard from "../views/DashBoard.vue"
 import PrivacyPolicy from "../views/PrivacyPolicy.vue"
+import HelpSection from "../views/HelpSection"
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -75,6 +76,14 @@ const router = createRouter({
             path: "/dashboard/",
             name: "Dashboard",
             component: Dashboard,
+            meta: {
+                requiresLogin: true
+            }
+        },
+        {
+            path: "/help/",
+            name: "Help_Section",
+            component: HelpSection,
             meta: {
                 requiresLogin: true
             }

@@ -21,6 +21,7 @@ import { RouterView } from "vue-router";
           <router-link to="/events" class="navbar-item">Events</router-link>
           <router-link to="" class="navbar-item">Discussion</router-link>
           <router-link to="/dashboard" class="navbar-item">Dashboard</router-link>
+          <router-link to="/help" class="navbar-item">Help</router-link>
 
       <div class="navbar-item">
         <div class="buttons">
