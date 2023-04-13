@@ -15,6 +15,7 @@
                     <option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}
                     </option>
                 </select>
+                <input type="file" @change="onFileSelected"/>
             </div>
         </form>
     </div>
@@ -32,6 +33,7 @@ export default {
             owner: '',
             category: '',
             categories: [],
+            image: null,
         };
     },
     mounted() {
@@ -47,6 +49,9 @@ export default {
                     console.log(error);
                 });
         },
+        onFileSelected(event) {
+            this.get_image = event.target.files[0];
+        },
         handleSubmit() {
             // Decode the JWT token to get the user ID
             const token = localStorage.getItem("access");
@@ -58,12 +63,14 @@ export default {
                 description: this.description,
                 category: this.category,
                 owner: userId,
+                get_image: this.get_image,
             };
 
             getAPI
                 .post("/posts/", payload, {
                     headers: {
                         Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data',
                     },
                 })
                 .then(() => {
