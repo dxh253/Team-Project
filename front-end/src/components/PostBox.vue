@@ -5,31 +5,31 @@
             }}</router-link>
             </h3>
             <p class="post-box-description">{{ post.description }}</p>
+            <div>
+                <figure>
+                <img :src="post.get_image" class="image">
+                </figure>
+            </div>
             <div class="post-box-details">
-                <div class="post-box-subreddit">
+                <div class="post-box-category">
                     <i class="fas fa-rss"></i>
-                    <span class="post-box-subreddit-name">{{ post.category_name }}</span>
+                    <span class="post-box-category-name">{{ post.category_name }}</span>
                 </div>
-                <div class="post-box-score">
-                    <i class="fas fa-arrow-up post-box-upvote fa-xl" @click="upvote" :style="{ color: upColor }"></i>
-                    <span>{{ totalScore }}</span>
-                    <i class="fas fa-arrow-down post-box-downvote fa-xl" @click="downvote"
-                        :style="{ color: downColor }"></i>
-                </div>
+                
                 <div class="post-box-time">
                     <i class="far fa-clock"></i>
                     <span class="post-box-time-since">{{ post.time_since_post }}</span>
                 </div>
             </div>
-            <div>
-                <div class="post-box-interactions">
-                    <i class="fa-sharp fa-solid fa-comments fa-xl"></i>
-                    <router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">&nbsp;{{ post.number_of_comments
-                    }}Comments</router-link>
-                    <i class="fa-sharp fa-solid fa-eye-slash fa-xl" v-on:click="isHidden = !isHidden"
-                        style="margin-left: 10px;"></i>
-                </div>
+            <div class="post-box-interactions">
+                <i class="fas fa-arrow-up post-box-upvote fa-xl" @click="upvote" :style="{ color: upColor }"></i>
+                <span>{{ post.score }}</span>
+                <i class="fas fa-arrow-down post-box-downvote fa-xl" @click="downvote" :style="{ color: downColor }"></i>
+                <span style="margin-left: 10px;"><i class="fa-sharp fa-solid fa-comments fa-xl"></i><router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">&nbsp;{{ post.number_of_comments }}Comments</router-link></span>
+                <i class="fa-sharp fa-solid fa-eye-slash fa-xl" v-on:click="isHidden = !isHidden" style="margin-left: 10px;"></i>
             </div>
+
+
         </div>
         <div v-show="isHidden">
             <div class="post-box">
@@ -43,7 +43,7 @@
 
 
 <script>
-    import { getAPI } from '@/plugins/axios';
+import { getAPI } from '@/plugins/axios';
 import { reactive } from '@vue/reactivity';
 import jwt_decode from 'jwt-decode';
 
@@ -174,70 +174,75 @@ export default {
 
 <style>
 .post-box {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 25px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin-bottom: 20px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
 }
 
 .post-box-title {
-    margin-top: 0;
-    display: flex;
+  margin-top: 0;
+  display: flex;
 }
 
 .post-box-description {
-    color: #666;
-    font-size: 16px;
-    line-height: 1.5;
+  color: #666;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 .post-box-details {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
 }
 
-.post-box-interactions {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
+.post-box-interactions{
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
 }
 
-.post-box-subreddit {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    color: #999;
+.post-box-category {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #999;
 }
 
 .post-box-score {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    color: #999;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #999;
 }
 
 .post-box-upvote,
 .post-box-downvote {
-    cursor: pointer;
-    margin: 0 5px;
+  cursor: pointer;
+  margin: 0 5px;
 }
 
 .post-box-score-value {
-    margin: 0 10px;
+  margin: 0 10px;
 }
 
 .post-box-time {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    color: #999;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #999;
 }
 
 .post-box-time-since {
-    margin-left: 5px;
+  margin-left: 5px;
+}
+
+.image {
+  max-width: 400px; max-height:400px; width:auto; height: auto; object-fit: contain; align-items: center; display: block; margin-left: auto; margin-right: auto;
 }
 </style>
+

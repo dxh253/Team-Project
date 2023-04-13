@@ -45,6 +45,7 @@ class Post(TimeStampedModel):
     category = ForeignKey(Category,
                         on_delete=models.CASCADE,
                         null=False)
+    image = models.ImageField(upload_to='images/', default='default.png')   
     slug = AutoSlugField(
         "Post url slug",
         unique=True,
@@ -131,6 +132,12 @@ class Post(TimeStampedModel):
         days_since_post, secs_since_post = diff_time.days, diff_time.seconds
         days_since_post_float = secs_since_post / 86400 + days_since_post
         return self.score() / days_since_post_float
+    
+    def get_image(self):
+        if self.image:
+            return self.image.url
+        return ''
+
 
     category_slug = get_category
     full_url = get_full_url

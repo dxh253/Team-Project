@@ -38,7 +38,7 @@ export default {
         const token = localStorage.getItem("access");
 
         getAPI
-            .get("/allposts/", {
+            .get("/posts/", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -56,15 +56,15 @@ export default {
 
 <style>
 .post-background {
-    background-color: #c5aaf0;
-    padding: 20px;
-    border-radius: 25px;
-    float: left;
-    width: 85%;
+  background-color: #c5aaf0;
+  padding: 20px;
+  border-radius: 25px;
+  float: left;
+  width:45%;
 }
 
 
-.sidebar {
+  .sidebar {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -75,9 +75,9 @@ export default {
     border-radius: 25px;
     margin-bottom: 25px;
     color: black;
-}
+  }
 
-.create {
+  .create {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -88,11 +88,13 @@ export default {
     border-radius: 25px;
     padding: 25px;
     color: white;
-}
+  }
 
-.left {
+  .left{
     width: 15%;
     float: left;
     padding-right: 25px;
-}
+    margin-left: 280px;
+  }
+
 </style>
