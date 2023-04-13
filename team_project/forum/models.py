@@ -45,7 +45,6 @@ class Post(TimeStampedModel):
     category = ForeignKey(Category,
                         on_delete=models.CASCADE,
                         null=False)
-    # image = models.ImageField(upload_to='images/', default='default.png')
     slug = AutoSlugField(
         "Post url slug",
         unique=True,
@@ -55,11 +54,9 @@ class Post(TimeStampedModel):
     user_up_style = ''
     user_down_style = ''
 
-    # Metadata
     class Meta:
         ordering = ['-modified']
 
-    # Methods
     def get_absolute_url(self):
         return reverse('reddit:post', kwargs={'slug': self.slug, 'category_slug': self.category_slug})
 
@@ -135,14 +132,8 @@ class Post(TimeStampedModel):
         days_since_post_float = secs_since_post / 86400 + days_since_post
         return self.score() / days_since_post_float
 
-    # def get_image(self):
-    #     if self.image:
-    #         return self.image.url
-    #     return ''
-
     category_slug = get_category
     full_url = get_full_url
-
 
 class PostVotes(Model):
     post_id = ForeignKey('Post', related_name='post', on_delete=models.CASCADE)
@@ -160,7 +151,6 @@ class PostVotes(Model):
         if self.vote == -1:
             return 'blue'
         return 'grey'
-
 
 class PostComment(TimeStampedModel):
     class Meta:

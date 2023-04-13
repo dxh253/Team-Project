@@ -68,7 +68,7 @@ export default {
                 })
                 .then(() => {
                     alert("Post created successfully!");
-                    this.$router.push("/"); // Redirect to homepage or wherever you want
+                    this.$router.push("/posts"); // Redirect to homepage or wherever you want
                 })
                 .catch((error) => {
                     console.log(error);

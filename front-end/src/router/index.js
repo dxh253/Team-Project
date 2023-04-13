@@ -43,12 +43,18 @@ const router = createRouter({
         {
             path: "/posts/",
             name: "Posts",
-            component: () => import("../views/PostsList.vue")
+            component: () => import("../views/PostsList.vue"),
+            meta: {
+                requiresLogin: true
+            }
         },
         {
             path: "/create/",
             name: "create",
-            component: PostCreate
+            component: PostCreate,
+            meta: {
+                requiresLogin: true
+            }
         },
         {
             path: "/events_form/",

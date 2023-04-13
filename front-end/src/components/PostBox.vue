@@ -41,8 +41,9 @@
     </div>
 </template>
 
+
 <script>
-import { getAPI } from '@/plugins/axios';
+    import { getAPI } from '@/plugins/axios';
 import { reactive } from '@vue/reactivity';
 import jwt_decode from 'jwt-decode';
 
@@ -90,10 +91,10 @@ export default {
             .then((response) => {
                 const existingVote = response.data.find(
                     (vote) => vote.post_id === this.post.id && vote.user_id === userId
-                );
+                    );
 
-                if (existingVote) {
-                    this.userVote = reactive(existingVote);
+                    if (existingVote) {
+                        this.userVote = reactive(existingVote);
                     this.vote = existingVote.vote;
                 }
             })
@@ -129,13 +130,16 @@ export default {
 
         updateVote() {
             const token = localStorage.getItem('access');
+            const decodedToken = jwt_decode(token);
+            const userId = decodedToken.user_id;
+
             const data = {
                 post_id: this.post.id,
-                user_id: 1,
+                user_id: userId,
                 vote: this.vote,
                 id: this.userVote ? this.userVote.id : null,
             };
-
+            
             if (data.id) {
                 getAPI
                     .put(`/posts/${this.post.id}/votes/${this.userVote.id}/`, data, {
@@ -149,8 +153,8 @@ export default {
                     .catch((error) => {
                         console.log(error);
                     });
-            } else {
-                getAPI
+                } else {
+                    getAPI
                     .post(`/posts/${this.post.id}/votes/`, data, {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -162,13 +166,11 @@ export default {
                     .catch((error) => {
                         console.log(error);
                     });
-            }
+                }
+            },
         },
-    },
-};
+    };
 </script>
-
-
 
 <style>
 .post-box {
@@ -210,8 +212,6 @@ export default {
     font-size: 14px;
     color: #999;
 }
-
-.post-box-subreddit-name {}
 
 .post-box-score {
     display: flex;
