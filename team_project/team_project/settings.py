@@ -39,11 +39,17 @@ CORS_ALLOWED_ORIGINS = [
     "http://192.168.0.25:8081",
     "http://192.168.0.25:8080",
     "https://team22-22.bham.team",
+    "http://0.0.0.0:8000",
 ]
 
 CORS_ORIGIN_WHITELIST = [
+    "https://team22-22.bham.team",
+    "http://192.168.0.25:8080",
+    "http://192.168.0.25:8081",
     "http://localhost:8080",
     "http://localhost:8081",
+    "https://team22-22.bham.team/register",
+    "http://0.0.0.0:8000/",
 ]
 
 default_headers = [
@@ -79,6 +85,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'djoser',
     'rest_framework_simplejwt.token_blacklist',
+    'azure.storage.blob',
     'storages',
 ]
 
@@ -92,7 +99,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'authentication.middleware.AddTokenHeaderMiddleware',
 ]
 
 ROOT_URLCONF = 'team_project.urls'

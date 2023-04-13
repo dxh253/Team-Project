@@ -5,7 +5,7 @@
         <router-link v-a11y-link="'Events'" to="/events">Events</router-link>
       </div>
       <div class="event-card">
-        <router-link v-a11y-link="'Discussions'" to="/discussions">Discussions</router-link>
+        <router-link v-a11y-link="'Discussions'" to="/posts">Discussions</router-link>
       </div>
       <div class="event-card">
         <router-link v-a11y-link="'Resources'" to="/resources">Resources</router-link>

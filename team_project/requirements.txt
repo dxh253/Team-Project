@@ -8,3 +8,6 @@ pyjwt
 azure-storage-blob
 azure-identity
 django-storages
+django-autoslug
+django-model-utils
+python-dateutil

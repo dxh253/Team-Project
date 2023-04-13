@@ -8,6 +8,8 @@ import EventsDetail from "../views/EventsDetail.vue"
 import EventsForm from "../views/EventsForm.vue"
 import Dashboard from "../views/DashBoard.vue"
 import PrivacyPolicy from "../views/PrivacyPolicy.vue"
+import PostCreate from "../views/PostCreate.vue"
+
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -39,6 +41,16 @@ const router = createRouter({
 
         },
         {
+            path: "/posts/",
+            name: "Posts",
+            component: () => import("../views/PostsList.vue")
+        },
+        {
+            path: "/create/",
+            name: "create",
+            component: PostCreate
+        },
+        {
             path: "/events_form/",
             name: "EventsForm",
             component: EventsForm,
@@ -64,6 +76,11 @@ const router = createRouter({
                 requiresLogin: true
             }
 
+        },
+        {
+            path: "/posts/:slug/",
+            name: "post-detail",
+            // component: () => import("../views/PostDetail.vue")
         },
         {
             path: "/privacy_policy/",
