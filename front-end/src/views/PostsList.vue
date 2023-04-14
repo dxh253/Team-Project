@@ -16,6 +16,7 @@
             <vote :post-id="post.id" :initial-score="post.score"></vote>
         </div>
     </div>
+    <button @click="scrollToTop" class="myBtn">Scroll to top</button>
 </template>
 
 <script>
@@ -34,6 +35,12 @@ export default {
         }
     },
     computed: mapState(['APIData']),
+    methods: {
+      scrollToTop() {
+        // Scroll to top with smooth behavior
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+      },
     created() {
         const token = localStorage.getItem("access");
 
@@ -55,6 +62,21 @@ export default {
 </script>
 
 <style>
+.myBtn {
+  /* display: none; Hidden by default */
+  position: fixed; /* Fixed/sticky position */
+  bottom: 20px; /* Place the button at the bottom of the page */
+  right: 30px; /* Place the button 30px from the right */
+  z-index: 99; /* Make sure it does not overlap */
+  border: none; /* Remove borders */
+  outline: none; /* Remove outline */
+  background-color: #7B57AA; /* Set a background color */
+  color: white; /* Text color */
+  cursor: pointer; /* Add a mouse pointer on hover */
+  padding: 15px; /* Some padding */
+  border-radius: 10px; /* Rounded corners */
+  font-size: 18px; /* Increase font size */
+}
 .post-background {
   background-color: #c5aaf0;
   padding: 20px;
