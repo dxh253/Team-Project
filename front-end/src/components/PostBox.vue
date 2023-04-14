@@ -1,9 +1,11 @@
 <template>
     <div>
         <div class="post-box" v-show="!isHidden">
-            <h3 class="post-box-title"><router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">{{ post.title
-            }}</router-link>
+            <div class= "post-box-header">
+            <h3 class="post-box-title"><router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">{{ post.title}}</router-link>
             </h3>
+            <span>&nbsp;// posted by {{ post.username }} </span>
+            </div>
             <p class="post-box-description">{{ post.description }}</p>
             <div>
                 <figure>
@@ -180,6 +182,12 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
   margin-bottom: 20px;
+}
+
+.post-box-header{
+  display: flex;
+  justify-content: left;
+  align-items: center;
 }
 
 .post-box-title {
