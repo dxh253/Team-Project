@@ -47,8 +47,79 @@
       </form>
     </div>
   </template>
-  
+
+
+
 <script>
+  import { getAPI } from '@/plugins/axios'
+  import jwt_decode from "jwt-decode";
+
+  export default {
+    data() {
+      return {
+        eventData: {
+          id: '',
+          name: '',
+          description: '',
+          venue: '',
+          date: '',
+          image: null,
+          thumbnail: null,
+        },
+      }
+    },
+    methods: {
+      handleImageUpload(event) {
+        if (event.target.files.length > 0) {
+          console.log(event.target.files[0])
+          this.eventData.get_image = event.target.files[0]
+        }
+      },
+      handleThumbnailUpload(event) {
+        if (event.target.files.length > 0) {
+          console.log(event.target.files[0])
+          this.eventData.get_thumbnail = event.target.files[0]
+        }
+      },
+
+      submitForm() {
+        console.log('submitForm method is executed');
+        const token = localStorage.getItem("access");
+        const decodedToken = jwt_decode(token);
+        const ownerId = decodedToken.user_id;
+
+        const formData = new FormData();
+        formData.append('id', this.eventData.id);
+        formData.append('name', this.eventData.name);
+        formData.append('description', this.eventData.description);
+        formData.append('venue', this.eventData.venue);
+        formData.append('date', this.eventData.date);
+        formData.append('get_image', this.eventData.get_image);
+        formData.append('get_thumbnail', this.eventData.get_thumbnail);
+        formData.append('owner', parseInt(ownerId));
+        getAPI
+          .post('api/v1/latest-events/', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': `Bearer ${this.$store.state.accessToken}`,
+            },
+            method: 'POST'
+          })
+          .then((response) => {
+            console.log('API response data:', response.data);
+            // console.log(response.data)
+            window.history.back()
+          })
+          .catch((error) => {
+            console.log(error.response.data);
+            // alert('Something went wrong. Please try again.')
+          })
+      },
+    },
+  }
+</script>
+  
+<!-- <script>
   import { getAPI } from '@/plugins/axios'
   
   export default {
@@ -111,7 +182,7 @@
 
     },
   }
-  </script>
+  </script> -->
 
 
   <!-- <template>
