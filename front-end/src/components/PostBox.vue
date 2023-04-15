@@ -6,6 +6,11 @@
                     post.title }}</router-link>
                 </h3>
                 <span>&nbsp;// posted by {{ post.username }} </span>
+                <div>
+                    <router-link v-if="isPostCreator" :to="{ name: 'edit-post', params: { id: post.id } }">
+                    <i class="fa-sharp fa-solid fa-pen-to-square fa-xl" style="margin-right: -1px"></i>
+                    </router-link>
+                </div>
             </div>
             <p class="post-box-description">{{ post.description }}</p>
             <div>
@@ -25,19 +30,15 @@
                 </div>
             </div>
             <div class="post-box-interactions">
-                <i class="fas fa-arrow-up post-box-upvote fa-xl" @click="upvote" :style="{ color: upColor }"></i>
+                <div class="flex-item"><i class="fas fa-arrow-up post-box-upvote fa-xl" @click="upvote" :style="{ color: upColor }"></i>
                 <span>{{ post.score }}</span>
                 <i class="fas fa-arrow-down post-box-downvote fa-xl" @click="downvote" :style="{ color: downColor }"></i>
-                <span style="margin-left: 10px;"><i class="fa-sharp fa-solid fa-comments fa-xl"></i><router-link
+                </div>
+                <div class ="flex-item"><span><i class="fa-sharp fa-solid fa-comments fa-xl"></i><router-link
                         :to="{ name: 'post-detail', params: { slug: post.slug } }">&nbsp;{{ post.number_of_comments
-                        }}Comments</router-link></span>
-                <i class="fa-sharp fa-solid fa-eye-slash fa-xl" v-on:click="isHidden = !isHidden"
-                    style="margin-left: 10px;"></i>
-                <button v-if="isPostCreator" @click="deletePost" class="delete-button">Delete</button>
-                <router-link v-if="isPostCreator" :to="{ name: 'edit-post', params: { id: post.id } }">
-                    <button class="edit-button">Edit</button>
-                </router-link>
-
+                        }}Comments</router-link></span></div>
+                <div class="flex-item"><i class="fa-sharp fa-solid fa-eye-slash fa-xl" v-on:click="isHidden = !isHidden"></i></div>
+                <div class= "flex-item"><i class="fa-solid fa-trash-can fa-xl" v-if="isPostCreator" @click="deletePost"></i></div>
             </div>
 
         </div>
@@ -244,6 +245,7 @@ export default {
     display: flex;
     align-items: center;
     margin-top: 10px;
+
 }
 
 .post-box-category {
@@ -291,4 +293,8 @@ export default {
     display: block;
     margin-left: auto;
     margin-right: auto;
-}</style>
+}
+.flex-item{
+    margin: 5px;
+}
+</style>
