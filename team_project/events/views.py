@@ -1,3 +1,5 @@
+from .models import UserEvent
+from django.shortcuts import get_object_or_404
 from django.http import Http404
 
 from rest_framework.views import APIView
@@ -10,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.utils.text import slugify
 from django.core.files.storage import default_storage as storage
+
 
 class EventsList(APIView):
     permission_classes = (IsAuthenticated,)
@@ -49,8 +52,18 @@ class EventsList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request, pk, format=None):
+        try:
+            event = Events.objects.get(pk=pk)
+            event.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Events.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 class EventsDetail(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get_object(self, category_slug, events_slug):
         print(self.request.user)
         # print(APIView.request.user)
@@ -58,25 +71,22 @@ class EventsDetail(APIView):
             return Events.objects.filter(category__slug=category_slug).get(slug=events_slug)
         except Events.DoesNotExist:
             raise Http404
-    
+
     def get(self, request, category_slug, events_slug, format=None):
         events = self.get_object(category_slug, events_slug)
         serializer = EventsSerializer(events)
         return Response(serializer.data)
-    
-    def delete_event(self):
-        # delete image and thumbnail files from storage
-        if self.image and self.image.storage.exists(self.image.name):
-            self.image.storage.delete(self.image.name)
-        if self.thumbnail and self.thumbnail.storage.exists(self.thumbnail.name):
-            self.thumbnail.storage.delete(self.thumbnail.name)
 
-        # delete related UserEvent instances
-        UserEvent.objects.filter(event=self).delete()
+    def delete(self, request, category_slug, events_slug, format=None):
+        events = self.get_object(category_slug, events_slug)
 
-        # delete the event instance
-        self.delete()
-        
+        # Check if the authenticated user is the owner of the event
+        if events.owner != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        events.delete_event()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class EventsView(generics.RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
@@ -86,18 +96,22 @@ class EventsView(generics.RetrieveAPIView):
         queryset = self.get_queryset()
         serializer = EventsSerializer(queryset, many=True)
         return Response(serializer.data)
-    
+
     def delete(self, request, category_slug, events_slug, format=None):
-        events = self.get_object(category_slug, events_slug)
-        events.delete_event()
+        user = request.user
+        if user.is_authenticated:
+            events = self.get_object(category_slug, events_slug)
+            events.delete_event()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_403_FORBIDDEN)
         return Response({"message": "Event deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
 
-from .models import UserEvent
 
 # Add this import at the top of the file
-from django.shortcuts import get_object_or_404
 
 # ...
+
 
 class SaveEvent(APIView):
     permission_classes = (IsAuthenticated,)
@@ -111,12 +125,13 @@ class SaveEvent(APIView):
 
         event = get_object_or_404(Events, id=event_id)
         user_event = UserEvent.objects.filter(user=user, event=event).first()
-        
+
         if user_event:  # Event is already saved, unsave it
             user_event.delete()
             return Response({"message": "Event is unsaved."}, status=status.HTTP_200_OK)
         else:  # Event is not saved, save it
-            user_event = UserEvent(user=user, event=event, name=event.name, date=event.date, category=event.category)
+            user_event = UserEvent(
+                user=user, event=event, name=event.name, date=event.date, category=event.category)
             user_event.save()
             serializer = UserEventSerializer(user_event)
             return Response(serializer.data, status=status.HTTP_201_CREATED)

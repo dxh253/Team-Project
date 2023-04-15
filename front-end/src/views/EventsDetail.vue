@@ -26,17 +26,12 @@
             <h2 class="subtitle is-4">Description</h2>
             <p>{{ events.description }}</p>
           </div>
+          <div class="button-is-danger" @click="deleteEvents">Delete</div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-
-
-  
-
-
 
 <script>
 import axios from 'axios'
@@ -44,28 +39,45 @@ import { getAPI } from '@/plugins/axios';
 export default {
   name: 'EventsDetail',
   data() {
-      return {
-          events: {}
-      }
+    return {
+      events: {}
+    }
   },
   mounted() {
-      this.getEvents()
+    this.getEvents()
   },
   methods: {
-      getEvents() {
-          const category_slug = this.$route.params.category_slug
-          const events_slug = this.$route.params.events_slug
+    getEvents() {
+      const category_slug = this.$route.params.category_slug
+      const events_slug = this.$route.params.events_slug
 
-          axios
-              getAPI.get(`api/v1/events/${category_slug}/${events_slug}/`, { headers: { Authorization: `Bearer ${this.$store.state.accessToken}` } })
-              .then(response => {
-                  this.events = response.data
-              })
-              .catch(error => {
-                  console.log(error)
-              })
-      }
-  
+      axios
+      getAPI.get(`api/v1/events/${category_slug}/${events_slug}/`, { headers: { Authorization: `Bearer ${this.$store.state.accessToken}` } })
+        .then(response => {
+          this.events = response.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    deleteEvents() {
+      const category_slug = this.$route.params.category_slug
+      const events_slug = this.$route.params.events_slug
+
+      axios
+      getAPI.delete(`/api/v1/events/${category_slug}/${events_slug}/`, { headers: { Authorization: `Bearer ${this.$store.state.accessToken}` } })
+        .then(() => {
+          // Redirect the user to the /events page
+          window.location.href = '/events';
+        })
+        .catch(error => {
+          if (error.response.status === 403) {
+            alert('You are not authorized to delete this event.')
+          } else {
+            console.log(error)
+          }
+        })
+    }
   }
 }
 </script>
