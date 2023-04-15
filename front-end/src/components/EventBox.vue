@@ -10,9 +10,6 @@
       <span class="icon is-large is-clickable" @click="saveEvent(event.id)">
         <font-awesome-icon class="right" icon="bookmark" />
       </span>
-      <span class="icon is-large is-clickable" @click="deleteEvent(event.id)">
-        <font-awesome-icon class="right" icon="bookmark" />
-      </span>
     </div>
   </div>
 </template>
@@ -47,26 +44,6 @@ export default {
       } catch (error) {
         console.error('Error saving event:', error);
         alert('Error saving the event. Please try again.');
-      }
-    },
-
-    async deleteEvent(eventId) {
-      try {
-        const token = localStorage.getItem('access');
-        const headers = {
-          Authorization: `Bearer ${token}`,
-        };
-
-        const response = await getAPI.delete(`/api/v1/events/${eventId}/`, { headers });
-
-        if (response.status === 204) {
-          notyf.success('Event deleted successfully.');
-        } else {
-          notyf.error('Error deleting the event.');
-        }
-      } catch (error) {
-        console.error('Error deleting event:', error);
-        alert('Error deleting the event. Please try again.');
       }
     },
   },

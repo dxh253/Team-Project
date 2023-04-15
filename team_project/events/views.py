@@ -58,21 +58,74 @@ class EventsList(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
+# class EventsDetail(APIView):
+#     permission_classes = [IsAuthenticated]
+#     def get_object(self, category_slug, events_slug):
+#         print(self.request.user)
+#         # print(APIView.request.user)
+#         try:
+#             return Events.objects.filter(category__slug=category_slug).get(slug=events_slug)
+#         except Events.DoesNotExist:
+#             raise Http404
+    
+#     def get(self, request, category_slug, events_slug, format=None):
+#         events = self.get_object(category_slug, events_slug)
+#         serializer = EventsSerializer(events)
+#         return Response(serializer.data)
+    
+#     def put(self, request, category_slug, events_slug, format=None):
+#         events = self.get_object(category_slug, events_slug)
+
+#         # Check if the authenticated user is the owner of the event
+#         if events.owner != request.user:
+#             return Response(status=status.HTTP_403_FORBIDDEN)
+
+#         # Update the event's fields based on the data sent by the user
+#         serializer = EventsSerializer(events, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+#     def delete(self, request, category_slug, events_slug, format=None):
+#         events = self.get_object(category_slug, events_slug)
+
+#         # Check if the authenticated user is the owner of the event
+#         if events.owner != request.user:
+#             return Response(status=status.HTTP_403_FORBIDDEN)
+
+#         events.delete_event()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+
 class EventsDetail(APIView):
     permission_classes = [IsAuthenticated]
+
     def get_object(self, category_slug, events_slug):
-        print(self.request.user)
-        # print(APIView.request.user)
         try:
             return Events.objects.filter(category__slug=category_slug).get(slug=events_slug)
         except Events.DoesNotExist:
             raise Http404
-    
+
     def get(self, request, category_slug, events_slug, format=None):
         events = self.get_object(category_slug, events_slug)
         serializer = EventsSerializer(events)
         return Response(serializer.data)
-    
+
+    def put(self, request, category_slug, events_slug, format=None):
+        events = self.get_object(category_slug, events_slug)
+
+        # Check if the authenticated user is the owner of the event
+        if events.owner != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        serializer = EventsSerializer(events, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
     def delete(self, request, category_slug, events_slug, format=None):
         events = self.get_object(category_slug, events_slug)
 
@@ -82,6 +135,7 @@ class EventsDetail(APIView):
 
         events.delete_event()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
         
 
 class EventsView(generics.RetrieveAPIView):
