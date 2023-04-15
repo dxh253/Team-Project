@@ -124,12 +124,10 @@ class Events(models.Model):
             self.slug = slugify(f"{new_id}-{self.name}")
 
         super().save(*args, **kwargs)
+    
+    def delete_event(self, user=None, *args, **kwargs):
+        super().delete(*args, **kwargs)
 
-    def delete(self, user=None, *args, **kwargs):
-        if user and self.owner == user:
-            super().delete(*args, **kwargs)
-        else:
-            raise PermissionError('Only the post owner can delete this post')
 
 
         

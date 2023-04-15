@@ -10,11 +10,69 @@
       <span class="icon is-large is-clickable" @click="saveEvent(event.id)">
         <font-awesome-icon class="right" icon="bookmark" />
       </span>
+      <span class="icon is-large is-clickable" @click="deleteEvent(event.id)">
+        <font-awesome-icon class="right" icon="bookmark" />
+      </span>
     </div>
   </div>
 </template>
-
 <script>
+import { getAPI } from '@/plugins/axios';
+import { notyf } from '@/plugins/notyf';
+
+export default {
+  name: 'EventBox',
+  props: ['event'],
+  methods: {
+    async saveEvent(eventId) {
+      try {
+        const token = localStorage.getItem('access');
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+
+        const data = {
+          event_id: eventId,
+        };
+
+        const response = await getAPI.post('/api/v1/save-event/', data, { headers });
+
+        if (response.status === 201) {
+          notyf.success('Event saved to your profile.');
+        } else if (response.status === 200) {
+          notyf.success('You have removed this item from your saved list');
+        } else {
+          notyf.error('Error saving the event.');
+        }
+      } catch (error) {
+        console.error('Error saving event:', error);
+        alert('Error saving the event. Please try again.');
+      }
+    },
+
+    async deleteEvent(eventId) {
+      try {
+        const token = localStorage.getItem('access');
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+
+        const response = await getAPI.delete(`/api/v1/events/${eventId}/`, { headers });
+
+        if (response.status === 204) {
+          notyf.success('Event deleted successfully.');
+        } else {
+          notyf.error('Error deleting the event.');
+        }
+      } catch (error) {
+        console.error('Error deleting event:', error);
+        alert('Error deleting the event. Please try again.');
+      }
+    },
+  },
+};
+</script>
+<!-- <script>
 import { getAPI } from '@/plugins/axios';
 import {notyf} from '@/plugins/notyf';
 
@@ -49,7 +107,7 @@ export default {
     },
   },
 };
-</script>
+</script> -->
 
 <style scoped>
 .image {
