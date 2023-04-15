@@ -168,7 +168,8 @@ export default {
             <p>{{ events.description }}</p>
           </div>
           <hr>
-          <div class="dropdown is-hoverable">
+          
+          <div v-if="isOwner" class="dropdown is-hoverable">
             <div class="dropdown-trigger">
               <button class="button is-small" aria-haspopup="true" aria-controls="dropdown-menu">
                 <span>Options</span>
@@ -241,6 +242,7 @@ export default {
 <script>
 import axios from 'axios';
 import { getAPI } from '@/plugins/axios';
+import jwt_decode from "jwt-decode";
 
 export default {
   name: 'EventsDetail',
@@ -253,6 +255,7 @@ export default {
       description: '',
       date: '',
       showForm: false,
+      isOwner: false,
     };
   },
   mounted() {
@@ -262,6 +265,9 @@ export default {
     getEvents() {
       const category_slug = this.$route.params.category_slug;
       const events_slug = this.$route.params.events_slug;
+      const token = this.$store.state.accessToken;
+      const decodedToken = jwt_decode(token);
+      const userId = decodedToken.user_id;
 
       axios
         getAPI.get(`api/v1/events/${category_slug}/${events_slug}/`, {
@@ -269,6 +275,12 @@ export default {
         })
         .then((response) => {
           this.events = response.data;
+          // Check if the user is the owner of the event
+          if (this.events.owner === userId) {
+          this.isOwner = true;
+        }
+          console.log('user:', this.$store.state.user);
+          console.log('event owner:', this.events.owner);
         })
         .catch((error) => {
           console.log(error);
