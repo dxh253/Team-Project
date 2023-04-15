@@ -15,7 +15,10 @@
                     <option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}
                     </option>
                 </select>
-                <input type="file" @change="onFileSelected"/>
+                <label>
+                    <i class="fa-solid fa-image fa-xl"></i>
+                    <input type="file" @change="onFileSelected" style="display:none"/>
+                </label>
             </div>
         </form>
     </div>

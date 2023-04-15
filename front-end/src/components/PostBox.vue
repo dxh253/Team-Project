@@ -8,7 +8,7 @@
                 <span>&nbsp;// posted by {{ post.username }} </span>
                 <div class="post-box-edit">
                 <div class="flex-item">
-                    <router-link v-if="isPostCreator" :to="{ name: 'edit-post', params: { id: post.id } }">
+                    <router-link v-if="isPostCreator" :to="{ name: 'edit-post', params: { id: post.id } }"> 
                     <i class="fa-sharp fa-solid fa-pen-to-square fa-xl"></i>
                     </router-link>
                 </div>

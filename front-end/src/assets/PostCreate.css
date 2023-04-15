@@ -58,5 +58,11 @@
 .bottom {
     display: flex;
     align-items: center;
-    margin-top: 15px;
+    margin: 15px;
+
+}
+
+.post label{
+    margin-top:10px;
+    margin-left:10px;
 }
