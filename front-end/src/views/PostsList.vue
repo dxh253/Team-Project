@@ -12,8 +12,9 @@
     <div class="post-background">
         <h2 style="color: black; margin-bottom: 10px;">Posts</h2>
         <div v-for="post in allposts" :key="post.id">
-            <post-box :post="post" />
+            <!-- <post-box :post="post" /> -->
             <vote :post-id="post.id" :initial-score="post.score"></vote>
+            <post-box :post="post" @postDeleted="removePostFromList" />
         </div>
     </div>
     <button @click="scrollToTop" class="myBtn">Scroll to top</button>
@@ -39,8 +40,11 @@ export default {
       scrollToTop() {
         // Scroll to top with smooth behavior
         window.scrollTo({ top: 0, behavior: 'instant' });
-        }
       },
+      removePostFromList(postId) {
+        this.allposts = this.allposts.filter((post) => post.Id !== postId);
+      },
+  },
     created() {
         const token = localStorage.getItem("access");
 
@@ -63,19 +67,18 @@ export default {
 
 <style>
 .myBtn {
-  /* display: none; Hidden by default */
-  position: fixed; /* Fixed/sticky position */
-  bottom: 20px; /* Place the button at the bottom of the page */
-  right: 30px; /* Place the button 30px from the right */
-  z-index: 99; /* Make sure it does not overlap */
-  border: none; /* Remove borders */
-  outline: none; /* Remove outline */
-  background-color: #7B57AA; /* Set a background color */
-  color: white; /* Text color */
-  cursor: pointer; /* Add a mouse pointer on hover */
-  padding: 15px; /* Some padding */
-  border-radius: 10px; /* Rounded corners */
-  font-size: 18px; /* Increase font size */
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  border: none;
+  outline: none;
+  background-color: #7B57AA;
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 18px;
 }
 .post-background {
   background-color: #c5aaf0;

@@ -29,8 +29,12 @@
                 <i class="fas fa-arrow-down post-box-downvote fa-xl" @click="downvote" :style="{ color: downColor }"></i>
                 <span style="margin-left: 10px;"><i class="fa-sharp fa-solid fa-comments fa-xl"></i><router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">&nbsp;{{ post.number_of_comments }}Comments</router-link></span>
                 <i class="fa-sharp fa-solid fa-eye-slash fa-xl" v-on:click="isHidden = !isHidden" style="margin-left: 10px;"></i>
-            </div>
+                <button v-if="isPostCreator" @click="deletePost" class="delete-button">Delete</button>
+                <router-link v-if="isPostCreator" :to="{ name: 'edit-post', params: { id: post.id } }">
+                    <button class="edit-button">Edit</button>
+                </router-link>
 
+            </div>
 
         </div>
         <div v-show="isHidden">
@@ -78,6 +82,12 @@ export default {
         downColor() {
             return this.vote === -1 ? 'blue' : 'grey';
         },
+        isPostCreator() {
+            const token = localStorage.getItem("access");
+            const decodedToken = jwt_decode(token);
+            const userId = decodedToken.user_id;
+            return this.post.owner === userId;
+        },
     },
     created() {
         const token = localStorage.getItem('access');
@@ -105,6 +115,24 @@ export default {
             });
     },
     methods: {
+        deletePost() {
+            console.log('delete post');
+            const token = localStorage.getItem('access');
+            const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+
+        getAPI.delete(`/posts/${this.post.id}/`, config)
+        .then(() => {
+            // Emit a custom event to notify the parent component that a post was deleted
+            this.$emit('post-deleted', this.post.id);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    },
         upvote() {
             // If the user has already upvoted, remove their vote.
             if (this.userVote && this.userVote.vote === 1) {
@@ -171,7 +199,7 @@ export default {
                 }
             },
         },
-    };
+};
 </script>
 
 <style>

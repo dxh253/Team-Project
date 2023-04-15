@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory} from "vue-router";
-
 import jwtDecode from "jwt-decode";
 import Login from "../views/Login.vue"
 import RegisterForm from "../views/RegisterForm.vue"
@@ -9,6 +8,7 @@ import EventsForm from "../views/EventsForm.vue"
 import Dashboard from "../views/DashBoard.vue"
 import PrivacyPolicy from "../views/PrivacyPolicy.vue"
 import PostCreate from "../views/PostCreate.vue"
+import EditPost from "../views/EditPost.vue"
 
 
 const router = createRouter({
@@ -39,6 +39,22 @@ const router = createRouter({
                 requiresLogin: true
             }
 
+        },
+        {
+            path: "/edit-post/:id/",
+            name: "edit-post",
+            component: EditPost,
+            meta: {
+              requiresLogin: true
+            }
+        },
+        {
+            path: '/posts/:id/edit',
+            name: 'edit-post',
+            component: EditPost,
+            meta: {
+                requiresLogin: true
+            }
         },
         {
             path: "/posts/",
