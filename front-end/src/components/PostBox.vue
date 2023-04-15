@@ -6,11 +6,14 @@
                     post.title }}</router-link>
                 </h3>
                 <span>&nbsp;// posted by {{ post.username }} </span>
-                <div>
+                <div class="post-box-edit">
+                <div class="flex-item">
                     <router-link v-if="isPostCreator" :to="{ name: 'edit-post', params: { id: post.id } }">
-                    <i class="fa-sharp fa-solid fa-pen-to-square fa-xl" style="margin-right: -1px"></i>
+                    <i class="fa-sharp fa-solid fa-pen-to-square fa-spin fa-xl"></i>
                     </router-link>
                 </div>
+                </div>
+                <div class= "flex-item"><i class="fa-solid fa-trash-can fa-xl" v-if="isPostCreator" @click="deletePost"></i></div>
             </div>
             <p class="post-box-description">{{ post.description }}</p>
             <div>
@@ -38,7 +41,6 @@
                         :to="{ name: 'post-detail', params: { slug: post.slug } }">&nbsp;{{ post.number_of_comments
                         }}Comments</router-link></span></div>
                 <div class="flex-item"><i class="fa-sharp fa-solid fa-eye-slash fa-xl" v-on:click="isHidden = !isHidden"></i></div>
-                <div class= "flex-item"><i class="fa-solid fa-trash-can fa-xl" v-if="isPostCreator" @click="deletePost"></i></div>
             </div>
 
         </div>
@@ -219,7 +221,7 @@ export default {
 
 .post-box-header {
     display: flex;
-    justify-content: left;
+    /* justify-content: left; */
     align-items: center;
 }
 
@@ -296,5 +298,9 @@ export default {
 }
 .flex-item{
     margin: 5px;
+}
+
+.post-box-edit{
+    margin-left: auto;
 }
 </style>
