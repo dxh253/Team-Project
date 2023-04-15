@@ -63,6 +63,19 @@ class EventsDetail(APIView):
         events = self.get_object(category_slug, events_slug)
         serializer = EventsSerializer(events)
         return Response(serializer.data)
+    
+    def delete_event(self):
+        # delete image and thumbnail files from storage
+        if self.image and self.image.storage.exists(self.image.name):
+            self.image.storage.delete(self.image.name)
+        if self.thumbnail and self.thumbnail.storage.exists(self.thumbnail.name):
+            self.thumbnail.storage.delete(self.thumbnail.name)
+
+        # delete related UserEvent instances
+        UserEvent.objects.filter(event=self).delete()
+
+        # delete the event instance
+        self.delete()
         
 
 class EventsView(generics.RetrieveAPIView):
@@ -73,6 +86,11 @@ class EventsView(generics.RetrieveAPIView):
         queryset = self.get_queryset()
         serializer = EventsSerializer(queryset, many=True)
         return Response(serializer.data)
+    
+    def delete(self, request, category_slug, events_slug, format=None):
+        events = self.get_object(category_slug, events_slug)
+        events.delete_event()
+        return Response({"message": "Event deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
 
 from .models import UserEvent
 
