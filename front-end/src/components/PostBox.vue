@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="post-box" v-show="!isHidden">
+        <div class="post-box" v-show="!isHidden && !isDeleted">
             <div class="post-box-header">
                 <h3 class="post-box-title"><router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">{{
                     post.title }}</router-link>
@@ -9,11 +9,11 @@
                 <div class="post-box-edit">
                 <div class="flex-item">
                     <router-link v-if="isPostCreator" :to="{ name: 'edit-post', params: { id: post.id } }">
-                    <i class="fa-sharp fa-solid fa-pen-to-square fa-spin fa-xl"></i>
+                    <i class="fa-sharp fa-solid fa-pen-to-square fa-xl"></i>
                     </router-link>
                 </div>
                 </div>
-                <div class= "flex-item"><i class="fa-solid fa-trash-can fa-xl" v-if="isPostCreator" @click="deletePost"></i></div>
+                <div class= "flex-item"><i class="fa-solid fa-trash-can fa-xl" v-if="isPostCreator" @click="deletePost" v-on:click="isDeleted = !isDeleted"></i></div> 
             </div>
             <p class="post-box-description">{{ post.description }}</p>
             <div>
@@ -44,13 +44,21 @@
             </div>
 
         </div>
+        <!-- <div v-show="isDeleted">
+            <div class="post-box">
+                <div style="justify-content: center; display: flex;">
+                    <i class="fa-solid fa-trash-can fa-xl" v-on:click="isDeleted = !isDeleted"></i>
+                </div>
+            </div>
+        </div> -->
         <div v-show="isHidden">
             <div class="post-box">
                 <div style="justify-content: center; display: flex;">
                     <i class="fa-solid fa-eye fa-xl" v-on:click="isHidden = !isHidden"></i>
                 </div>
             </div>
-        </div>
+        </div> 
+        
     </div>
 </template>
 
@@ -72,6 +80,7 @@ export default {
             vote: 0,
             userVote: null,
             isHidden: false,
+            isDeleted: false,
         };
     },
     computed: {
@@ -302,5 +311,17 @@ export default {
 
 .post-box-edit{
     margin-left: auto;
+}
+
+.fa-trash-can:hover{
+    color: grey;
+}
+
+.fa-arrow-up:hover{
+    color: green;
+}
+
+.flex-item:hover .fa-trash-can:before{
+    content: "\f1f8"
 }
 </style>
