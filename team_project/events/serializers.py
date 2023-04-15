@@ -18,9 +18,43 @@ AZURE_CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=%s;Account
 BLOB_SERVICE_CLIENT = BlobServiceClient.from_connection_string(AZURE_CONNECTION_STRING)
     
     
+# class EventsSerializer(serializers.ModelSerializer):
+#     get_image = serializers.ImageField(max_length=None, use_url=True, required=False)
+#     get_thumbnail = serializers.ImageField(max_length=None, use_url=True, required=False)
+#     class Meta:
+#         model = Events
+#         fields = (
+#             "id",
+#             "name",
+#             "get_absolute_url",
+#             "description",
+#             "venue",
+#             "date",
+#             "get_image",
+#             "get_thumbnail",
+#             "category",
+#             "slug"
+#         )
+
+
+#     def create(self, validated_data):
+#         image = validated_data.pop('get_image', None)
+#         thumbnail = validated_data.pop('get_thumbnail', None)
+#         event = Events.objects.create(image=image, thumbnail=thumbnail, **validated_data)
+#         return event
+
+#     def to_representation(self, instance):
+#         representation = super().to_representation(instance)
+#         if instance.image and instance.image.storage.exists(instance.image.name):
+#             representation['get_image'] = instance.image.url
+#         if instance.thumbnail and instance.thumbnail.storage.exists(instance.thumbnail.name):
+#             representation['get_thumbnail'] = instance.thumbnail.url
+#         return representation
+
 class EventsSerializer(serializers.ModelSerializer):
     get_image = serializers.ImageField(max_length=None, use_url=True, required=False)
     get_thumbnail = serializers.ImageField(max_length=None, use_url=True, required=False)
+
     class Meta:
         model = Events
         fields = (
@@ -33,9 +67,9 @@ class EventsSerializer(serializers.ModelSerializer):
             "get_image",
             "get_thumbnail",
             "category",
-            "slug"
+            "slug",
+            "owner"
         )
-
 
     def create(self, validated_data):
         image = validated_data.pop('get_image', None)
