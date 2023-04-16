@@ -54,6 +54,7 @@ class Post(TimeStampedModel):
     user_vote = 0
     user_up_style = ''
     user_down_style = ''
+    isBlurred = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-modified']

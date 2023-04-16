@@ -11,6 +11,7 @@ class PostSerializer(serializers.ModelSerializer):
         queryset=Category.objects.all()
     )
     get_image = serializers.ImageField(max_length=None, use_url=True, required=False)
+    isBlurred = serializers.BooleanField(default=False)  # set default value to False
 
     class Meta:
         model = Post
@@ -33,6 +34,7 @@ class PostSerializer(serializers.ModelSerializer):
             'full_url',
             'user_vote',
             'get_image',
+            'isBlurred',
         ]
         extra_kwargs = {
             "url": {"view_name": "api:posts", "lookup_field": "title"}

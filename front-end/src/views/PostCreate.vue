@@ -19,6 +19,7 @@
                     <i class="fa-solid fa-image fa-xl"></i>
                     <input type="file" @change="onFileSelected" style="display:none"/>
                 </label>
+                <input type="checkbox" id="isBlurred" v-model="isBlurred">
             </div>
         </form>
     </div>
@@ -37,6 +38,7 @@ export default {
             category: '',
             categories: [],
             image: null,
+            isBlurred: false,
         };
     },
     mounted() {
@@ -67,6 +69,7 @@ export default {
                 category: this.category,
                 owner: userId,
                 get_image: this.get_image,
+                isBlurred: this.isBlurred,
             };
 
             getAPI

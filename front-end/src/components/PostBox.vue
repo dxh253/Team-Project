@@ -18,7 +18,8 @@
             <p class="post-box-description">{{ post.description }}</p>
             <div>
                 <figure>
-                    <img :src="post.get_image" class="image">
+                    <img :src="post.get_image" v-if="!post.isBlurred" />
+                    <img :src="post.get_image" v-else :style="{ filter: 'blur(10px)' }" />
                 </figure>
             </div>
             <div class="post-box-details">
@@ -219,109 +220,5 @@ export default {
 </script>
 
 <style>
-.post-box {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 25px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin-bottom: 20px;
-}
-
-.post-box-header {
-    display: flex;
-    /* justify-content: left; */
-    align-items: center;
-}
-
-.post-box-title {
-    margin-top: 0;
-    display: flex;
-}
-
-.post-box-description {
-    color: #666;
-    font-size: 16px;
-    line-height: 1.5;
-}
-
-.post-box-details {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.post-box-interactions {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-
-}
-
-.post-box-category {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    color: #999;
-}
-
-.post-box-score {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    color: #999;
-}
-
-.post-box-upvote,
-.post-box-downvote {
-    cursor: pointer;
-    margin: 0 5px;
-}
-
-.post-box-score-value {
-    margin: 0 10px;
-}
-
-.post-box-time {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    color: #999;
-}
-
-.post-box-time-since {
-    margin-left: 5px;
-}
-
-.image {
-    max-width: 400px;
-    max-height: 400px;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    align-items: center;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-.flex-item{
-    margin: 5px;
-}
-
-.post-box-edit{
-    margin-left: auto;
-}
-
-.fa-trash-can:hover{
-    color: grey;
-}
-
-.fa-arrow-up:hover{
-    color: green;
-}
-
-.flex-item:hover .fa-trash-can:before{
-    content: "\f1f8"
-}
+@import url('./../assets/PostBox.css');
 </style>
