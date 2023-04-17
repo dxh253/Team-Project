@@ -9,6 +9,7 @@ import Dashboard from "../views/DashBoard.vue"
 import PrivacyPolicy from "../views/PrivacyPolicy.vue"
 import PostCreate from "../views/PostCreate.vue"
 import EditPost from "../views/EditPost.vue"
+import HelpSection from "../views/HelpSection.vue"
 
 
 const router = createRouter({
@@ -108,6 +109,12 @@ const router = createRouter({
             path: "/privacy_policy/",
             name: "PrivacyPolicy",
             component: PrivacyPolicy,
+
+        },
+        {
+            path: "/help/",
+            name: "HelpSection",
+            component: HelpSection,
 
         },
         {
