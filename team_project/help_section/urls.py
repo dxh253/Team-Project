@@ -2,5 +2,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.help_section, name='home'),
+    path('api/v1/problems', views.ProblemsView.as_view()),
 ]
