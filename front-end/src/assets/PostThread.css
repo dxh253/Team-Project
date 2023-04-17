@@ -1,0 +1,19 @@
+.topnav {
+    overflow: hidden;
+    background-color: #423264;
+    justify-content: space-between;
+    margin: 0 auto;
+}
+
+.topnav>a {
+    float: left;
+    display: flex;
+    padding: 10px 10px;
+    height: 65px;
+    width: auto;
+    align-items: center;
+    font-size: 25px;
+    text-decoration: none;
+    color: white;
+    padding-left: 150px;
+}

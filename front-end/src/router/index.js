@@ -7,6 +7,7 @@ import EventsDetail from "../views/EventsDetail.vue"
 import EventsForm from "../views/EventsForm.vue"
 import PrivacyPolicy from "../views/PrivacyPolicy.vue"
 import PostCreate from "../views/PostCreate.vue"
+import PostThread from "../views/PostThread.vue"
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -67,6 +68,12 @@ const router = createRouter({
             name: "create",
             component: PostCreate
         },
+
+        {
+            path: "/thread/",
+            name: "thread",
+            component: PostThread
+        }
         
     ]
 })
