@@ -19,7 +19,13 @@
                     <i class="fa-solid fa-image fa-xl"></i>
                     <input type="file" @change="onFileSelected" style="display:none"/>
                 </label>
-                <input type="checkbox" id="isBlurred" v-model="isBlurred">
+                <div style="margin-left: auto; display: flex; align-items: center;">
+                    <p style="padding: 9px;">Sensitive Content ?</p>
+                    <label class="switch">
+                    <input type="checkbox" id="isBlurred" v-model="isBlurred">
+                    <span class="slider round"></span>
+                    </label>
+                </div>
             </div>
         </form>
     </div>
