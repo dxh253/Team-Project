@@ -18,9 +18,9 @@
             <p class="post-box-description">{{ post.description }}</p>
             <div>
                 <figure>
-                    <img :src="post.get_image" v-if="!post.isBlurred" />
-                    <img :src="post.get_image" v-else :style="{ filter: 'blur(10px)' }" />
+                    <img :src="post.get_image" :style="{ filter: blur ? 'blur(10px)' : 'none' }" />
                 </figure>
+                <button v-if="blur" @click="toggleBlur">Unblur</button>
             </div>
             <div class="post-box-details">
                 <div class="post-box-category">
@@ -82,6 +82,7 @@ export default {
             userVote: null,
             isHidden: false,
             isDeleted: false,
+            blur: this.post.isBlurred // initialize the blur state based on the isBlurred property of the post
         };
     },
     computed: {
@@ -132,6 +133,9 @@ export default {
             });
     },
     methods: {
+        toggleBlur() {
+            this.blur = !this.blur;
+        },
         deletePost() {
             console.log('delete post');
             const token = localStorage.getItem('access');
