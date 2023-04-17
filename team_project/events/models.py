@@ -22,8 +22,7 @@ class Category(models.Model):
         return f'/{self.slug}/'
 
 class Events(models.Model):
-    category = models.ForeignKey(
-        Category, related_name='events', on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, related_name='events', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, editable=False)
     description = models.TextField(blank=True, null=True)
@@ -32,8 +31,7 @@ class Events(models.Model):
     image = models.ImageField()
     thumbnail = models.ImageField()
     date_added = models.DateTimeField(auto_now_add=True)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
-                            related_name='events', on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='events', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('-date_added',)
@@ -78,12 +76,23 @@ class Events(models.Model):
     def delete_event(self, user=None, *args, **kwargs):
         super().delete(*args, **kwargs)
 
+    def edit_name(self, new_name):
+        self.name = new_name
+        self.save()
 
+    def edit_venue(self, new_venue):
+        self.venue = new_venue
+        self.save()
+
+    def edit_description(self, new_description):
+        self.description = new_description
+        self.save()
+
+
+        
 class UserEvent(models.Model):
-    user = models.ForeignKey(
-        User, related_name='saved_events', on_delete=models.CASCADE)
-    event = models.ForeignKey(
-        Events, related_name='saved_by_users', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='saved_events', on_delete=models.CASCADE)
+    event = models.ForeignKey(Events, related_name='saved_by_users', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     date = models.DateField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)

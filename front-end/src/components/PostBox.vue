@@ -16,14 +16,14 @@
                 <div class= "flex-item"><i class="fa-solid fa-trash-can fa-xl" v-if="isPostCreator" @click="deletePost" v-on:click="isDeleted = !isDeleted"></i></div> 
             </div>
             <p class="post-box-description">{{ post.description }}</p>
-            <div>
+            <div style="position: relative;">
                 <figure>
-                    <img :src="post.get_image" :style="{ filter: blur ? 'blur(10px)' : 'none' }" />
+                    <a :href="post.get_image" target="_blank"><img :src="post.get_image" :style="{ filter: blur ? 'blur(10px)' : 'none' }" @click="enlargeImage"></a>
                 </figure>
-                <button v-if="blur" @click="toggleBlur">Unblur</button>
+                <button class="unblur" v-if="blur" @click="toggleBlur">Unblur</button>
             </div>
             <div class="post-box-details">
-                <div class="post-box-category">
+                <div class="post-box-category"> 
                     <i class="fas fa-rss"></i>
                     <span class="post-box-category-name">{{ post.category_name }}</span>
                 </div>
