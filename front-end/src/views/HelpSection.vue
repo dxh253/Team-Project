@@ -73,20 +73,27 @@
     </div>
 
     <h2 class="title is-3">Here is a list of problems submitted by other users</h2>
-    <!-- <ProblemCard
+    <div class="box" @click.right="viewProblem" style="max-width: 1000px; margin-left: 5%;">
+        <h3 class="is-size-4"> static problem card 1 </h3>
+        <p class="is-size-6" style=""> description display 1</p>
+    </div>
+    <div class="box" @click.right="viewProblem" style="max-width: 1000px; margin-left: 5%;">
+        <h3 class="is-size-4"> Static problem card 2 </h3>
+        <p class="is-size-6" style=""> description display 2</p>
+    </div>
+
+    <ProblemCard
         v-for="problem in allProblems"
         v-bind:key="problem.id"
         v-bind:problem="problem"
-      >
-    </ProblemCard> -->
+      />
 
 </template>
 
 
 <script>
-// import ProblemCard from '@/components/ProblemCard';
+import ProblemCard from '@/components/ProblemCard';
 import { getAPI } from '@/plugins/axios'
-// import { title } from 'process';
 
 export default {
     name: 'HelpSection',
@@ -105,12 +112,18 @@ export default {
     },
     methods: {
         submitProblem() {
+            console.log('submit problem method');
+            if (!this.$store.getters.loggedIn) {
+                //User is not logged in
+                return;
+            }
+
             console.log(this.problemInfo.title + " " + this.problemInfo.description)
             const formData = new FormData();
             formData.append('title', this.problemInfo.title);
             formData.append('description', this.problemInfo.description);
             getAPI
-                .post('/help/', formData, {
+                .post('/api/v1/help', formData, {
                 method: 'POST'
                 })
                 .then((response) => {
@@ -123,7 +136,27 @@ export default {
                 alert('Something went wrong. Please try again.')
                 })
         }
-    }
+    },
+    async created() {
+        console.log('created method is executed');
+            if (!this.$store.getters.loggedIn) {
+            //User is not logged in
+            return;
+        }
 
-};
+        getAPI
+            .get('/api/v1/help/', {
+                   headers: { Authorization: `Bearer ${this.$store.state.accessToken}` },
+               })
+            .then((response) => {
+               console.log('API response data:', response.data);
+               this.allProblems = response.data;
+               this.$store.state.APIData = response.data;
+            })
+            .catch((error) => {
+                console.log('API error:', error);
+            });
+        },
+    };
+
 </script>
