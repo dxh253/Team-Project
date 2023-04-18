@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
-class ProblemsView(generics.RetrieveAPIView):
+class ProblemsView(APIView):
     permission_classes = (IsAuthenticated,)
     ALLOWED_METHODS = ['GET', 'POST']
     http_method_names = ['get', 'post']
@@ -19,3 +19,6 @@ class ProblemsView(generics.RetrieveAPIView):
         queryset = Problems.objects.all()
         serializer = ProblemSerializer(queryset, many=True)
         return Response(serializer.data)
+
+    def post():
+        return
