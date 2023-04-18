@@ -6,13 +6,16 @@ from rest_framework import generics
 from .serializers import ProblemSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
 class ProblemsView(generics.RetrieveAPIView):
-    queryset = Problems.objects.all()
+    permission_classes = (IsAuthenticated,)
+    ALLOWED_METHODS = ['GET', 'POST']
+    http_method_names = ['get', 'post']
 
     def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
+        queryset = Problems.objects.all()
         serializer = ProblemSerializer(queryset, many=True)
         return Response(serializer.data)
