@@ -46,17 +46,19 @@ export default {
 .accessibility {
     display: flex;
     gap: 10px;
+    padding: 10px;
 }
 
 .accessibility__button {
     background-color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 15px;
     color: #333;
     cursor: pointer;
     font-size: 1.5rem;
-    height: 50px;
-    width: 50px;
+    height: 40px;
+    width: 40px;
+    align-items: center;
 }
 
 .accessibility__button:hover,
@@ -69,7 +71,7 @@ export default {
     font-size: 1.2rem;
 }
 
-.high-contrast {
+body.high-contrast {
     background-color: #000;
     color: #fff;
 }
