@@ -14,3 +14,7 @@ class ProblemSerializer(serializers.ModelSerializer):
             "date_added",
             "user"
         )
+
+    def create(self,validated_data):
+        problem = Problems.objects.create(validated_data)
+        return problem
