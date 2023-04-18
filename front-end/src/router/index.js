@@ -109,7 +109,12 @@ const router = createRouter({
             meta: {
                 requiresLogin: true
             }
-        }
+        },
+        {
+            path: '/posts/:id',
+            name: 'PostDetails',
+            component: PostDetail
+          }
     ]
 });
 

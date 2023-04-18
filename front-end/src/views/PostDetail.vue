@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="post-detail">
       <h2>{{ post.title }}</h2>
       <p>{{ post.content }}</p>
@@ -23,28 +23,29 @@
     data() {
       return {
         newCommentText: '',
+        post: {},
       };
     },
     computed: {
       ...mapState(['APIData']),
-    // post() {
-    //     const slug = this.$route.params.slug;
-    //     return this.$store.dispatch('getPostBySlug', slug);
-    //     },
-        post() {
-            const slug = this.$route.params.slug;
-            // const posts = this.$store.state.APIData;
-            const posts = this.$store.dispatch('getPostBySlug', slug);
-            return posts.then(response => response.data.find(post => post.slug === slug));
-        },
+    },
+    created() {
+      this.fetchPost();
     },
     methods: {
+      fetchPost() {
+        const slug = this.$route.params.slug;
+        const posts = this.$store.state.APIData;
+        if (posts) {
+          this.post = posts.find(post => post.slug === slug);
+        }
+      },
       addComment() {
         const token = localStorage.getItem('access');
-        const postId = this.$route.params.id;
+        const postId = this.post.id;
         const data = { text: this.newCommentText };
   
-        getAPI.post(`/posts/${postId}/comments/`, data, {
+        getAPI.post(`/posts/{{ post.id }}/comments/`, data, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -66,4 +67,52 @@
     },
   };
   </script>
+   -->
+
+   <template>
+    <div class="post-background">
+      <div class="post-container">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.description }}</p>
+        <img :src="post.image" alt="Post Image" />
+        <p>Uploaded at: {{ post.uploaded_at }}</p>
+        <hr>
+        <h3>Comments</h3>
+        <div class="comment-container">
+          <p>Placeholder for comments...</p>
+        </div>
+      </div>
+    </div>
+  </template>
+
   
+  <script>
+import { getAPI } from '@/plugins/axios';
+
+export default {
+  name: 'PostDetail',
+  data() {
+    return {
+      post: {},
+    };
+  },
+  created() {
+    const token = localStorage.getItem('access');
+    const postId = this.$route.params.id;
+
+    getAPI
+      .get(`/posts/${postId}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        console.log('Post API has received data');
+        this.post = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
+};
+</script>

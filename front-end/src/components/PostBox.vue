@@ -2,8 +2,10 @@
     <div>
         <div class="post-box" v-show="!isHidden && !isDeleted">
             <div class="post-box-header">
-                <h3 class="post-box-title"><router-link :to="{ name: 'post-detail', params: { slug: post.slug } }">{{
-                    post.title }}</router-link>
+                <h3 class="post-box-title">
+                    <router-link :to="{ name: 'PostDetails', params: { id: post.id } }">
+                    <h2>{{ post.title }}</h2>
+                    </router-link>
                 </h3>
                 <span>&nbsp;// posted by {{ post.username }} </span>
                 <div class="post-box-edit">
