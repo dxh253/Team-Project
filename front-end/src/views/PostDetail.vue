@@ -73,9 +73,9 @@
     <div class="post-background">
       <div class="post-container">
         <h2>{{ post.title }}</h2>
-        <p>{{ post.description }}</p>
-        <img :src="post.image" alt="Post Image" />
-        <p>Uploaded at: {{ post.uploaded_at }}</p>
+        <p class="post-box-description">{{ post.description }}</p>
+        <a :href="post.get_image" target="_blank"><img :src="post.get_image" :style="{ filter: blur ? 'blur(10px)' : 'none' }" @click="enlargeImage"></a>
+        <span class="post-box-time-since">posted {{ post.time_since_post }}</span>
         <hr>
         <h3>Comments</h3>
         <div class="comment-container">
