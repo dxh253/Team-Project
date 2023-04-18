@@ -43,6 +43,9 @@ export default createStore({
       console.log('getting APIData:', state.APIData);
       return state.APIData
     },
+    postById: (state) => (postId) => {
+      return state.APIData.find(post => post.id === postId)
+    },
   },
   actions: {
     // Call the API to log in the user with the provided credentials, and update the state and local storage with the new tokens
@@ -75,6 +78,11 @@ export default createStore({
           context.dispatch("userLogout");
         }
       }
+    },
+
+    async getPostBySlug(context, slug) {
+      const response = await getAPI.get(`/posts/?slug=${slug}`)
+      return response.data
     },
     
   },

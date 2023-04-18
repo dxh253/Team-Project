@@ -38,9 +38,20 @@
                 <span>{{ post.score }}</span>
                 <i class="fas fa-arrow-down post-box-downvote fa-xl" @click="downvote" :style="{ color: downColor }"></i>
                 </div>
-                <div class ="flex-item"><span><i class="fa-sharp fa-solid fa-comments fa-xl"></i><router-link
-                        :to="{ name: 'post-detail', params: { slug: post.slug } }">&nbsp;{{ post.number_of_comments
-                        }}Comments</router-link></span></div>
+                <div class ="flex-item">
+                    <span>
+                        <i class="fa-sharp fa-solid fa-comments fa-xl"></i>
+                        <!-- <router-link 
+                        :to="{ name: 'post-detail', params: { slug: post.slug } }">&nbsp;{{ post.number_of_comments}}Comments
+                        </router-link> -->
+                        <!-- <router-link 
+                        :to="{ name: 'post-detail', params: { slug: post.slug } }">&nbsp;{{ post.number_of_comments}}Comments
+                        </router-link> -->
+                        <router-link :to="{ name: 'PostDetail', params: { postId: post.id } }">
+                            <button>Comments</button>
+                        </router-link>                       
+                    </span>
+                </div>
                 <div class="flex-item"><i class="fa-sharp fa-solid fa-eye-slash fa-xl" v-on:click="isHidden = !isHidden"></i></div>
             </div>
 

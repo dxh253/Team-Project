@@ -9,7 +9,7 @@ import Dashboard from "../views/DashBoard.vue"
 import PrivacyPolicy from "../views/PrivacyPolicy.vue"
 import PostCreate from "../views/PostCreate.vue"
 import EditPost from "../views/EditPost.vue"
-
+import PostDetail from "../views/PostDetail.vue"
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -20,7 +20,6 @@ const router = createRouter({
             component: Login
         },
         {
-
             path: "/login/",
             name: "Login",
             component: Login,
@@ -41,14 +40,6 @@ const router = createRouter({
 
         },
         {
-            path: "/edit-post/:id/",
-            name: "edit-post",
-            component: EditPost,
-            meta: {
-              requiresLogin: true
-            }
-        },
-        {
             path: '/posts/:id/edit',
             name: 'edit-post',
             component: EditPost,
@@ -65,6 +56,11 @@ const router = createRouter({
             }
         },
         {
+            path: '/detail/:postId',
+            name: 'PostDetail',
+            component: PostDetail
+          },
+        {
             path: "/create/",
             name: "create",
             component: PostCreate,
@@ -80,7 +76,6 @@ const router = createRouter({
                 requiresLogin: true
             }
         },
-
         {
             path: "/:category_slug/:events_slug/",
             name: "EventsDetail",
@@ -88,7 +83,6 @@ const router = createRouter({
             meta: {
                 requiresLogin: true
             }
-
         },
         {
             path: "/events_form/",
@@ -97,7 +91,6 @@ const router = createRouter({
             meta: {
                 requiresLogin: true
             }
-
         },
         {
             path: "/posts/:slug/",
@@ -108,7 +101,6 @@ const router = createRouter({
             path: "/privacy_policy/",
             name: "PrivacyPolicy",
             component: PrivacyPolicy,
-
         },
         {
             path: "/dashboard/",
