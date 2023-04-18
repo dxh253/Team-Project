@@ -72,16 +72,6 @@
         </div>
     </div>
 
-    <h2 class="title is-3">Here is a list of problems submitted by other users</h2>
-    <div class="box" @click.right="viewProblem" style="max-width: 1000px; margin-left: 5%;">
-        <h3 class="is-size-4"> static problem card 1 </h3>
-        <p class="is-size-6" style=""> description display 1</p>
-    </div>
-    <div class="box" @click.right="viewProblem" style="max-width: 1000px; margin-left: 5%;">
-        <h3 class="is-size-4"> Static problem card 2 </h3>
-        <p class="is-size-6" style=""> description display 2</p>
-    </div>
-
     <ProblemCard
         v-for="problem in allProblems"
         v-bind:key="problem.id"
