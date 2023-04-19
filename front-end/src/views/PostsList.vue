@@ -1,4 +1,7 @@
 <template>
+    <div>
+        <input v-model="searchTerm" placeholder="Search posts" />
+    </div>
     <div class="left">
         <div class="sidebar">
             <p>hello</p>
@@ -11,10 +14,10 @@
     </div>
     <div class="post-background">
         <h2 style="color: black; margin-bottom: 10px;">Posts</h2>
-        <div v-for="post in allposts" :key="post.id">
-            <!-- <post-box :post="post" /> -->
-            <vote :post-id="post.id" :initial-score="post.score"></vote>
-            <post-box :post="post" @postDeleted="removePostFromList" />
+        <div v-if="filteredPosts.length > 0">
+            <div v-for="post in filteredPosts" :key="post.id">
+                <post-box :post="post" @postDeleted="removePostFromList" />
+            </div>
         </div>
     </div>
     <button @click="scrollToTop" class="myBtn">Scroll to top</button>
@@ -23,7 +26,7 @@
 <script>
 import { getAPI } from '@/plugins/axios';
 import PostBox from '../components/PostBox.vue';
-import { mapState } from 'vuex';
+// import { mapState } from 'vuex';
 
 export default {
     name: 'PostsList',
@@ -33,9 +36,19 @@ export default {
     data() {
         return {
             allposts: [],
+            searchTerm: '',
         }
     },
-    computed: mapState(['APIData']),
+    computed: {
+        // mapState(['APIData']),
+        filteredPosts() {
+            return this.allposts.filter(post => {
+                // filter posts that include the search term in the title
+                return post.title.toLowerCase().includes(this.searchTerm.toLowerCase());
+            });
+        }
+    },
+
     methods: {
       scrollToTop() {
         // Scroll to top with smooth behavior
@@ -44,7 +57,7 @@ export default {
       removePostFromList(postId) {
         this.allposts = this.allposts.filter((post) => post.Id !== postId);
       },
-  },
+    },        
     created() {
         const token = localStorage.getItem("access");
 
