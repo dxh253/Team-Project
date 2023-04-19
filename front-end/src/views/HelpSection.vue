@@ -134,16 +134,12 @@ export default {
                 })
                 .then((response) => {
                 console.log('API response data:', response.data);
-                this.allProblems = response.data;
-                this.$store.state.APIData = response.data;
+                window.location.reload();
                 })
                 .catch((error) => {
                 console.log(error.response.data);
                 alert('Something went wrong. Please try again.')
                 })
-
-            if(!this.title && this.description)
-                window.location.reload();
         }
     },
     async created() {
