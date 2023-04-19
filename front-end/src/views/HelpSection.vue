@@ -11,6 +11,8 @@
             type="text" 
             placeholder="Search your problem here..." 
             style="width: 675px; border-radius: 20px; text-indent: 3%;"
+            v-model="searchValue"
+            @keyup.enter="searchProblem(searchValue)"
             >
           </div>
           <div class="hero-footer has-text-centered mb-5">
@@ -102,6 +104,7 @@ export default {
                 user: 'null',
             },
             renderComponent: true,
+            searchValue : ''
         }
     },
     components: {
@@ -129,8 +132,7 @@ export default {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${this.$store.state.accessToken}`,
-                },
-                method: 'POST'
+                }
                 })
                 .then((response) => {
                 console.log('API response data:', response.data);
@@ -140,14 +142,28 @@ export default {
                 console.log(error.response.data);
                 alert('Something went wrong. Please try again.')
                 })
-        }
+        },
+
+        // searchProblem() {
+        //     console.log("search methos executed")
+
+        //     getAPI
+        //     .get('/api/v1/help/', {
+        //            headers: { Authorization: `Bearer ${this.$store.state.accessToken}` },
+        //        }, {text: "hello"})
+        //     .then((response) => {
+        //        console.log('API response data:', response.data);
+        //        this.allProblems = response.data;
+        //        this.$store.state.APIData = response.data;
+        //        window.location.reload();
+        //     })
+        //     .catch((error) => {
+        //         console.log('API error:', error);
+        //     });
+        // },
     },
     async created() {
         console.log('created method is executed');
-            if (!this.$store.getters.loggedIn) {
-            //User is not logged in
-            return;
-        }
 
         getAPI
             .get('/api/v1/help/', {
