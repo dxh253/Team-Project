@@ -17,12 +17,18 @@ const router = createRouter({
         {
             path: "/",
             name: "Home",
-            component: Login
+            component: Login,
+            meta: {
+                requiresLogin: false
+            }
         },
         {
             path: "/login/",
             name: "Login",
             component: Login,
+            meta: {
+                requiresLogin: false
+            }
 
         },
         {
@@ -58,7 +64,10 @@ const router = createRouter({
         {
             path: '/detail/:postId',
             name: 'PostDetail',
-            component: PostDetail
+            component: PostDetail,
+            meta: {
+                requiresLogin: true
+            }
           },
         {
             path: "/create/",
@@ -96,6 +105,10 @@ const router = createRouter({
             path: "/posts/:slug/",
             name: "post-detail",
             // component: () => import("../views/PostDetail.vue")
+            component: PostDetail,
+            meta: {
+                requiresLogin: true
+            },
         },
         {
             path: "/privacy_policy/",
@@ -113,7 +126,10 @@ const router = createRouter({
         {
             path: '/posts/:id',
             name: 'PostDetails',
-            component: PostDetail
+            component: PostDetail,
+            meta:{
+                requiresLogin: true
+            },
           }
     ]
 });
