@@ -42,7 +42,7 @@
             <i class="column is-1 material-icons" style="font-size: 40px;">person</i>
         </div>
 
-        <div class="event-card" style="margin: 0%; width: 1000px;">
+        <form class="event-card" style="margin: 0%; width: 1000px;">
             <div class="field">
                 <label>Title of your problem</label>
                 <input 
@@ -54,6 +54,7 @@
                 border:1px solid grey;
                 background-color: white;"
                 v-model.trim="problemInfo.title"
+                required
                 >
             </div>
             <div class="field">
@@ -63,20 +64,25 @@
                     type="text" 
                     placeholder="Describe your problem here" 
                     style="border:1px solid grey;"
-                    v-model.trim="problemInfo.description">
+                    v-model.trim="problemInfo.description" required
+                    >
                 </textarea>
                 <div style="text-align: right;">
-                <button class="button is-info" type="button" style="margin-top: 5px;" @click="submitProblem">Submit</button>
+                    <button class="button is-info" type="submit" style="margin-top: 5px;" @click="submitProblem">Submit</button>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 
+    <h2 class="title is-3">Here is a list of problems submitted by other users</h2>
+
+    <div v-if="renderComponent">
     <ProblemCard
         v-for="problem in allProblems"
         v-bind:key="problem.id"
         v-bind:problem="problem"
       />
+    </div>
 
 </template>
 
@@ -94,7 +100,8 @@ export default {
                 title: '',
                 description: '',
                 user: 'null',
-            }
+            },
+            renderComponent: true,
         }
     },
     components: {
@@ -108,12 +115,21 @@ export default {
                 return;
             }
 
+            this.renderComponent = false,
+            this.$nextTick(() => {
+                this.renderComponent = true;
+            });
+
             console.log(this.problemInfo.title + " " + this.problemInfo.description)
             const formData = new FormData();
             formData.append('title', this.problemInfo.title);
             formData.append('description', this.problemInfo.description);
             getAPI
-                .post('/api/v1/help', formData, {
+                .post('/api/v1/help/', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${this.$store.state.accessToken}`,
+                },
                 method: 'POST'
                 })
                 .then((response) => {
@@ -125,6 +141,9 @@ export default {
                 console.log(error.response.data);
                 alert('Something went wrong. Please try again.')
                 })
+
+            if(!this.title && this.description)
+                window.location.reload();
         }
     },
     async created() {
