@@ -16,5 +16,5 @@ class ProblemSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        problem = Problems.objects.create(validated_data)
+        problem = Problems.objects.create(**validated_data)
         return problem
