@@ -15,6 +15,7 @@
       <div class="column is-8">
         <div class="box">
           <h1 class="title">{{ events.name }}</h1>
+          <p>{{ eventIdToName() }}</p>
           <div class="event-details">
             <div class="event-detail">
               <h2 class="subtitle is-4">Venue</h2>
@@ -192,6 +193,10 @@ export default {
     },
     updateEvents() {
       this.submitEditEvents();
+    },
+    eventIdToName() {
+      const categories = ["Event", "Study group"];
+      return categories[this.events.category - 1];
     },
     submitEditEvents() {
       const category_slug = this.$route.params.category_slug;
