@@ -14,6 +14,33 @@
         </div>
       </div>
       <div class="field">
+        <label class="label" for="category">Category:</label>
+        <div style="display: flex; justify-content: space-around">
+          <div>
+            <label style="display: inline" for="study-group">Event </label>
+            <input
+              type="radio"
+              id="event"
+              name="event"
+              value="event"
+              v-model="eventData.category"
+            />
+          </div>
+          <div>
+            <label style="display: inline" for="study-group"
+              >Study group
+            </label>
+            <input
+              type="radio"
+              id="study-group"
+              name="study-group"
+              value="study-group"
+              v-model="eventData.category"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="field">
         <label class="label" for="description">Description:</label>
         <div class="control">
           <textarea
@@ -91,6 +118,7 @@ export default {
       eventData: {
         id: "",
         name: "",
+        category: "",
         description: "",
         venue: "",
         date: "",
@@ -122,6 +150,7 @@ export default {
       const formData = new FormData();
       formData.append("id", this.eventData.id);
       formData.append("name", this.eventData.name);
+      formData.append("category", this.eventData.category);
       formData.append("description", this.eventData.description);
       formData.append("venue", this.eventData.venue);
       formData.append("date", this.eventData.date);
