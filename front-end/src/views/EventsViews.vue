@@ -50,7 +50,7 @@ export default {
   name: "EventsViews",
   data() {
     return {
-      eventsFilter: "",
+      eventsFilter: "0",
       allEvents: [],
       displayedEvents: [],
       filterByOwner: false,
