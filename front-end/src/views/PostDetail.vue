@@ -103,11 +103,13 @@ export default {
       <hr>
       <h3>Comments</h3>
       <div class="comment-container">
-        <form>
+        <form @submit.prevent="addComment">
           <input type="text" v-model="newCommentText" placeholder="Add a comment...">
           <button>Add Comment</button>
         </form>
-        <p>Placeholder for comments...</p>
+        <div v-for="comment in post.comments" :key="comment.id" class="comment-box">
+          <p class="comment-text">{{ comment.text }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -129,6 +131,7 @@ export default {
     };
   },
   async created() {
+    console.log("This is the created hook: ", this.$route.params);
     try {
       this.loading = true; // set loading to true before calling fetchPost
       await this.fetchPost();
@@ -148,25 +151,23 @@ export default {
   methods: {
     async fetchPost() {
       const token = localStorage.getItem('access');
-      console.log('this.$route:', this.$route);
-      console.log('this.$route.params:', this.$route.params);
-      const postId = this.$route.params.id || localStorage.getItem('postId');
+      const post_slug = this.$route.params.slug || localStorage.getItem('post_slug');
 
       console.log('API endpoint:', getAPI.defaults.baseURL);
-      console.log('postSlug:', postId);
+      console.log('postSlug:', post_slug);
 
-      if (postId) {
+      if (post_slug) {
         this.loading = true;
 
         try {
-          const response = await getAPI.get(`/posts/${postId}/`, {
+          const response = await getAPI.get(`/posts/${post_slug}/`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
           console.log('Post API has received data');
           this.post = response.data;
-          localStorage.setItem('postId', postId); // store postId in local storage
+          localStorage.setItem('post_slug', post_slug); // store post_slug in local storage
         } catch (error) {
           console.log(error);
           this.error = error;
@@ -176,6 +177,79 @@ export default {
         }
       }
     },
+    async addComment() {
+      const token = localStorage.getItem('access');
+      const post_slug = this.$route.params.slug || localStorage.getItem('post_slug');
+
+      try {
+        const response = await getAPI.post(`/posts/${post_slug}/comments/`, {
+          text: this.newCommentText,
+          post_slug: post_slug,
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log('Comment has been added');
+        this.post.comments.push(response.data);
+        this.newCommentText = '';
+      } catch (error) {
+        console.log(error);
+      }
+    }
   },
 };
 </script>
+
+ // async fetchPost() {
+    //   const token = localStorage.getItem('access');
+    //   console.log('this.$route:', this.$route);
+    //   console.log('this.$route.params:', this.$route.params);
+    //   const post_id = this.$route.params.id || localStorage.getItem('post_id');
+    //   console.log("Post Id is: " + post_id + ', ' + 'Params is: ' + this.$route.params.id)
+
+    //   console.log('API endpoint:', getAPI.defaults.baseURL);
+    //   console.log('postSlug:', post_id);
+
+    //   if (post_id) {
+    //     this.loading = true;
+
+    //     try {
+    //       const response = await getAPI.get(`/posts/${post_id}/`, {
+    //         headers: {
+    //           Authorization: `Bearer ${token}`,
+    //         },
+    //       });
+    //       console.log('Post API has received data');
+    //       this.post = response.data;
+    //       localStorage.setItem('post_id', post_id); // store post_id in local storage
+    //     } catch (error) {
+    //       console.log(error);
+    //       this.error = error;
+    //       return Promise.reject(error);
+    //     } finally {
+    //       this.loading = false;
+    //     }
+    //   }
+    // },
+        // async addComment() {
+    //   const token = localStorage.getItem('access');
+    //   const post_id = this.$route.params.id || localStorage.getItem('post_id');
+    //   console.log("Post Id is: " + post_id + ', ' + 'Params is: ' + this.$route.params.id)
+
+    //   try {
+    //     const response = await getAPI.post(`/posts/${post_id}/comments/`, {
+    //       text: this.newCommentText,
+    //       post_id: post_id, // change to post_id
+    //     }, {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     });
+    //     console.log('Comment has been added');
+    //     this.post.comments.push(response.data); // add the new comment to the post's comments array
+    //     this.newCommentText = ''; // reset the newCommentText field
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },

@@ -7,7 +7,11 @@ from autoslug import AutoSlugField
 from model_utils.models import TimeStampedModel
 from datetime import datetime, timedelta, timezone
 from dateutil.relativedelta import relativedelta
+from django.utils import timezone
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
+User = get_user_model()
 
 class Category(TimeStampedModel):
     name = CharField(max_length=56, help_text='Enter category name')
@@ -100,8 +104,8 @@ class Post(TimeStampedModel):
     def owner_url(self):
         return '/users/' + self.owner.username
 
-    def number_of_comments(self):
-        return PostComment.objects.filter(post_id=self.id).count()
+    # def number_of_comments(self):
+    #     return PostComment.objects.filter(post_id=self.id).count()
 
     def description_br(self):
         safe_text = self.description.replace('<', '').replace('>', '').replace(
@@ -139,14 +143,13 @@ class Post(TimeStampedModel):
             return self.image.url
         return ''
 
-
     category_slug = get_category
     full_url = get_full_url
 
 class PostVotes(Model):
     post_id = ForeignKey('Post', related_name='post', on_delete=models.CASCADE)
     user_id = ForeignKey(settings.AUTH_USER_MODEL,
-                         on_delete=models.CASCADE, null=False)
+                        on_delete=models.CASCADE, null=False)
     VOTE_CHOICES = [(-1, 'downvote'), (0, 'no vote'), (1, 'upvote')]
     vote = IntegerField(choices=VOTE_CHOICES, default=None)
 
@@ -160,69 +163,100 @@ class PostVotes(Model):
             return 'blue'
         return 'grey'
 
-class PostComment(TimeStampedModel):
-    class Meta:
-        ordering = ['-modified']
-    post_id = ForeignKey('Post', related_name='comment_post',
-                         on_delete=models.CASCADE, null=False)
-    user_id = ForeignKey(
+class Comment(models.Model):
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='comments',
+    )
+    parent_comment = models.ForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        related_name='parent_comment_replies',
+        blank=True,
+        null=True,
+    )
+    author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        null=False)
-    comment = TextField("Post Comment", blank=True)
-    user_vote = 0
-    user_up_style = ''
-    user_down_style = ''
-    tldr = CharField(
-        max_length=56, help_text="Too Long; Didn't Read. Your responce in a nutshell")
-    parent = ForeignKey('PostComment', related_name='comment_reply',
-                        on_delete=models.CASCADE, null=True, blank=True)
-
-    def children(self):
-        return self.comment_reply.all()
-
-    def level(self):
-        if self.parent:
-            return self.parent.level() + 1
-        return 0
-
-    def username(self):
-        return self.user_id.username
-
-    def time_since_comment(self):
-        time_now = datetime.now(timezone.utc)
-        diff_time = time_now - self.modified
-        diff_days, diff_hours = str(diff_time.days), str(
-            int(diff_time.seconds / 3600))
-        if diff_days == '0':
-            if diff_hours == '1':
-                return '1 hour ago'
-            return diff_hours + ' hours ago.'
-        else:
-            if diff_days == '1':
-                return '1 day ago.'
-            return diff_days + ' days ago.'
-
-    def owner_url(self):
-        return '/users/' + self.user_id.username
-
-    def comment_br(self):
-        safe_text = self.comment.replace('<', '').replace('>', '').replace(
-            '{{', '').replace('{%', '').replace('}}', '').replace('%}', '')
-        safe_text = safe_text.replace('((b))', '<strong>').replace(
-            '((/b))', '</strong>').replace('((i))', '<i>').replace('((/i))', '</i')
-        return "<br>".join(safe_text.splitlines())
-
-    def score(self):
-        votes = PostVotes.objects.filter(post_id=self.id)
-        score = 0
-        for vote in votes:
-            score = score + vote.vote
-        return score
+        related_name='comments',
+    )
+    text = models.TextField()
+    created_date = models.DateTimeField(auto_now_add=True)
+    edited_date = models.DateTimeField(auto_now=True)
+    upvoted_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='upvoted_comments',
+        blank=True,
+    )
+    downvoted_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='downvoted_comments',
+        blank=True,
+    )
 
     def __str__(self):
-        if len(self.comment) > 20:
-            return self.comment[:20] + '...'
-        return self.comment
+        return self.text
 
-    score = score
+    def upvote(self, user):
+        if user not in self.upvoted_by.all():
+            self.upvoted_by.add(user)
+            self.downvoted_by.remove(user)
+        else:
+            self.upvoted_by.remove(user)
+
+    def downvote(self, user):
+        if user not in self.downvoted_by.all():
+            self.downvoted_by.add(user)
+            self.upvoted_by.remove(user)
+        else:
+            self.downvoted_by.remove(user)
+
+    def is_owner(self, user):
+        return self.author == user
+
+    def can_be_deleted(self, user):
+        return self.is_owner(user) or self.post.is_owner(user)
+
+class CommentVote(models.Model):
+    UPVOTE = 1
+    DOWNVOTE = -1
+    VOTE_CHOICES = (
+        (UPVOTE, 'Upvote'),
+        (DOWNVOTE, 'Downvote'),
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.ForeignKey('Comment', on_delete=models.CASCADE, related_name='votes')
+    vote = models.SmallIntegerField(choices=VOTE_CHOICES)
+
+    class Meta:
+        unique_together = ('user', 'comment')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.comment.id} - {self.vote}"
+
+class Reply(models.Model):
+    comment = models.ForeignKey('Comment', on_delete=models.CASCADE, related_name='comment_replies')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    body = models.TextField()
+    parent_reply = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.body
+    
+    # def __str__(self):
+    #     return f"Reply #{self.id} to Comment #{self.comment_id}"
+    
+    # def __str__(self):
+    #     return f'{self.body[:50]}...'
+    
+    # def __str__(self):
+    #     if self.parent_reply:
+    #         return f"Reply {self.parent_reply.id}-{self.id}"
+    #     else:
+    #         return f"Reply {self.id}"

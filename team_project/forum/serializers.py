@@ -1,11 +1,11 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Category, Post, PostVotes, PostComment, Category
+from .models import Category, Post, PostVotes, Category, Comment, CommentVote, Reply
 from rest_framework.response import Response
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
 
 User = get_user_model()
-
-
 class PostSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all()
@@ -15,26 +15,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = [
-            "id",
-            "created",
-            "modified",
-            'time_since_post',
-            "title",
-            "description",
-            "description_br",
-            "owner",
-            'score',
-            "username",
-            "owner_url",
-            "category",
-            "category_name",
-            'slug',
-            'category_slug',
-            'full_url',
-            'user_vote',
-            'get_image',
-            'isBlurred',
+        fields = ["id","created","modified",'time_since_post',"title","description","description_br","owner",'score',"username","owner_url","category","category_name",'slug','category_slug','full_url','user_vote','get_image','isBlurred',
         ]
         extra_kwargs = {
             "url": {"view_name": "api:posts", "lookup_field": "title"}
@@ -42,14 +23,13 @@ class PostSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         owner = validated_data.pop('owner', None)
+        image = validated_data.pop('get_image', None)
         if owner:
             validated_data['owner_id'] = owner.pk
+        if image:
+            validated_data['image'] = image
         return super().create(validated_data)
 
-    def create(self, validated_data):
-        image = validated_data.pop('get_image', None)
-        post = Post.objects.create(image=image, **validated_data)
-        return post
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -81,7 +61,6 @@ class PostVotesSerializer(serializers.ModelSerializer):
 
         return data
 
-
 class AllPostsSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all()
@@ -90,29 +69,7 @@ class AllPostsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = [
-            "id",
-            "created",
-            "modified",
-            'time_since_post',
-            "title",
-            "description",
-            "description_br",
-            "owner",
-            "username",
-            "owner_url",
-            "category",
-            "category_name",
-            'slug',
-            'category_slug',
-            'score',
-            'full_url',
-            'user_vote',
-            'user_up_style',
-            'user_down_style',
-            'weighted_score',
-            'age_in_days',
-            'number_of_comments',
+        fields = ["id","created","modified",'time_since_post',"title","description","description_br","owner","username","owner_url","category","category_name",'slug','category_slug','score','full_url','user_vote','user_up_style','user_down_style','weighted_score','age_in_days','number_of_comments',
         ]
         extra_kwargs = {
             "url": {"view_name": "api:allposts", "lookup_field": "title"}
@@ -120,57 +77,98 @@ class AllPostsSerializer(serializers.ModelSerializer):
         # extra_kwargs = {
         #     "url": {"view_name": "api:user-detail", "lookup_field": "username"}
         # }
-
-
-class CommentSerializer(serializers.ModelSerializer):
-    children = serializers.SerializerMethodField(
-        read_only=True, method_name="get_children")
-
-    post_id = serializers.PrimaryKeyRelatedField(
-        queryset=Post.objects.all()
-    )
-    user_id = serializers.HiddenField(default=serializers.CurrentUserDefault())
-
-    parent = serializers.PrimaryKeyRelatedField(
-        queryset=PostComment.objects.all(), allow_null=True)
-
-    class Meta:
-        model = PostComment
-        fields = [
-            "id",
-            "post_id",
-            "created",
-            "modified",
-            'time_since_comment',
-            "comment",
-            "comment_br",
-            "user_id",
-            "username",
-            "owner_url",
-            'score',
-            'user_vote',
-            'user_up_style',
-            'user_down_style',
-            'level',
-            'parent',
-            'children',
-            'tldr',
-        ]
-
-        extra_kwargs = {
-            "url": {"view_name": "api:allposts", "lookup_field": "title"}
-        }
-
-    def get_children(self, obj):
-        """ self referral field """
-        serializer = CommentSerializer(
-            instance=obj.comment_reply.all(),
-            many=True
-        )
-        return serializer.data
-
-
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
+
+# class CommentSerializer(serializers.ModelSerializer):
+#     children = serializers.SerializerMethodField()
+#     owner = serializers.SerializerMethodField()
+#     upvotes = serializers.IntegerField(read_only=True)
+#     downvotes = serializers.IntegerField(read_only=True)
+#     user_vote = serializers.SerializerMethodField()
+
+#     class Meta:
+#         model = Comment
+#         fields = ["id", "created_date", "owner", "upvotes", "downvotes", "children", "parent_comment", "user_vote"]
+#         read_only_fields = ["created", "upvotes", "downvotes"]
+
+#     def get_children(self, obj):
+#         children = Comment.objects.filter(parent_comment=obj)
+#         return CommentSerializer(children, many=True, context=self.context).data
+
+
+#     def get_owner(self, obj):
+#         return obj.author.username
+
+#     def get_user_vote(self, obj):
+#         if not self.context.get('request').user.is_authenticated:
+#             return None
+#         try:
+#             vote = CommentVote.objects.get(user=self.context.get('request').user, comment=obj)
+#             return vote.vote_type
+#         except CommentVote.DoesNotExist:
+#             return None
+
+        # fields = ["id", "created_date", "modified", "content", "owner", "upvotes", "downvotes", "children", "parent_comment", "user_vote"]
+        # read_only_fields = ["created", "modified", "upvotes", "downvotes"]
+
+    # def get_children(self, obj):
+    #     return CommentSerializer(obj.children.all(), many=True).data
+
+    # def get_owner(self, obj):
+    #     if obj.owner:
+    #         return obj.owner.username
+    #     return ""
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    upvoted_by = serializers.StringRelatedField(many=True, read_only=True)
+    downvoted_by = serializers.StringRelatedField(many=True, read_only=True)
+    children = serializers.SerializerMethodField()
+    owner = serializers.SerializerMethodField()
+    upvotes = serializers.IntegerField(read_only=True)
+    downvotes = serializers.IntegerField(read_only=True)
+    user_vote = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Comment
+        fields = ["id", "created_date", "owner", "upvotes", "downvotes", "upvoted_by", "downvoted_by", "children", "parent_comment", "user_vote", "text"]
+        read_only_fields = ["created", "upvotes", "downvotes", "upvoted_by", "downvoted_by"]
+
+    def get_children(self, obj):
+        children = Comment.objects.filter(parent_comment=obj)
+        return CommentSerializer(children, many=True, context=self.context).data
+
+    def get_owner(self, obj):
+        return obj.author.username
+
+    def get_user_vote(self, obj):
+        if not self.context.get('request').user.is_authenticated:
+            return None
+        try:
+            vote = CommentVote.objects.get(user=self.context.get('request').user, comment=obj)
+            return vote.vote_type
+        except CommentVote.DoesNotExist:
+            return None
+
+
+from rest_framework import serializers
+from .models import Reply
+
+
+class CommentReplySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reply
+        fields = ['id', 'body', 'created_at']
+        read_only_fields = ['id', 'created_at']
+
+# class CommentReplySerializer(serializers.ModelSerializer):
+#     parent_reply_id = serializers.PrimaryKeyRelatedField(queryset=Reply.objects.all(), required=False)
+#     class Meta:
+#         model = Reply
+#         fields = ['id', 'user', 'comment', 'body', 'created_at', 'parent_reply_id']
+#         read_only_fields = ['id', 'created_at']
+
+
