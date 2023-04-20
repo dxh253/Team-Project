@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="register">
         <h1>Account Registration</h1>
         <form @submit.prevent="registerUser" method="post">
             <label for="first-name">First name:</label>

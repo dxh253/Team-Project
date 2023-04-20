@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <input v-model="searchTerm" placeholder="Search posts" />
+    <div class="postlist">
+        <input class="search" type="text" v-model="searchTerm" placeholder="Search posts" /><i class="fa-solid fa-magnifying-glass"></i>
     </div>
     <div class="left">
         <div class="sidebar">
