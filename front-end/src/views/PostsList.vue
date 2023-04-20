@@ -12,7 +12,11 @@
           <button class="button is-primary">New Post</button>
         </router-link>
       </h2>
-      <div v-for="post in allposts" :key="post.id">
+      <div class="searchbar">
+        <input class="search" type="text" v-model="searchTerm" placeholder="Search posts" >
+      </div> 
+      <div v-if="filteredPosts.length > 0">
+            <div v-for="post in filteredPosts" :key="post.id">
         <div class="box">
           <div class="columns is-vcentered">
             <div class="column">
@@ -28,13 +32,13 @@
       <button @click="scrollToTop" class="button is-info is-hidden-desktop is-fullwidth">Scroll to top</button>
     </div>
   </div>
+  </div>
 </template>
 
 
 <script>
 import { getAPI } from '@/plugins/axios';
 import PostBox from '../components/PostBox.vue';
-import { mapState } from 'vuex';
 
 export default {
   name: 'PostsList',
@@ -44,9 +48,19 @@ export default {
   data() {
     return {
       allposts: [],
+      searchTerm: '',
+
+
     }
   },
-  computed: mapState(['APIData']),
+  computed: {
+    filteredPosts() {
+            return this.allposts.filter(post => {
+                // filter posts that include the search term in the title
+                return post.title.toLowerCase().includes(this.searchTerm.toLowerCase());
+            });
+        }
+  },
   methods: {
     scrollToTop() {
       // Scroll to top with smooth behavior
