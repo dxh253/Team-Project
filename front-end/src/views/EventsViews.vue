@@ -8,15 +8,22 @@
     </section>
 
     <div class="columns">
-      <div class="column is-10">
+      <div class="column is-6">
         <h2 class="title">Upcoming Events</h2>
+      </div>
+      <div class="select">
+        <select v-model="eventsFilter">
+          <option value="0">Show events and study groups</option>
+          <option value="1">Show events only</option>
+          <option value="2">Show study groups only</option>
+        </select>
       </div>
       <div class="column is-1">
         <button class="button is-primary is-light" @click="filterEvents">
           My Events
         </button>
       </div>
-      <div class="column is-4">
+      <div class="column is-1">
         <router-link to="/events_form">
           <button class="button is-primary is-light">Add Event</button>
         </router-link>
@@ -25,7 +32,7 @@
 
     <div class="columns is-multiline">
       <EventBox
-        v-for="event in displayedEvents"
+        v-for="event in filteredEvents"
         v-bind:key="event.id"
         v-bind:event="event"
       />
@@ -43,6 +50,7 @@ export default {
   name: "EventsViews",
   data() {
     return {
+      eventsFilter: "",
       allEvents: [],
       displayedEvents: [],
       filterByOwner: false,
@@ -51,7 +59,6 @@ export default {
   components: {
     EventBox,
   },
-  computed: mapState(["APIData"]),
   async created() {
     console.log("created method is executed");
     if (!this.$store.getters.loggedIn) {
@@ -86,6 +93,17 @@ export default {
         this.displayedEvents = filteredEvents;
         this.filterByOwner = true;
       }
+    },
+  },
+  computed: {
+    computed: mapState(["APIData"]),
+    filteredEvents: function () {
+      let result = this.displayedEvents;
+      const filter_applied = this.eventsFilter != 0;
+      if (filter_applied) {
+        result = result.filter((event) => event.category == this.eventsFilter);
+      }
+      return result;
     },
   },
 };
