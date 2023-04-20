@@ -22,7 +22,7 @@
               type="radio"
               id="event"
               name="event"
-              value="event"
+              value="1"
               v-model="eventData.category"
             />
           </div>
@@ -34,7 +34,7 @@
               type="radio"
               id="study-group"
               name="study-group"
-              value="study-group"
+              value="2"
               v-model="eventData.category"
             />
           </div>

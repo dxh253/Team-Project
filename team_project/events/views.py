@@ -25,7 +25,7 @@ class EventsList(APIView):
 
     def post(self, request, format=None):
         data = request.data.copy()  # Create a mutable copy of the QueryDict
-        data["category"] = 1  # Modify the category field
+        data["category"] = int(data["category"])
         serializer = EventsSerializer(data=data)
         if serializer.is_valid():
             instance = serializer.save()
