@@ -133,7 +133,7 @@ export default {
     color: white;
     cursor: pointer;
     padding: 15px;
-    border-radius: 10px;
+    border-radius: 5px;
     font-size: 18px;
   }
 </style>
