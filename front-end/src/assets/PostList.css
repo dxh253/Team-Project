@@ -57,11 +57,5 @@
     .searchbar{
       display: flex;
     }
-
-    .search{
-      float:left;
-    }
-
-    .fa-solid fa-magnifying-glass{
-      float:right;
-    }
+    
+    

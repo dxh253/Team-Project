@@ -33,6 +33,7 @@
     </div>
   </div>
   </div>
+  <button @click="scrollToTop" class="myBtn">Scroll to top</button>
 </template>
 
 
@@ -120,4 +121,19 @@ export default {
     margin-bottom: 1rem;
   }
 }
+
+.myBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: hsl(171, 100%, 41%);
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+  }
 </style>
