@@ -2,12 +2,8 @@
   <div class="home">
     <section class="hero is-medium is-dark mb-6">
       <div class="hero-body has-text-centered">
-        <h1 class="title">
-          Looking For Something To Do?
-        </h1>
-        <p class="subtitle">
-          Here are some upcoming events!
-        </p>
+        <h1 class="title">Looking For Something To Do?</h1>
+        <p class="subtitle">Here are some upcoming events!</p>
       </div>
     </section>
 
@@ -16,7 +12,9 @@
         <h2 class="title">Upcoming Events</h2>
       </div>
       <div class="column is-1">
-        <button class="button is-primary is-light" @click="filterEvents">My Events</button>
+        <button class="button is-primary is-light" @click="filterEvents">
+          My Events
+        </button>
       </div>
       <div class="column is-4">
         <router-link to="/events_form">
@@ -36,13 +34,13 @@
 </template>
 
 <script>
-import { getAPI } from '@/plugins/axios';
-import EventBox from '@/components/EventBox';
-import { mapState } from 'vuex';
+import { getAPI } from "@/plugins/axios";
+import EventBox from "@/components/EventBox";
+import { mapState } from "vuex";
 import jwt_decode from "jwt-decode";
 
 export default {
-  name: 'EventsViews',
+  name: "EventsViews",
   data() {
     return {
       allEvents: [],
@@ -53,26 +51,26 @@ export default {
   components: {
     EventBox,
   },
-  computed: mapState(['APIData']),
+  computed: mapState(["APIData"]),
   async created() {
-    console.log('created method is executed');
+    console.log("created method is executed");
     if (!this.$store.getters.loggedIn) {
       // User is not logged in
       return;
     }
 
     getAPI
-      .get('/api/v1/events/', {
+      .get("/api/v1/events/", {
         headers: { Authorization: `Bearer ${this.$store.state.accessToken}` },
       })
       .then((response) => {
-        console.log('API response data:', response.data);
+        console.log("API response data:", response.data);
         this.allEvents = response.data;
         this.displayedEvents = response.data;
         this.$store.state.APIData = response.data;
       })
       .catch((error) => {
-        console.log('API error:', error);
+        console.log("API error:", error);
       });
   },
   methods: {
@@ -92,7 +90,3 @@ export default {
   },
 };
 </script>
-
-
-
-
