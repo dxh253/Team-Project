@@ -1,24 +1,35 @@
 <template>
-    <div class="left">
-        <div class="sidebar">
-            <p>hello</p>
-        </div>
+  <div class="columns is-mobile">
+    <div class="column is-one-quarter-desktop is-hidden-mobile">
+      <div class="box">
+        <p class="title is-5">hello</p>
+      </div>
+    </div>
+    <div class="column">
+      <h2 class="title is-4" style="margin-bottom: 1rem; display: flex; align-items: center;">
+        <span style="flex-grow: 1;">Posts</span>
         <router-link to="/create">
-            <div class="create">
-                New Post
-            </div>
+          <button class="button is-primary">New Post</button>
         </router-link>
-    </div>
-    <div class="post-background">
-        <h2 style="color: black; margin-bottom: 10px;">Posts</h2>
-        <div v-for="post in allposts" :key="post.id">
-            <!-- <post-box :post="post" /> -->
-            <vote :post-id="post.id" :initial-score="post.score"></vote>
-            <post-box :post="post" @postDeleted="removePostFromList" />
+      </h2>
+      <div v-for="post in allposts" :key="post.id">
+        <div class="box">
+          <div class="columns is-vcentered">
+            <div class="column">
+              <post-box
+                :post="post"
+                @postDeleted="removePostFromList"
+                @vote-updated="updatePostVote"
+              />
+            </div>
+          </div>
         </div>
+      </div>
+      <button @click="scrollToTop" class="button is-info is-hidden-desktop is-fullwidth">Scroll to top</button>
     </div>
-    <button @click="scrollToTop" class="myBtn">Scroll to top</button>
+  </div>
 </template>
+
 
 <script>
 import { getAPI } from '@/plugins/axios';
@@ -26,45 +37,73 @@ import PostBox from '../components/PostBox.vue';
 import { mapState } from 'vuex';
 
 export default {
-    name: 'PostsList',
-    components: {
-        'post-box': PostBox,
-    },
-    data() {
-        return {
-            allposts: [],
-        }
-    },
-    computed: mapState(['APIData']),
-    methods: {
-      scrollToTop() {
-        // Scroll to top with smooth behavior
-        window.scrollTo({ top: 0, behavior: 'instant' });
-      },
-      removePostFromList(postId) {
-        this.allposts = this.allposts.filter((post) => post.Id !== postId);
-      },
+  name: 'PostsList',
+  components: {
+    'post-box': PostBox,
   },
-    created() {
-        const token = localStorage.getItem("access");
-
-        getAPI
-            .get("/posts/", {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            .then((response) => {
-                console.log("Post API has received data");
-                this.allposts = response.data;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+  data() {
+    return {
+      allposts: [],
+    }
+  },
+  computed: mapState(['APIData']),
+  methods: {
+    scrollToTop() {
+      // Scroll to top with smooth behavior
+      window.scrollTo({ top: 0, behavior: 'instant' });
     },
+    removePostFromList(postId) {
+      this.allposts = this.allposts.filter((post) => post.id !== postId);
+    },
+    updatePostVote(postId, vote) {
+      const postToUpdate = this.allposts.find((post) => post.id === postId);
+      if (postToUpdate) {
+        postToUpdate.score += vote;
+      }
+    },
+    updatePostScore(postId, updatedScore) {
+      const postToUpdate = this.allposts.find((post) => post.id === postId);
+      if (postToUpdate) {
+        postToUpdate.score = updatedScore;
+      }
+    }
+  },
+  created() {
+    const token = localStorage.getItem("access");
+
+    getAPI
+      .get("/posts/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        console.log("Post API has received data");
+        this.allposts = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
 }
 </script>
 
-<style>
-@import url('./../assets/PostList.css');
+<style lang="scss">
+.box {
+  margin-bottom: 1.5rem;
+}
+
+@media screen and (max-width: 1023px) {
+  .column.is-one-quarter-desktop {
+    display: none;
+  }
+
+  .button.is-hidden-desktop {
+    display: block !important;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+}
 </style>
