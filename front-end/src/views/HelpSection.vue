@@ -26,15 +26,21 @@
     
     <div class="columns is-mobile is-centered is-multiline has-text-centered" style="margin-bottom: 2%;">
         <div class="column">
-            <button class="button is-large is-link is-light is-outlined" style="width: 250px; height: 125px; margin: 3px 25px;">
-                Testing
-            </button>
-            <button class="button is-large is-link is-light is-outlined" style="width: 250px; height: 125px; margin: 3px 25px;">
-                Testing
-            </button>
-            <button class="button is-large is-link is-light is-outlined" style="width: 250px; height: 125px; margin: 3px 25px;">
-                Testing232
-            </button>
+            <RouterLink to="">
+                <button class="button is-large is-link is-light is-outlined" style="width: 250px; height: 125px; margin: 3px 25px;">
+                    Testing
+                </button>
+            </RouterLink>
+            <RouterLink to="">
+                <button class="button is-large is-link is-light is-outlined" style="width: 250px; height: 125px; margin: 3px 25px;">
+                    Testing
+                </button>
+            </RouterLink>
+            <RouterLink to="">
+                <button class="button is-large is-link is-light is-outlined" style="width: 250px; height: 125px; margin: 3px 25px;">
+                    Testing232
+                </button>
+            </RouterLink>
         </div>
     </div>
     
@@ -76,11 +82,18 @@
         </form>
     </div>
 
-    <h2 class="title is-3">Here is a list of problems submitted by other users</h2>
+    <div class="columns">
+        <div class="column is-10">
+            <h2 class="title is-3">Here is a list of problems submitted by other users</h2>
+        </div>
+        <div class="column is-8 is-offset 8">
+            <button type="button" class="button is-underlined is-link is-light" @click="filterProblems"> My problems </button>
+        </div>
+    </div>
 
     <div v-if="renderComponent">
     <ProblemCard
-        v-for="problem in allProblems"
+        v-for="problem in displayedProblems"
         v-bind:key="problem.id"
         v-bind:problem="problem"
       />
@@ -99,10 +112,12 @@ export default {
     data() {
         return {
             allProblems: [],
+            displayedProblems: [],
             problemInfo: {
                 title: '',
                 description: '',
                 isOwner: false,
+                filterByOwner: false,
             },
             renderComponent: true,
             searchValue : ''
@@ -167,6 +182,20 @@ export default {
         //         console.log('API error:', error);
         //     });
         // },
+
+        filterProblems() {
+            if (this.filterByOwner) {
+                this.displayedProblems = this.allProblems;
+                this.filterByOwner = false;
+            } else {
+                const userId = jwt_decode(this.$store.state.accessToken).user_id;
+                const filteredEvents = this.allProblems.filter((problem) => {
+                    return problem.ownerId === userId;
+                });
+                this.displayedProblems = filteredEvents;
+                this.filterByOwner = true;
+            }
+        },
     },
     async created() {
         console.log('created method is executed');
@@ -176,9 +205,12 @@ export default {
                    headers: { Authorization: `Bearer ${this.$store.state.accessToken}` },
                })
             .then((response) => {
-               console.log('API response data:', response.data);
-               this.allProblems = response.data;
-               this.problemInfo.isOwner = true;
+                console.log('API response data:', response.data);
+                this.allProblems = response.data;
+                this.displayedProblems = response.data;
+                this.$store.state.APIData = response.data
+
+                this.problemInfo.isOwner = true;
             })
             .catch((error) => {
                 console.log('API error:', error);
