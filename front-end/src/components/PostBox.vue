@@ -1,81 +1,64 @@
 <template>
-    <div>
-        <div class="post-box" v-show="!isHidden && !isDeleted">
-            <div class="post-box-header">
-                <h3 class="post-box-title">
+    <div class="card">
+        <div class="card-header">
+            <p class="card-header-title">
+                <router-link :to="{ name: 'PostDetails', params: { id: post.id } }">
+                    {{ post.title }}
+                </router-link>
+            </p>
+            <div class="card-header-icon">
+                <span class="icon">
+                    <i class="fas fa-angle-down"></i>
+                </span>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="content">
+                <p>{{ post.description }}</p>
+                <div v-if="post.get_image" class="has-text-centered">
+                    <figure class="image is-16by9">
+                        <a :href="post.get_image" target="_blank"><img :src="post.get_image"
+                                :style="{ filter: blur ? 'blur(10px)' : 'none' }" @click="enlargeImage"></a>
+                    </figure>
+                </div>
+            </div>
+            <div class="columns is-mobile is-gapless">
+                <div class="column">
                     <router-link :to="{ name: 'PostDetails', params: { id: post.id } }">
-                    <h2>{{ post.title }}</h2>
-                    </router-link>
-                </h3>
-                <span>&nbsp;// posted by {{ post.username }} </span>
-                <div class="post-box-edit">
-                <div class="flex-item">
-                    <router-link v-if="isPostCreator" :to="{ name: 'edit-post', params: { id: post.id } }"> 
-                    <i class="fa-sharp fa-solid fa-pen-to-square fa-xl"></i>
+                        <span class="icon is-small"><i class="fas fa-comment"></i></span>
+                        <span>Comments</span>
                     </router-link>
                 </div>
+                <div class="column">
+                    <span class="icon is-small"><i class="fas fa-arrow-up" @click="upvote"
+                            :style="{ color: upColor }"></i></span>
+                    <span>{{ totalScore }}</span>
+                    <span class="icon is-small"><i class="fas fa-arrow-down" @click="downvote"
+                            :style="{ color: downColor }"></i></span>
                 </div>
-                <div class= "flex-item"><i class="fa-solid fa-trash-can fa-xl" v-if="isPostCreator" @click="deletePost" v-on:click="isDeleted = !isDeleted"></i></div> 
-            </div>
-            <p class="post-box-description">{{ post.description }}</p>
-            <div style="position: relative;">
-                <figure>
-                    <a :href="post.get_image" target="_blank"><img :src="post.get_image" :style="{ filter: blur ? 'blur(10px)' : 'none' }" @click="enlargeImage"></a>
-                </figure>
-                <button class="unblur" v-if="blur" @click="toggleBlur">Unblur</button>
-            </div>
-            <div class="post-box-details">
-                <div class="post-box-category"> 
-                    <i class="fas fa-rss"></i>
-                    <span class="post-box-category-name">{{ post.category_name }}</span>
-                </div>
-
-                <div class="post-box-time">
-                    <i class="far fa-clock"></i>
-                    <span class="post-box-time-since">{{ post.time_since_post }}</span>
-                </div>
-            </div>
-            <div class="post-box-interactions">
-                <div class="flex-item"><i class="fas fa-arrow-up post-box-upvote fa-xl" @click="upvote" :style="{ color: upColor }"></i>
-                <span>{{ post.score }}</span>
-                <i class="fas fa-arrow-down post-box-downvote fa-xl" @click="downvote" :style="{ color: downColor }"></i>
-                </div>
-                <div class ="flex-item">
-                    <span>
-                        <i class="fa-sharp fa-solid fa-comments fa-xl"></i>
-                        <!-- <router-link 
-                        :to="{ name: 'post-detail', params: { slug: post.slug } }">&nbsp;{{ post.number_of_comments}}Comments
-                        </router-link> -->
-                        <!-- <router-link 
-                        :to="{ name: 'post-detail', params: { slug: post.slug } }">&nbsp;{{ post.number_of_comments}}Comments
-                        </router-link> -->
-                        <router-link :to="{ name: 'PostDetail', params: { postId: post.id } }">
-                            <button>Comments</button>
-                        </router-link>                       
+                <div v-if="post.get_image" class="column">
+                    <span class="icon is-small">
+                        <i class="fas fa-eye" @click="toggleBlur"></i>
                     </span>
                 </div>
-                <div class="flex-item"><i class="fa-sharp fa-solid fa-eye-slash fa-xl" v-on:click="isHidden = !isHidden"></i></div>
             </div>
-
         </div>
-        <!-- <div v-show="isDeleted">
-            <div class="post-box">
-                <div style="justify-content: center; display: flex;">
-                    <i class="fa-solid fa-trash-can fa-xl" v-on:click="isDeleted = !isDeleted"></i>
-                </div>
+        <div class="card-footer">
+            <span class="card-footer-item">posted by {{ post.username }}</span>
+            <span class="card-footer-item"><i class="far fa-clock"></i> {{ post.time_since_post }}</span>
+            <span class="card-footer-item"><i class="fas fa-rss"></i> {{ post.category_name }}</span>
+            <div class="card-footer-item">
+                <router-link v-if="isPostCreator" :to="{ name: 'edit-post', params: { id: post.id } }">
+                    <span class="icon"><i class="fas fa-edit"></i></span>
+                </router-link>
+                <span v-if="isPostCreator" class="icon" @click="deletePost"><i class="fas fa-trash"></i></span>
             </div>
-        </div> -->
-        <div v-show="isHidden">
-            <div class="post-box">
-                <div style="justify-content: center; display: flex;">
-                    <i class="fa-solid fa-eye fa-xl" v-on:click="isHidden = !isHidden"></i>
-                </div>
-            </div>
-        </div> 
-        
+        </div>
     </div>
 </template>
-
+  
+  
+  
 
 <script>
 import { getAPI } from '@/plugins/axios';
@@ -95,7 +78,7 @@ export default {
             userVote: null,
             isHidden: false,
             isDeleted: false,
-            blur: this.post.isBlurred // initialize the blur state based on the isBlurred property of the post
+            blur: this.post.isBlurred,
         };
     },
     computed: {
@@ -114,7 +97,7 @@ export default {
             return this.vote === -1 ? 'blue' : 'grey';
         },
         isPostCreator() {
-            const token = localStorage.getItem("access");
+            const token = localStorage.getItem('access');
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.user_id;
             return this.post.owner === userId;
@@ -154,41 +137,39 @@ export default {
             const token = localStorage.getItem('access');
             const config = {
                 headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             };
 
-            getAPI.delete(`/posts/${this.post.id}/`, config)
+            getAPI
+                .delete(`/posts/${this.post.id}/`, config)
                 .then(() => {
-                    // Emit a custom event to notify the parent component that a post was deleted
                     this.$emit('post-deleted', this.post.id);
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.log(error);
                 });
         },
         upvote() {
-            // If the user has already upvoted, remove their vote.
             if (this.userVote && this.userVote.vote === 1) {
                 this.vote = 0;
                 this.updateVote();
-            }
-            // If the user has already downvoted or hasn't voted yet, upvote the post.
-            else {
+            } else {
                 this.vote = 1;
-                this.updateVote();
+                this.updateVote().then(() => {
+                    this.$emit("vote-updated", this.post.id, this.vote);
+                });
             }
         },
         downvote() {
-            // If the user has already downvoted, remove their vote.
             if (this.userVote && this.userVote.vote === -1) {
                 this.vote = 0;
                 this.updateVote();
-            }
-            // If the user has already upvoted or hasn't voted yet, downvote the post.
-            else {
+            } else {
                 this.vote = -1;
-                this.updateVote();
+                this.updateVote().then(() => {
+                    this.$emit("vote-updated", this.post.id, this.vote);
+                });
             }
         },
 
@@ -213,6 +194,7 @@ export default {
                     })
                     .then((response) => {
                         this.userVote = reactive(response.data);
+                        this.$emit("vote-updated", this.totalScore);
                     })
                     .catch((error) => {
                         console.log(error);
@@ -226,6 +208,7 @@ export default {
                     })
                     .then((response) => {
                         this.userVote = reactive(response.data);
+                        this.$emit("vote-updated", this.totalScore);
                     })
                     .catch((error) => {
                         console.log(error);
@@ -235,7 +218,3 @@ export default {
     },
 };
 </script>
-
-<style>
-@import url('./../assets/PostBox.css');
-</style>
