@@ -1,10 +1,14 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from .serializers import PostSerializer, AllPostsSerializer, PostVotesSerializer, CommentSerializer, CategorySerializer
-from .models import Category, Post, PostVotes, PostComment
+from .serializers import PostSerializer, AllPostsSerializer, PostVotesSerializer, CategorySerializer, CommentSerializer, CommentReplySerializer, CommentReplySerializer
+from .models import Category, Post, PostVotes, Comment, CommentVote, Reply
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.core.exceptions import ValidationError
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+
 class IsOwnerOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
@@ -14,7 +18,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
                 return obj.user_id == request.user
             return True
         return False
-    
+
 class PostList(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -105,23 +109,6 @@ class AllPostsList(generics.ListAPIView):
     serializer_class = AllPostsSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-class CommentList(generics.ListCreateAPIView):
-    queryset = PostComment.objects.all()
-    serializer_class = CommentSerializer
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def perform_create(self, serializer):
-        serializer.save(user_id=self.request.user)
-
-class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = PostComment.objects.all()
-    serializer_class = CommentSerializer
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [
-        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-
 class CategoryList(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -135,11 +122,203 @@ class CategoryList(generics.ListCreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-class CommentListCreateAPIView(generics.ListCreateAPIView):
-    queryset = PostComment.objects.all()
+
+class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        # This view should return a list of all the comments for the post as determined by the post_pk portion of the URL.
+        post_pk = self.kwargs["post_pk"]
+        return Comment.objects.filter(post=post_pk)
+
 
     def perform_create(self, serializer):
-        serializer.save(user_id=self.request.user)
+        post = generics.get_object_or_404(Post, pk=self.kwargs["post_pk"])
+        serializer.save(post=post, author=self.request.user)
+    # def perform_create(self, serializer):
+    #     post = generics.get_object_or_404(Post, pk=self.kwargs["post_pk"])
+    #     serializer.save(post=post)
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        # This view should return a single comment for the post as determined by the post_pk and pk portions of the URL.
+        post_pk = self.kwargs["post_pk"]
+        comment_pk = self.kwargs["pk"]
+        return Comment.objects.filter(post=post_pk, pk=comment_pk)
+
+class CommentVote(generics.UpdateAPIView):
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        # This view should return a single comment for the post as determined by the post_pk and pk portions of the URL.
+        post_pk = self.kwargs["post_pk"]
+        comment_pk = self.kwargs["pk"]
+        return Comment.objects.filter(post=post_pk, pk=comment_pk)
+
+    def patch(self, request, *args, **kwargs):
+        comment = self.get_object()
+        vote = request.data.get("vote")
+
+        if vote == "up":
+            comment.votes += 1
+        elif vote == "down":
+            comment.votes -= 1
+        else:
+            raise ValidationError("Invalid vote value.")
+
+        comment.save()
+        serializer = self.get_serializer(comment)
+        return Response(serializer.data)
+
+class CommentDelete(generics.DestroyAPIView):
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        # This view should return a single comment for the post as determined by the post_pk and pk portions of the URL.
+        post_pk = self.kwargs["post_pk"]
+        comment_pk = self.kwargs["pk"]
+        return Comment.objects.filter(post=post_pk, pk=comment_pk)
+
+    def delete(self, request, *args, **kwargs):
+        comment = self.get_object()
+
+        if comment.author != request.user:
+            raise ValidationError("You cannot delete someone else's comment.")
+
+        return super().delete(request, *args, **kwargs)
+
+class CommentReply(generics.CreateAPIView):
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        # This view should return a single comment for the post as determined by the post_pk and pk portions of the URL.
+        post_pk = self.kwargs["post_pk"]
+        comment_pk = self.kwargs["pk"]
+        return Comment.objects.filter(post=post_pk, pk=comment_pk)
+
+    def perform_create(self, serializer):
+        parent_comment = generics.get_object_or_404(Comment, pk=self.kwargs["pk"])
+        serializer.save(post=parent_comment.post, parent=parent_comment)
+
+class CommentReplyCreateView(generics.CreateAPIView):
+    queryset = Reply.objects.all()
+    serializer_class = CommentReplySerializer
+
+    def perform_create(self, serializer):
+        comment = generics.get_object_or_404(Comment, pk=self.kwargs["comment_pk"])
+        parent_reply_id = self.request.data.get('parent_reply', None)
+        parent_reply = None
+        if parent_reply_id:
+            parent_reply = generics.get_object_or_404(Reply, pk=parent_reply_id)
+        serializer.save(comment=comment, user=self.request.user, parent_reply=parent_reply)
+
+class CommentUpvoteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, post_pk, comment_pk):
+        return get_object_or_404(Comment, post__pk=post_pk, pk=comment_pk)
+
+    def put(self, request, post_pk, comment_pk):
+        comment = self.get_object(post_pk, comment_pk)
+        comment.upvote(request.user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CommentDownvoteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, post_pk, comment_pk):
+        return get_object_or_404(Comment, post__pk=post_pk, pk=comment_pk)
+
+    def put(self, request, post_pk, comment_pk):
+        comment = self.get_object(post_pk, comment_pk)
+        comment.downvote(request.user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class CommentReplyUpvoteView(APIView):
+    def put(self, request, post_pk, comment_pk, reply_pk):
+        reply = get_object_or_404(CommentReply, pk=reply_pk)
+        user = request.user
+
+        if user.is_authenticated:
+            if user in reply.upvotes.all():
+                reply.upvotes.remove(user)
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            elif user in reply.downvotes.all():
+                reply.downvotes.remove(user)
+            reply.upvotes.add(user)
+            reply.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+class CommentReplyDownvoteView(APIView):
+    def put(self, request, post_pk, comment_pk, reply_pk):
+        reply = get_object_or_404(CommentReply, pk=reply_pk)
+        user = request.user
+
+        if user.is_authenticated:
+            if user in reply.downvotes.all():
+                reply.downvotes.remove(user)
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            elif user in reply.upvotes.all():
+                reply.upvotes.remove(user)
+            reply.downvotes.add(user)
+            reply.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+# class CommentUpvoteView(generics.UpdateAPIView):
+#     queryset = Comment.objects.all()
+#     serializer_class = CommentSerializer
+
+#     def get_queryset(self):
+#         comment_pk = self.kwargs["pk"]
+#         return Comment.objects.filter(id=comment_pk)
+
+#     def patch(self, request, *args, **kwargs):
+#         comment = self.get_object()
+#         print("Comment:", comment)
+#         vote_type = request.data.get('vote_type')
+
+#         if vote_type == 'upvote':
+#             comment.upvoted_by.add(request.user)
+#             comment.downvoted_by.remove(request.user)
+#         elif vote_type == 'downvote':
+#             comment.downvoted_by.add(request.user)
+#             comment.upvoted_by.remove(request.user)
+#         else:
+#             comment.upvoted_by.remove(request.user)
+#             comment.downvoted_by.remove(request.user)
+
+#         serializer = self.get_serializer(comment)
+#         return Response(serializer.data)
+
+
+# class CommentDownvoteView(generics.UpdateAPIView):
+#     queryset = Comment.objects.all()
+#     serializer_class = CommentSerializer
+
+#     def get_queryset(self):
+#         comment_pk = self.kwargs["pk"]
+#         return Comment.objects.filter(id=comment_pk)
+
+
+#     def patch(self, request, *args, **kwargs):
+#         comment = self.get_object()
+#         vote_type = request.data.get('vote_type')
+
+#         if vote_type == 'upvote':
+#             comment.upvoted_by.add(request.user)
+#             comment.downvoted_by.remove(request.user)
+#         elif vote_type == 'downvote':
+#             comment.downvoted_by.add(request.user)
+#             comment.upvoted_by.remove(request.user)
+#         else:
+#             comment.upvoted_by.remove(request.user)
+#             comment.downvoted_by.remove(request.user)
+
+#         serializer = self.get_serializer(comment)
+#         return Response(serializer.data)

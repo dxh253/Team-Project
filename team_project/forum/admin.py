@@ -1,18 +1,13 @@
 from django.contrib import admin
-from .models import Category, Post, PostVotes, PostComment
-
-# Register your models here.
-
-
+from . import models
 class MyClassAdmin(admin.ModelAdmin):
     readonly_fields = ('created', 'modified', 'slug')
-
 
 class MyChildren(admin.ModelAdmin):
     readonly_fields = ('children', )
 
-
-admin.site.register(Category, MyClassAdmin)
-admin.site.register(Post, MyClassAdmin)
-admin.site.register(PostVotes)
-admin.site.register(PostComment, MyChildren)
+admin.site.register(models.Category)
+admin.site.register(models.Post)
+admin.site.register(models.PostVotes)
+admin.site.register(models.Comment)
+admin.site.register(models.Reply)
