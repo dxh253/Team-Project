@@ -11,6 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.http import HttpResponseBadRequest
 from django.views.generic.base import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.decorators.csrf import csrf_exempt
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -174,22 +175,62 @@ class CommentVote(generics.UpdateAPIView):
         serializer = self.get_serializer(comment)
         return Response(serializer.data)
 
+# class CommentDelete(generics.DestroyAPIView):
+#     serializer_class = CommentSerializer
+
+#     def get_queryset(self):
+#         post_pk = self.kwargs["post_pk"]
+#         comment_pk = self.kwargs["comment_pk"]
+#         reply_pk = self.kwargs.get("reply_pk")
+        
+#         if reply_pk is not None:
+#             return Reply.objects.filter(comment_id=comment_pk, pk=reply_pk)
+#         else:
+#             return Comment.objects.filter(post_id=post_pk, pk=comment_pk)
+
+
+
+#     def delete(self, request, *args, **kwargs):
+#         comment = self.get_object()
+
+#         if comment.author != request.user:
+#             raise ValidationError("You cannot delete someone else's comment.")
+
+#         return super().delete(request, *args, **kwargs)
+
+    # def get_queryset(self):
+    #     # This view should return a single comment or reply for the post as determined by the post_pk and pk portions of the URL.
+    #     post_pk = self.kwargs["post_pk"]
+    #     comment_pk = self.kwargs["pk"]
+    #     reply_pk = self.kwargs.get("reply_pk")
+    #     if reply_pk:
+    #         return Reply.objects.filter(comment=comment_pk, pk=reply_pk)
+    #     else:
+    #         return Comment.objects.filter(post=post_pk, pk=comment_pk)
+
+
 class CommentDelete(generics.DestroyAPIView):
     serializer_class = CommentSerializer
+    lookup_field = 'pk'
 
     def get_queryset(self):
-        # This view should return a single comment for the post as determined by the post_pk and pk portions of the URL.
         post_pk = self.kwargs["post_pk"]
-        comment_pk = self.kwargs["pk"]
-        return Comment.objects.filter(post=post_pk, pk=comment_pk)
+        comment_pk = self.kwargs["comment_pk"]
+        reply_pk = self.kwargs.get("pk")
+            
+        if reply_pk is not None:
+            return Reply.objects.filter(comment_id=comment_pk, pk=reply_pk)
+        else:
+            return Comment.objects.filter(post_id=post_pk, pk=comment_pk)
 
     def delete(self, request, *args, **kwargs):
         comment = self.get_object()
 
-        if comment.author != request.user:
+        if comment.user != request.user:
             raise ValidationError("You cannot delete someone else's comment.")
 
         return super().delete(request, *args, **kwargs)
+
 
 class CommentReply(generics.CreateAPIView):
     serializer_class = CommentSerializer
@@ -238,96 +279,123 @@ class CommentDownvoteView(APIView):
         comment = self.get_object(post_pk, comment_pk)
         comment.downvote(request.user)
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
-class CommentReplyUpvoteView(LoginRequiredMixin, View):
-    def put(self, request, post_id, comment_id, reply_id, action):
-        valid_actions = ['upvote', 'downvote']
-        if action not in valid_actions:
-            return HttpResponseBadRequest("Invalid action")
-        reply = get_object_or_404(Reply, id=reply_id)
-        user = request.user
-        vote, created = ReplyVote.objects.get_or_create(
-            user=user,
-            reply=reply,
-            defaults={'vote_type': 'up' if action == 'upvote' else 'down'}
+
+
+class CommentReplyUpvoteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, post_pk, comment_pk, reply_pk):
+        return get_object_or_404(
+            Reply,
+            pk=reply_pk,
+            comment_id=comment_pk,
+            comment__post_id=post_pk
         )
-        if not created:
-            if vote.vote_type == ('up' if action == 'upvote' else 'down'):
-                vote.delete()
-            else:
-                vote.vote_type = 'up' if action == 'upvote' else 'down'
-                vote.save()
-        reply.upvotes = ReplyVote.objects.filter(reply_id=reply.id, vote_type='up').count()
-        reply.downvotes = ReplyVote.objects.filter(reply_id=reply.id, vote_type='down').count()
-        reply.save()
-        return HttpResponse("OK")
 
-class CommentReplyDownvoteView(APIView):
     def put(self, request, post_pk, comment_pk, reply_pk):
-        reply = get_object_or_404(CommentReply, pk=reply_pk)
+        reply = self.get_object(post_pk, comment_pk, reply_pk)
         user = request.user
+        vote_type = request.data.get("vote_type")
 
-        if user.is_authenticated:
-            if user in reply.downvotes.all():
-                reply.downvotes.remove(user)
-                return Response(status=status.HTTP_204_NO_CONTENT)
-            elif user in reply.upvotes.all():
-                reply.upvotes.remove(user)
-            reply.downvotes.add(user)
-            reply.save()
-            return Response(status=status.HTTP_200_OK)
-        else:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        # Check if the user has already voted on this reply
+        try:
+            reply_vote = ReplyVote.objects.get(reply=reply, user=user)
+        except ReplyVote.DoesNotExist:
+            reply_vote = None
 
-# class CommentUpvoteView(generics.UpdateAPIView):
-#     queryset = Comment.objects.all()
-#     serializer_class = CommentSerializer
+        if vote_type == "upvote":
+            if reply_vote is None:
+                reply.upvotes += 1
+                reply_vote = ReplyVote.objects.create(
+                    reply=reply, user=user, vote_type="up"
+                )
+            elif reply_vote.vote_type == "up":
+                # User already upvoted, so remove the upvote
+                reply.upvotes -= 1
+                reply_vote.delete()
+            elif reply_vote.vote_type == "down":
+                # User downvoted before, now they are upvoting
+                reply_vote.vote_type = "up"
+                reply_vote.save()
+                reply.upvotes += 1
+                reply.downvotes -= 1
+        elif vote_type == "downvote":
+            if reply_vote is None:
+                reply.downvotes += 1
+                reply_vote = ReplyVote.objects.create(
+                    reply=reply, user=user, vote_type="down"
+                )
+            elif reply_vote.vote_type == "down":
+                # User already downvoted, so remove the downvote
+                reply.downvotes -= 1
+                reply_vote.delete()
+            elif reply_vote.vote_type == "up":
+                # User upvoted before, now they are downvoting
+                reply_vote.vote_type = "down"
+                reply_vote.save()
+                reply.downvotes += 1
+                reply.upvotes -= 1
 
-#     def get_queryset(self):
-#         comment_pk = self.kwargs["pk"]
-#         return Comment.objects.filter(id=comment_pk)
+        reply.save()
 
-#     def patch(self, request, *args, **kwargs):
-#         comment = self.get_object()
-#         print("Comment:", comment)
-#         vote_type = request.data.get('vote_type')
-
-#         if vote_type == 'upvote':
-#             comment.upvoted_by.add(request.user)
-#             comment.downvoted_by.remove(request.user)
-#         elif vote_type == 'downvote':
-#             comment.downvoted_by.add(request.user)
-#             comment.upvoted_by.remove(request.user)
-#         else:
-#             comment.upvoted_by.remove(request.user)
-#             comment.downvoted_by.remove(request.user)
-
-#         serializer = self.get_serializer(comment)
-#         return Response(serializer.data)
-
-
-# class CommentDownvoteView(generics.UpdateAPIView):
-#     queryset = Comment.objects.all()
-#     serializer_class = CommentSerializer
-
-#     def get_queryset(self):
-#         comment_pk = self.kwargs["pk"]
-#         return Comment.objects.filter(id=comment_pk)
+        return Response({"upvotes": reply.upvotes, "downvotes": reply.downvotes})
 
 
-#     def patch(self, request, *args, **kwargs):
-#         comment = self.get_object()
-#         vote_type = request.data.get('vote_type')
+class ReplyVoteView(APIView):
+    permission_classes = [IsAuthenticated]
 
-#         if vote_type == 'upvote':
-#             comment.upvoted_by.add(request.user)
-#             comment.downvoted_by.remove(request.user)
-#         elif vote_type == 'downvote':
-#             comment.downvoted_by.add(request.user)
-#             comment.upvoted_by.remove(request.user)
-#         else:
-#             comment.upvoted_by.remove(request.user)
-#             comment.downvoted_by.remove(request.user)
+    def get_object(self, post_pk, comment_pk, reply_pk):
+        return get_object_or_404(
+            Reply,
+            pk=reply_pk,
+            comment_id=comment_pk,
+            comment__post_id=post_pk
+        )
 
-#         serializer = self.get_serializer(comment)
-#         return Response(serializer.data)
+    def put(self, request, post_pk, comment_pk, reply_pk):
+        reply = self.get_object(post_pk, comment_pk, reply_pk)
+        user = request.user
+        vote_type = request.data.get("vote_type")
+
+        # Check if the user has already voted on this reply
+        try:
+            reply_vote = ReplyVote.objects.get(reply=reply, user=user)
+        except ReplyVote.DoesNotExist:
+            reply_vote = None
+
+        if vote_type == "upvote":
+            if reply_vote is None:
+                reply.upvotes += 1
+                reply_vote = ReplyVote.objects.create(
+                    reply=reply, user=user, vote_type="up"
+                )
+            elif reply_vote.vote_type == "up":
+                # User already upvoted, so remove the upvote
+                reply.upvotes -= 1
+                reply_vote.delete()
+            elif reply_vote.vote_type == "down":
+                # User downvoted before, now they are upvoting
+                reply_vote.vote_type = "up"
+                reply_vote.save()
+                reply.upvotes += 1
+                reply.downvotes -= 1
+        elif vote_type == "downvote":
+            if reply_vote is None:
+                reply.downvotes += 1
+                reply_vote = ReplyVote.objects.create(
+                    reply=reply, user=user, vote_type="down"
+                )
+            elif reply_vote.vote_type == "down":
+                # User already downvoted, so remove the downvote
+                reply.downvotes -= 1
+                reply_vote.delete()
+            elif reply_vote.vote_type == "up":
+                # User upvoted before, now they are downvoting
+                reply_vote.vote_type = "down"
+                reply_vote.save()
+                reply.downvotes += 1
+                reply.upvotes -= 1
+
+        reply.save()
+
+        return Response({"upvotes": reply.upvotes, "downvotes": reply.downvotes})
