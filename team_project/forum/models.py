@@ -242,21 +242,23 @@ class Reply(models.Model):
     parent_reply = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    upvotes = models.IntegerField(default=0)
+    downvotes = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['-created_at']
 
     def __str__(self):
         return self.body
-    
-    # def __str__(self):
-    #     return f"Reply #{self.id} to Comment #{self.comment_id}"
-    
-    # def __str__(self):
-    #     return f'{self.body[:50]}...'
-    
-    # def __str__(self):
-    #     if self.parent_reply:
-    #         return f"Reply {self.parent_reply.id}-{self.id}"
-    #     else:
-    #         return f"Reply {self.id}"
+
+class ReplyVote(models.Model):
+    reply = models.ForeignKey(Reply, on_delete=models.CASCADE, related_name='votes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    vote_type = models.CharField(choices=(('up', 'Upvote'), ('down', 'Downvote')), max_length=4)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('reply', 'user')
+
+    def __str__(self):
+        return f'{self.vote_type}vote on {self.reply}'

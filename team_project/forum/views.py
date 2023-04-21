@@ -1,13 +1,16 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from .serializers import PostSerializer, AllPostsSerializer, PostVotesSerializer, CategorySerializer, CommentSerializer, CommentReplySerializer, CommentReplySerializer
-from .models import Category, Post, PostVotes, Comment, CommentVote, Reply
+from .models import Category, Post, PostVotes, Comment, CommentVote, Reply, ReplyVote
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.core.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from django.http import HttpResponseBadRequest
+from django.views.generic.base import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -236,22 +239,28 @@ class CommentDownvoteView(APIView):
         comment.downvote(request.user)
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-class CommentReplyUpvoteView(APIView):
-    def put(self, request, post_pk, comment_pk, reply_pk):
-        reply = get_object_or_404(CommentReply, pk=reply_pk)
+class CommentReplyUpvoteView(LoginRequiredMixin, View):
+    def put(self, request, post_id, comment_id, reply_id, action):
+        valid_actions = ['upvote', 'downvote']
+        if action not in valid_actions:
+            return HttpResponseBadRequest("Invalid action")
+        reply = get_object_or_404(Reply, id=reply_id)
         user = request.user
-
-        if user.is_authenticated:
-            if user in reply.upvotes.all():
-                reply.upvotes.remove(user)
-                return Response(status=status.HTTP_204_NO_CONTENT)
-            elif user in reply.downvotes.all():
-                reply.downvotes.remove(user)
-            reply.upvotes.add(user)
-            reply.save()
-            return Response(status=status.HTTP_200_OK)
-        else:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        vote, created = ReplyVote.objects.get_or_create(
+            user=user,
+            reply=reply,
+            defaults={'vote_type': 'up' if action == 'upvote' else 'down'}
+        )
+        if not created:
+            if vote.vote_type == ('up' if action == 'upvote' else 'down'):
+                vote.delete()
+            else:
+                vote.vote_type = 'up' if action == 'upvote' else 'down'
+                vote.save()
+        reply.upvotes = ReplyVote.objects.filter(reply_id=reply.id, vote_type='up').count()
+        reply.downvotes = ReplyVote.objects.filter(reply_id=reply.id, vote_type='down').count()
+        reply.save()
+        return HttpResponse("OK")
 
 class CommentReplyDownvoteView(APIView):
     def put(self, request, post_pk, comment_pk, reply_pk):
