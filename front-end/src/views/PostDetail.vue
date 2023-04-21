@@ -139,8 +139,8 @@ export default {
                 <button type="submit" class="button is-primary">Submit</button>
               </div>
             </form>
-            <CommentBox :comments="post.comments" @add-comment="addComment" />
           </div>
+          <CommentBox :comments="post.comments" @add-comment="addComment" />
         </div>
       </article>
     </div>
@@ -151,6 +151,7 @@ export default {
     </div>
   </div>
 </template>
+
 
 <script>
 import { getAPI } from '@/plugins/axios';
@@ -249,6 +250,14 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@media screen and (max-width: 768px) {
+  .comments form {
+    width: 100%;
+  }
+}
+</style>
 
 
  // async fetchPost() {
