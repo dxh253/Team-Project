@@ -140,18 +140,9 @@ export default {
                 </div>
               </div>
             </form>
-            <div class="comments">
-              <div class="media">
-                <div class="media-content">
-                  <div class="content">
-                    <p>
-                      <strong>John Smith</strong>
-                      <br>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque
-                      tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
-                    </p>
-                  </div>
-                </div>
+            <div class="comment-container">
+              <div class="comments">
+                <CommentBox :postId="post.id" :token="token" />
               </div>
             </div>
           </div>
@@ -168,9 +159,13 @@ export default {
 
 <script>
 import { getAPI } from '@/plugins/axios';
+import CommentBox from '@/components/CommentBox.vue';
 
 export default {
   name: 'PostDetail',
+  components: {
+    CommentBox,
+  },
   data() {
     return {
       post: undefined,
@@ -181,7 +176,7 @@ export default {
   async created() {
     console.log("This is the created hook: ", this.$route.params);
     try {
-      this.loading = true; // set loading to true before calling fetchPost
+      this.loading = true;
       await this.fetchPost();
     } catch (error) {
       console.log(error);
@@ -190,7 +185,6 @@ export default {
       this.loading = false;
     }
   },
-
   watch: {
     $route() {
       this.fetchPost();
@@ -199,6 +193,7 @@ export default {
   methods: {
     async fetchPost() {
       const token = localStorage.getItem('access');
+      console.log('PostDetail token:', token);
       const post_slug = this.$route.params.slug || localStorage.getItem('post_slug');
 
       console.log('API endpoint:', getAPI.defaults.baseURL);
@@ -213,8 +208,18 @@ export default {
               Authorization: `Bearer ${token}`,
             },
           });
+
           console.log('Post API has received data');
-          this.post = response.data;
+          this.post = Object.assign({}, response.data);
+
+          // Fetch comments for the post
+          const commentsResponse = await getAPI.get(`/posts/${this.post.id}/comments/`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          this.post.comments = commentsResponse.data;
+
           localStorage.setItem('post_slug', post_slug); // store post_slug in local storage
         } catch (error) {
           console.log(error);
@@ -225,6 +230,7 @@ export default {
         }
       }
     },
+
     async addComment() {
       const token = localStorage.getItem('access');
       const post_slug = this.$route.params.slug || localStorage.getItem('post_slug');
@@ -244,10 +250,11 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    }
+    },
   },
 };
 </script>
+
 
  // async fetchPost() {
     //   const token = localStorage.getItem('access');
