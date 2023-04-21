@@ -144,11 +144,6 @@ export default {
         </div>
       </article>
     </div>
-    <div v-else>
-      <div class="notification is-danger">
-        Error fetching post. Please try again later.
-      </div>
-    </div>
   </div>
 </template>
 
@@ -167,53 +162,31 @@ export default {
       post: undefined,
       loading: false,
       newCommentText: '',
-      postSlug: undefined, // Add postSlug to data
     };
   },
-async created() {
-  console.log("This is the created hook: ", this.$route.params);
-  try {
-    this.loading = true;
-    await this.waitForPostSlug(); // Wait for postSlug to be defined
-    await this.fetchPost();
-  } catch (error) {
-    console.log(error);
-    this.post = null;
-  } finally {
-    this.loading = false;
-  }
-},
-
-async waitForPostSlug() {
-  // Wait for postSlug to be defined
-  while (!this.postSlug) {
-    await new Promise(resolve => setTimeout(resolve, 100));
-  }
-},
-
-  async mounted() {
-    this.postSlug = this.$route.params.id;
-    await this.fetchPost();
+  computed: {
+    postSlug() {
+      return this.$route.params.slug;
+    },
   },
-
   watch: {
-    $route(to, from) {
-      if (to.params.slug !== from.params.slug) {
-        this.postSlug = to.params.slug;
-        this.fetchPost();
-      }
+    postSlug: {
+      immediate: true,
+      handler: async function() {
+        await this.fetchPost();
+      },
     },
   },
   methods: {
-    async waitForPostSlug() {
-      // Wait for postSlug to be defined
-      while (!this.postSlug) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
-    },
     async fetchPost() {
       const token = localStorage.getItem('access');
       const post_slug = this.postSlug;
+
+      // Check if post_slug is not undefined
+      if (!post_slug) {
+        //reload the page
+        this.$router.go();
+      }
 
       console.log('API endpoint:', getAPI.defaults.baseURL);
       console.log('postSlug:', post_slug);
@@ -238,7 +211,7 @@ async waitForPostSlug() {
         });
         this.post.comments = commentsResponse.data;
 
-        localStorage.setItem('post_slug', post_slug); // store post_slug in local storage
+        localStorage.setItem('post_slug', post_slug);
       } catch (error) {
         console.log(error);
         this.error = error;
@@ -269,15 +242,14 @@ async waitForPostSlug() {
       }
     },
   },
-  async mounted() {
-    this.postSlug = this.$route.params.slug || localStorage.getItem('post_slug'); // set postSlug in mounted hook
-    await this.fetchPost(); // wait for the post to be fetched on mount
-  },
   destroyed() {
-    localStorage.removeItem('post_slug'); // clear stored post_slug when component is destroyed
+    localStorage.removeItem('post_slug');
   },
 };
 </script>
+
+
+
 
 
 
