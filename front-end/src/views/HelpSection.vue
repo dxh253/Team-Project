@@ -189,10 +189,10 @@ export default {
                 this.filterByOwner = false;
             } else {
                 const userId = jwt_decode(this.$store.state.accessToken).user_id;
-                const filteredEvents = this.allProblems.filter((problem) => {
-                    return problem.ownerId === userId;
+                const filteredProblems = this.allProblems.filter((problem) => {
+                    return problem.owner === userId;
                 });
-                this.displayedProblems = filteredEvents;
+                this.displayedProblems = filteredProblems;
                 this.filterByOwner = true;
             }
         },
