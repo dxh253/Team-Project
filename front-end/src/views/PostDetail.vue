@@ -127,24 +127,19 @@ export default {
           </div>
           <hr>
           <h2 class="subtitle">Comments</h2>
-          <div class="comment-container">
-            <form>
-              <div class="field is-grouped">
-                <div class="control is-expanded">
-                  <input class="input" type="text" v-model="newCommentText" placeholder="Add a comment...">
-                </div>
+          <div class="comments">
+            <form class="mt-3" @submit.prevent="addComment">
+              <div class="field">
+                <label class="label">Add Comment</label>
                 <div class="control">
-                  <button class="button is-info" @click.prevent="addComment">
-                    Add Comment
-                  </button>
+                  <textarea class="textarea" v-model="newCommentText" placeholder="Write your comment here"></textarea>
                 </div>
+              </div>
+              <div class="control">
+                <button type="submit" class="button is-primary">Submit</button>
               </div>
             </form>
-            <div class="comment-container">
-              <div class="comments">
-                <CommentBox :postId="post.id" :token="token" />
-              </div>
-            </div>
+            <CommentBox :comments="post.comments" @add-comment="addComment" />
           </div>
         </div>
       </article>

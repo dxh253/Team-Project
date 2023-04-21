@@ -1,77 +1,63 @@
 <template>
-    <div class="comment-box">
-      <div v-if="loading">Loading comments...</div>
-      <div v-else>
+    <div class="comment-container">
+      <div class="comments">
         <div v-if="comments.length === 0">No comments yet.</div>
         <div v-else>
           <div v-for="comment in comments" :key="comment.id" class="comment">
-            <h3>{{ comment.owner }}</h3>
-            <p>{{ comment.text }}</p>
+            <div class="comment-header">
+              <h3 class="comment-owner">{{ comment.owner }}</h3>
+            </div>
+            <div class="comment-body">
+              <p>{{ comment.text }}</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </template>
   
+  <style lang="scss">
+  .comment-container {
+    margin-top: 1.5rem;
+  }
   
+  .comment {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
   
+  .comment-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
   
+  .comment-owner {
+    font-size: 1.125rem;
+    font-weight: bold;
+    margin-right: 0.5rem;
+  }
+  
+  .comment-body {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #555;
+  }
+  </style>
   
   <script>
-  import { getAPI } from '@/plugins/axios';
-  
   export default {
-    name: 'CommentBox',
+    name: "CommentBox",
     props: {
-      postId: {
-        type: Number,
-        required: true,
+      comments: {
+        type: Array,
+        default: () => [],
       },
-      token: {
-        type: String,
-        required: true,
-      },
-    },
-    data() {
-      return {
-        loading: false,
-        comments: [],
-      };
-    },
-    watch: {
-      postId(newVal, oldVal) {
-        if (newVal !== oldVal && this.token) {
-          this.fetchComments();
-        }
-      },
-      token(newVal, oldVal) {
-        if (newVal !== oldVal && this.postId) {
-          this.fetchComments();
-        }
-      },
-    },
-    methods: {
-        async fetchComments() {
-        try {
-            this.loading = true;
-            const response = await getAPI.get(`/posts/${this.postId}/comments/`, {
-            headers: {
-                Authorization: `Bearer ${this.token}`,
-            },
-            });
-            console.log('Comments API has received data');
-            console.log('hi');
-            console.log(response); // add this line to log the response
-            this.comments = response.data;
-            console.log('Fetched comments:', this.comments);
-            
-        } catch (error) {
-            console.log(error);
-            return Promise.reject(error);
-        } finally {
-            this.loading = false;
-        }
-        },
     },
   };
   </script>
