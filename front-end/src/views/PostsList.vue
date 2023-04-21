@@ -33,7 +33,7 @@
     </div>
   </div>
   </div>
-  <button @click="scrollToTop" class="myBtn">Scroll to top</button>
+  <button @click="scrollToTop" class="myBtn is-hidden-mobile">Scroll to top</button>
 </template>
 
 
