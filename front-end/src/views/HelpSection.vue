@@ -44,7 +44,7 @@
             <i class="column is-1 material-icons" style="font-size: 40px;">person</i>
         </div>
 
-        <form class="event-card" style="margin: 0%; width: 1000px;">
+        <form class="event-card" style="margin: 0%; width: 1000px;" @submit.prevent="submitProblem">
             <div class="field">
                 <label>Title of your problem</label>
                 <input 
@@ -70,7 +70,7 @@
                     >
                 </textarea>
                 <div style="text-align: right;">
-                    <button class="button is-info" type="submit" style="margin-top: 5px;" @click="submitProblem">Submit</button>
+                    <button class="button is-info" type="submit" style="margin-top: 5px;">Submit</button>
                 </div>
             </div>
         </form>
@@ -92,6 +92,7 @@
 <script>
 import ProblemCard from '@/components/ProblemCard';
 import { getAPI } from '@/plugins/axios'
+import jwt_decode from "jwt-decode";
 
 export default {
     name: 'HelpSection',
@@ -101,7 +102,7 @@ export default {
             problemInfo: {
                 title: '',
                 description: '',
-                user: 'null',
+                isOwner: false,
             },
             renderComponent: true,
             searchValue : ''
@@ -124,9 +125,14 @@ export default {
             });
 
             console.log(this.problemInfo.title + " " + this.problemInfo.description)
+            const token = localStorage.getItem("access");
+            const decodedToken = jwt_decode(token);
+            const ownerId = decodedToken.user_id;
+
             const formData = new FormData();
             formData.append('title', this.problemInfo.title);
             formData.append('description', this.problemInfo.description);
+            formData.append('owner',parseInt(ownerId));
             getAPI
                 .post('/api/v1/help/', formData, {
                 headers: {
@@ -172,7 +178,7 @@ export default {
             .then((response) => {
                console.log('API response data:', response.data);
                this.allProblems = response.data;
-               this.$store.state.APIData = response.data;
+               this.problemInfo.isOwner = true;
             })
             .catch((error) => {
                 console.log('API error:', error);

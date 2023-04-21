@@ -12,7 +12,7 @@ class ProblemSerializer(serializers.ModelSerializer):
             "title",
             "description",
             "date_added",
-            "user"
+            "owner"
         )
 
     def create(self, validated_data):
