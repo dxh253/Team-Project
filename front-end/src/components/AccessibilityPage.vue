@@ -33,6 +33,7 @@ export default {
         toggleContrast() {
             this.contrast = !this.contrast;
             document.body.classList.toggle('high-contrast');
+            document.footer.classList.toggle('high-contrast');
         },
         toggleFocus() {
             this.focus = !this.focus;
@@ -69,10 +70,57 @@ export default {
     font-size: 1.2rem;
 }
 
-.high-contrast {
+.high-contrast{
     background-color: #000;
-    color: #fff;
+    color: turquoise;
 }
+
+.high-contrast a {
+  color: #fff12ebb;
+  text-decoration: underline;
+}
+
+.high-contrast div{
+    color: white;
+    background-color: black;
+    border-color: turquoise;
+}
+
+.high-contrast label
+.high-contrast p
+.high-contrast span{
+    color: white !important;
+}
+
+.high-contrast title{
+    color: white !important;
+}
+
+.high-contrast form{
+    background-color: black;
+    color: white;
+    border: solid 1px;
+}
+
+.high-contrast input{
+    background-color: black;
+    color: white;
+    border: solid 1px;
+}
+
+.high-contrast button{
+    background-color: black !important;
+    color: white !important;
+    border: solid 1px !important;
+}
+
+.high-contrast div.column{
+    background-color: black;
+    color: turquoise;
+    border: solid 1px;
+}
+
+
 
 .no-focus {
     outline: none;
