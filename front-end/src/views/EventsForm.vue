@@ -69,6 +69,7 @@
             class="input"
             type="date"
             id="date"
+            :min="currentDateString()"
             v-model="eventData.date"
             required
           />
@@ -128,6 +129,9 @@ export default {
     };
   },
   methods: {
+    currentDateString(){
+        return new Date().toISOString().split('T')[0];
+    },
     handleImageUpload(event) {
       if (event.target.files.length > 0) {
         console.log(event.target.files[0]);
