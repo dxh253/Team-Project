@@ -51,7 +51,7 @@
               </div>
             </form>
           </div>
-          <CommentBox :comments="post.comments" @add-comment="addComment" />
+          <CommentBox :comments="post.comments" @add-comment="addComment" @add-reply="addReply" />
         </div>
       </article>
     </div>
@@ -145,6 +145,32 @@ export default {
         console.log('Comment has been added');
         this.post.comments.push(response.data);
         this.newCommentText = '';
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // ...
+    async addReply({ parentCommentId, text }) {
+      const token = localStorage.getItem('access');
+      const post_slug = this.postSlug;
+
+      try {
+        const response = await getAPI.post(`/posts/${post_slug}/comments/`, {
+          text: text,
+          post_slug: post_slug,
+          parent_comment: parentCommentId,
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log('Reply has been added');
+
+        // Find the parent comment and add the reply to its children
+        const parentComment = this.post.comments.find(comment => comment.id === parentCommentId);
+        if (parentComment) {
+          parentComment.children.push(response.data);
+        }
       } catch (error) {
         console.log(error);
       }

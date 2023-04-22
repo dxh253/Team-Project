@@ -18,6 +18,9 @@ urlpatterns = [
     path('api/v1/forums/', include('forum.urls')),
     path('', include('forum.urls')),
     path('api/v1/', include('forum.urls')),
+    path('', include('help_section.urls')),
+    path('help/', include('help_section.urls')),
+
     # path('api/admin/', admin.site.urls, name='admin'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

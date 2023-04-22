@@ -10,6 +10,8 @@ import PrivacyPolicy from "../views/PrivacyPolicy.vue"
 import PostCreate from "../views/PostCreate.vue"
 import EditPost from "../views/EditPost.vue"
 import PostDetail from "../views/PostDetail.vue"
+import HelpSection from "../views/HelpSection.vue"
+
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -43,6 +45,12 @@ const router = createRouter({
             meta: {
                 requiresLogin: true
             }
+
+        },
+        {
+            path: "/help/",
+            name: "HelpSection",
+            component: HelpSection,
 
         },
         {
