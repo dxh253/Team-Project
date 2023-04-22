@@ -81,11 +81,11 @@ export default {
                     </div>
                     <div class="replies" v-if="comment.children && comment.children.length > 0">
                         <div v-for="reply in comment.children" :key="reply.id" class="reply">
-                            <div class="reply-body">
-                                <p>{{ reply.text }}</p>
-                            </div>
                             <div class="reply-footer">
                                 <span class="reply-owner">{{ reply.owner }}</span>
+                            </div>
+                            <div class="reply-body">
+                                <p>{{ reply.text }}</p>
                             </div>
                         </div>
                     </div>
@@ -171,13 +171,46 @@ export default {
 
 .reply-footer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    margin-top: 0.5rem;
 }
 
 .reply-owner {
     font-size: 0.875rem;
     font-weight: bold;
     color: #555;
+}
+
+.reply-form {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.reply-form .textarea {
+    min-height: 3rem;
+}
+
+.reply-form button {
+    margin-top: 0.5rem;
+}
+
+.button.is-light {
+    border-color: #ccc;
+    color: #333;
+}
+
+.button.is-light:hover {
+    background-color: #f5f5f5;
+}
+
+.button.is-primary {
+    background-color: #4a4a4a;
+}
+
+.button.is-primary:hover {
+    background-color: #363636;
 }
 </style>
 
