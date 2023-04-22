@@ -8,14 +8,24 @@
     </section>
 
     <div class="columns">
-      <div class="column is-6">
+      <div class="column is-3">
         <h2 class="title">Upcoming Events</h2>
       </div>
-      <div class="select">
-        <select v-model="eventsFilter">
-          <option value="0">Show events and study groups</option>
-          <option value="1">Show events only</option>
-          <option value="2">Show study groups only</option>
+      <div class="field column is-3">
+        <div class="control">
+          <input
+            v-model="searchText"
+            class="input"
+            type="text"
+            placeholder="Search"
+          />
+        </div>
+      </div>
+      <div class="select field column is-3">
+        <select v-model="categoryFilter">
+          <option value="0">Events and study groups</option>
+          <option value="1">Events only</option>
+          <option value="2">Study groups only</option>
         </select>
       </div>
       <div class="column is-1">
@@ -50,7 +60,8 @@ export default {
   name: "EventsViews",
   data() {
     return {
-      eventsFilter: "0",
+      searchText: "",
+      categoryFilter: "0",
       allEvents: [],
       displayedEvents: [],
       filterByOwner: false,
@@ -94,15 +105,36 @@ export default {
         this.filterByOwner = true;
       }
     },
+    fuzzyMatch(searchText, textToMatch) {
+      // Checks that all characters in `searchText` appear in the same order
+      // in `textToMatch`
+      // e.g. `prty` will match `party` but not `piracy` or `try please`
+
+      searchText = searchText.toLowerCase();
+      textToMatch = textToMatch.toLowerCase();
+      let charIndex = 0;
+      for (const c of textToMatch) {
+        if (c == searchText[charIndex]) ++charIndex;
+      }
+      return charIndex == searchText.length;
+    },
   },
   computed: {
     computed: mapState(["APIData"]),
     filteredEvents: function () {
       let result = this.displayedEvents;
-      const filter_applied = this.eventsFilter != 0;
-      if (filter_applied) {
-        result = result.filter((event) => event.category == this.eventsFilter);
-      }
+
+      // First filter events by category
+      result = result.filter(
+        (event) =>
+          (this.categoryFilter == 0) | (event.category == this.categoryFilter)
+      );
+
+      // Then by search string
+      result = result.filter((event) =>
+        this.fuzzyMatch(this.searchText, event.name)
+      );
+
       return result;
     },
   },
