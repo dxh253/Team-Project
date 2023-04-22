@@ -52,7 +52,7 @@ export default {
     },
     methods: {
         fetchCategories() {
-            getAPI.get('/categories/')
+            getAPI.get('/api/v1/categories/')
                 .then(response => {
                     this.categories = response.data;
                 })
@@ -79,7 +79,7 @@ export default {
             };
 
             getAPI
-                .post("/posts/", payload, {
+                .post("/api/v1/posts/", payload, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'multipart/form-data',

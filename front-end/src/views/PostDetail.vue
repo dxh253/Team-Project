@@ -103,7 +103,7 @@ export default {
       this.loading = true;
 
       try {
-        const response = await getAPI.get(`/posts/${post_slug}/`, {
+        const response = await getAPI.get(`/api/v1/posts/${post_slug}/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -112,7 +112,7 @@ export default {
         console.log('Post API has received data');
         this.post = Object.assign({}, response.data);
 
-        const commentsResponse = await getAPI.get(`/posts/${this.post.id}/comments/`, {
+        const commentsResponse = await getAPI.get(`/api/v1/posts/${this.post.id}/comments/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -134,7 +134,7 @@ export default {
       const post_slug = this.postSlug;
 
       try {
-        const response = await getAPI.post(`/posts/${post_slug}/comments/`, {
+        const response = await getAPI.post(`/api/v1/posts/${post_slug}/comments/`, {
           text: this.newCommentText,
           post_slug: post_slug,
         }, {
@@ -155,7 +155,7 @@ export default {
       const post_slug = this.postSlug;
 
       try {
-        const response = await getAPI.post(`/posts/${post_slug}/comments/`, {
+        const response = await getAPI.post(`/api/v1/posts/${post_slug}/comments/`, {
           text: text,
           post_slug: post_slug,
           parent_comment: parentCommentId,

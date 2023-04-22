@@ -92,7 +92,7 @@ export default {
         const token = localStorage.getItem("access");
 
         getAPI
-            .get("/posts/", {
+            .get("/api/v1/posts/", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

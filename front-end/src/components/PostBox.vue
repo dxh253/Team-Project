@@ -109,7 +109,7 @@ export default {
         const userId = decodedToken.user_id;
 
         getAPI
-            .get(`/posts/${this.post.id}/votes/?user_id=${userId}`, {
+            .get(`/api/v1/posts/${this.post.id}/votes/?user_id=${userId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -142,7 +142,7 @@ export default {
             };
 
             getAPI
-                .delete(`/posts/${this.post.id}/`, config)
+                .delete(`/api/v1/posts/${this.post.id}/`, config)
                 .then(() => {
                     this.$emit('post-deleted', this.post.id);
                 })
@@ -187,7 +187,7 @@ export default {
 
             if (data.id) {
                 getAPI
-                    .put(`/posts/${this.post.id}/votes/${this.userVote.id}/`, data, {
+                    .put(`/api/v1/posts/${this.post.id}/votes/${this.userVote.id}/`, data, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
@@ -201,7 +201,7 @@ export default {
                     });
             } else {
                 getAPI
-                    .post(`/posts/${this.post.id}/votes/`, data, {
+                    .post(`/api/v1/posts/${this.post.id}/votes/`, data, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
