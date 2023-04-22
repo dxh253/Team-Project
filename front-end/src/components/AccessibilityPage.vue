@@ -33,7 +33,6 @@ export default {
         toggleContrast() {
             this.contrast = !this.contrast;
             document.body.classList.toggle('high-contrast');
-            document.footer.classList.toggle('high-contrast');
         },
         toggleFocus() {
             this.focus = !this.focus;
@@ -69,8 +68,15 @@ export default {
     outline: none;
 }
 
-.large-text {
+.large-text{
     font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.large-text button{
+    font-size: 1.2rem;
+    font-weight: bold;
+
 }
 
 .high-contrast{
@@ -79,7 +85,7 @@ export default {
 }
 
 .high-contrast a {
-  color: #fff12ebb;
+  color: turquoise;
   text-decoration: underline;
 }
 
@@ -118,6 +124,14 @@ export default {
 }
 
 .high-contrast h1, h2, title{
+    color: white ;
+}
+
+.high-contrast h2.title{ /*specifically for help section*/
+    color: white;
+}
+
+.high-contrast h2.subtitle{ /*specifically for comment section*/
     color: white;
 }
 
@@ -130,7 +144,12 @@ export default {
     border: block 1px;
 }
 
-
+.high-contrast input::placeholder {
+  color: black;
+}
+.high-contrast textarea::placeholder{
+    color: black;
+}
 
 .no-focus {
     outline: none;
