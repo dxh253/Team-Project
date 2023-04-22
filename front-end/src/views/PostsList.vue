@@ -52,6 +52,15 @@ export default {
     },
     computed: {
         filteredPosts() {
+            // if there is no search term, return all posts
+            if (!this.searchTerm) {
+                return this.allposts;
+            }
+            // if there are no posts, return an empty array
+            if (this.allposts.length === 0) {
+                return [];
+            }
+            // if there is a search term, filter posts that include the search term in the title
             return this.allposts.filter(post => {
                 // filter posts that include the search term in the title
                 return post.title.toLowerCase().includes(this.searchTerm.toLowerCase());
