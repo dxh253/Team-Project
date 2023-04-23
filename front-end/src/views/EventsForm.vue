@@ -36,7 +36,7 @@
       <div class="field">
         <label class="label" for="date">Date:</label>
         <div class="control">
-          <input class="input" type="date" id="date" v-model="eventData.date" required />
+          <input class="input" type="date" id="date" :min="currentDateString()" v-model="eventData.date" required />
         </div>
       </div>
       <div class="field">
@@ -81,6 +81,9 @@ export default {
     };
   },
   methods: {
+    currentDateString() {
+      return new Date().toISOString().split('T')[0];
+    },
     handleImageUpload(event) {
       if (event.target.files.length > 0) {
         console.log(event.target.files[0]);
@@ -121,6 +124,7 @@ export default {
         .then((response) => {
           console.log("API response data:", response.data);
           // console.log(response.data)
+          // this.$router.push({ name: 'Events' })
           window.history.back();
         })
         .catch((error) => {

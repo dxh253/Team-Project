@@ -6,79 +6,96 @@
                 <h1 class="title" style="font-size: 50px;">
                     How can we help?
                 </h1>
-                <input class="input" type="text" placeholder="Search your problem here..."
-                    style="width: 675px; border-radius: 20px; text-indent: 3%;" v-model="searchValue"
-                    @keyup.enter="searchProblem(searchValue)">
+                <input class="search" type="text" placeholder="Search your problem here..."
+                    style="width: 675px; border-radius: 20px; text-indent: 3%;" v-model="searchValue">
             </div>
             <div class="hero-footer has-text-centered mb-5">
                 <p>
-                    Here are some useful articles
+                    {{ introText }}
                 </p>
             </div>
 
         </section>
     </div>
 
-    <div class="columns is-mobile is-centered is-multiline has-text-centered" style="margin-bottom: 2%;">
-        <div class="column">
-            <RouterLink to="">
-                <button class="button is-large is-link is-light is-outlined"
-                    style="width: 250px; height: 125px; margin: 3px 25px;">
-                    Testing
-                </button>
-            </RouterLink>
-            <RouterLink to="">
-                <button class="button is-large is-link is-light is-outlined"
-                    style="width: 250px; height: 125px; margin: 3px 25px;">
-                    Testing
-                </button>
-            </RouterLink>
-            <RouterLink to="">
-                <button class="button is-large is-link is-light is-outlined"
-                    style="width: 250px; height: 125px; margin: 3px 25px;">
-                    Testing232
-                </button>
-            </RouterLink>
-        </div>
-    </div>
-
-    <div class="hero" style="margin-bottom: 3%; margin-left: 5%;">
-        <p class="title is-4">Or you can submit your problem here</p>
-        <div class="columns" style="align-items: center;">
-            <i class="column is-1 material-icons" style="font-size: 40px;">person</i>
-        </div>
-
-        <form class="event-card" style="margin: 0%; width: 1000px;" @submit.prevent="submitProblem">
-            <div class="field">
-                <label>Title of your problem</label>
-                <input class="input" ows="1" type="text" placeholder="Enter Title" style="width: 400px; 
-                border:1px solid grey;
-                background-color: white;" v-model.trim="problemInfo.title" required>
+    <div v-show="showing">
+        <div class="columns is-mobile is-centered is-multiline has-text-centered" style="margin-bottom: 2%;">
+            <div class="column">
+                <RouterLink to="">
+                    <button class="button is-large is-link is-light is-outlined"
+                        style="width: 250px; height: 125px; margin: 3px 25px;">
+                        Testing
+                    </button>
+                </RouterLink>
+                <RouterLink to="">
+                    <button class="button is-large is-link is-light is-outlined"
+                        style="width: 250px; height: 125px; margin: 3px 25px;">
+                        Testing
+                    </button>
+                </RouterLink>
+                <RouterLink to="">
+                    <button class="button is-large is-link is-light is-outlined"
+                        style="width: 250px; height: 125px; margin: 3px 25px;">
+                        Testing232
+                    </button>
+                </RouterLink>
             </div>
-            <div class="field">
-                <label>Describe your problem</label>
-                <textarea class="textarea" type="text" placeholder="Describe your problem here"
-                    style="border:1px solid grey;" v-model.trim="problemInfo.description" required>
-                </textarea>
-                <div style="text-align: right;">
-                    <button class="button is-info" type="submit" style="margin-top: 5px;">Submit</button>
+        </div>
+
+        <div class="hero" style="margin-bottom: 3%; margin-left: 5%;">
+            <p class="title is-4">Or you can submit your problem here</p>
+            <div class="columns" style="align-items: center;">
+                <i class="column is-1 material-icons" style="font-size: 40px;">person</i>
+            </div>
+
+            <form class="event-card" style="margin: 0%; width: 1000px;" @submit.prevent="submitProblem">
+                <div class="field">
+                    <label>Title of your problem</label>
+                    <input class="input" ows="1" type="text" placeholder="Enter Title" style="width: 400px; 
+                        border:1px solid grey;
+                        background-color: white;" v-model.trim="problemInfo.title" required>
                 </div>
+                <div class="field">
+                    <label>Describe your problem</label>
+                    <textarea class="textarea" type="text" placeholder="Describe your problem here"
+                        style="border:1px solid grey;" v-model.trim="problemInfo.description" required>
+                        </textarea>
+                    <div style="text-align: right;">
+                        <button class="button is-info" type="submit" style="margin-top: 5px;">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="columns">
+            <div class="column is-10">
+                <h2 class="title is-3"> {{ listTitle }} </h2>
             </div>
-        </form>
-    </div>
-
-    <div class="columns">
-        <div class="column is-10">
-            <h2 class="title is-3">Here is a list of problems submitted by other users</h2>
+            <div class="column is-8 is-offset 8">
+                <button class="button is-underlined is-link is-light is-outlined" @click="filterProblems"> My problems
+                </button>
+            </div>
         </div>
-        <div class="column is-8 is-offset 8">
-            <button type="button" class="button is-underlined is-link is-light" @click="filterProblems"> My problems
-            </button>
+
+        <div v-if="renderComponent">
+            <ProblemCard v-for="problem in displayedProblems" v-bind:key="problem.id" v-bind:problem="problem" />
         </div>
     </div>
 
-    <div v-if="renderComponent">
-        <ProblemCard v-for="problem in displayedProblems" v-bind:key="problem.id" v-bind:problem="problem" />
+    <div v-show="!showing">
+        <div class="columns">
+            <div class="column is-10">
+                <h2 class="title is-3">You searched for problems containing "{{ searchValue }}"</h2>
+            </div>
+            <div class="column is-8 is-offset">
+                <button type="button" class="button is-underlined is-link is-light" @click="filterProblems"> My problems
+                </button>
+            </div>
+        </div>
+
+        <button class="button" @click="clearSearch" style="margin-top: 2px; margin-bottom: 50px;">Clear search</button>
+        <!-- roundabout way but works -->
+        <ProblemCard v-for="problem in searchProblems" v-bind:key="problem.id" v-bind:problem="problem" />
     </div>
 </template>
 
@@ -101,7 +118,10 @@ export default {
                 filterByOwner: false,
             },
             renderComponent: true,
-            searchValue: ''
+            searchValue: '',
+            showing: true,
+            listTitle: 'Here is a list of problems submitted by other users',
+            introText: 'Here are some useful articles'
         }
     },
     components: {
@@ -146,28 +166,11 @@ export default {
                 })
         },
 
-        // searchProblem() {
-        //     console.log("search methos executed")
-
-        //     getAPI
-        //     .get('/api/v1/help/', {
-        //            headers: { Authorization: `Bearer ${this.$store.state.accessToken}` },
-        //        }, {text: "hello"})
-        //     .then((response) => {
-        //        console.log('API response data:', response.data);
-        //        this.allProblems = response.data;
-        //        this.$store.state.APIData = response.data;
-        //        window.location.reload();
-        //     })
-        //     .catch((error) => {
-        //         console.log('API error:', error);
-        //     });
-        // },
-
         filterProblems() {
             if (this.filterByOwner) {
                 this.displayedProblems = this.allProblems;
                 this.filterByOwner = false;
+                this.listTitle = 'Here is a list of problems submitted by other users';
             } else {
                 const userId = jwt_decode(this.$store.state.accessToken).user_id;
                 const filteredProblems = this.allProblems.filter((problem) => {
@@ -175,7 +178,31 @@ export default {
                 });
                 this.displayedProblems = filteredProblems;
                 this.filterByOwner = true;
+                this.listTitle = 'My problems'
             }
+        },
+
+        clearSearch() {
+            this.searchValue = '';
+        }
+    },
+    computed: {
+        searchProblems() {
+            console.log("you searched for " + this.searchValue)
+            if (!this.searchValue) {
+                return this.allProblems.filter(problem => {
+                    this.showing = true;
+                    this.introText = 'Here are some useful articles';
+                    return problem;
+                });
+            }
+
+            return this.allProblems.filter(problem => {
+                // shows the searched problems
+                this.showing = false;
+                this.introText = '';
+                return problem.title.toLowerCase().includes(this.searchValue.toLowerCase());
+            });
         },
     },
     async created() {

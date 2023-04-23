@@ -11,6 +11,7 @@ import PostCreate from "../views/PostCreate.vue"
 import EditPost from "../views/EditPost.vue"
 import PostDetail from "../views/PostDetail.vue"
 import HelpSection from "../views/HelpSection.vue"
+import ProblemsDetail from "../views/ProblemsDetail.vue"
 
 
 const router = createRouter({
@@ -52,6 +53,14 @@ const router = createRouter({
             name: "HelpSection",
             component: HelpSection,
 
+        },
+        {
+            path: "/help/:problem_id/",
+            name: "ProblemsDetail",
+            component: ProblemsDetail,
+            meta: {
+                requiresLogin: true
+            }
         },
         {
             path: '/posts/:id/edit',
