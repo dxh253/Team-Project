@@ -9,6 +9,7 @@
 
 <script>
     export default {
+        // eslint-disable-next-line
         name: 'Notification',
         props: ['message', 'type', 'duration'],
         data() {
