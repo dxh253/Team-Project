@@ -10,6 +10,7 @@ import PrivacyPolicy from "../views/PrivacyPolicy.vue"
 import PostCreate from "../views/PostCreate.vue"
 import EditPost from "../views/EditPost.vue"
 import HelpSection from "../views/HelpSection.vue"
+import ProblemsDetail from "../views/ProblemsDetail.vue"
 
 
 const router = createRouter({
@@ -115,7 +116,18 @@ const router = createRouter({
             path: "/help/",
             name: "HelpSection",
             component: HelpSection,
+            meta: {
+                requiresLogin: true
+            }
 
+        },
+        {
+            path: "/help/:problem_id/",
+            name: "ProblemsDetail",
+            component: ProblemsDetail,
+            meta: {
+                requiresLogin: true
+            }
         },
         {
             path: "/dashboard/",
