@@ -48,10 +48,7 @@ class PostVotesList(generics.ListCreateAPIView):
     def get_queryset(self):
         pk = self.kwargs.get('pk')
         user_id = self.request.query_params.get('user_id')
-        if user_id:
-            queryset = PostVotes.objects.filter(post_id=pk, user_id=user_id)
-        else:
-            queryset = PostVotes.objects.filter(post_id=pk)
+        queryset = PostVotes.objects.filter(post_id=pk)
         return queryset
 
     def post(self, request, pk):

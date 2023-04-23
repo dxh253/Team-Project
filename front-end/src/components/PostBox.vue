@@ -38,15 +38,15 @@
             ><i
               class="fas fa-arrow-up"
               @click="upvote"
-              :style="{ color: upColor }"
+              :style="{ color: this.userVote === 1 ? 'orange' : 'grey' }"
             ></i
           ></span>
-          <span>{{ totalScore }}</span>
+          <span>{{ currentScore }}</span>
           <span class="icon is-small"
             ><i
               class="fas fa-arrow-down"
               @click="downvote"
-              :style="{ color: downColor }"
+              :style="{ color: this.userVote === -1 ? 'blue' : 'grey' }"
             ></i
           ></span>
         </div>
@@ -82,7 +82,7 @@
 
 <script>
 import { getAPI } from "@/plugins/axios";
-import { reactive } from "@vue/reactivity";
+/* import { reactive } from "@vue/reactivity"; */
 import jwt_decode from "jwt-decode";
 
 export default {
@@ -94,28 +94,18 @@ export default {
   },
   data() {
     return {
-      vote: 0,
-      userVote: null,
+      // Current score, including votes for this post from other users.
+      currentScore: 0,
+      // The current user's vote for this post. Either -1, 0, or 1.
+      userVote: 0,
+      // The user id (id field in the forum_postvotes table).
+      userId: null,
       isHidden: false,
       isDeleted: false,
       blur: this.post.isBlurred,
     };
   },
   computed: {
-    totalScore() {
-      let score = this.post.score;
-      if (this.userVote) {
-        score -= this.userVote.vote;
-      }
-      score += this.vote;
-      return score;
-    },
-    upColor() {
-      return this.vote === 1 ? "orange" : "grey";
-    },
-    downColor() {
-      return this.vote === -1 ? "blue" : "grey";
-    },
     isPostCreator() {
       const token = localStorage.getItem("access");
       const decodedToken = jwt_decode(token);
@@ -124,36 +114,78 @@ export default {
     },
   },
   created() {
-    const token = localStorage.getItem("access");
-    const decodedToken = jwt_decode(token);
-    const userId = decodedToken.user_id;
-
-    getAPI
-      .get(`/api/v1/posts/${this.post.id}/votes/?user_id=${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        const existingVote = response.data.find(
-          (vote) => vote.post_id === this.post.id && vote.user_id === userId
-        );
-
-        if (existingVote) {
-          this.userVote = reactive(existingVote);
-          this.vote = existingVote.vote;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.refreshVotes();
   },
   methods: {
     toggleBlur() {
       this.blur = !this.blur;
     },
+    refreshVotes() {
+      const token = localStorage.getItem("access");
+      const decodedToken = jwt_decode(token);
+      const userId = decodedToken.user_id;
+
+      getAPI
+        .get(`/api/v1/posts/${this.post.id}/votes/?user_id=${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const existingVote = response.data.find(
+            (vote) => vote.post_id === this.post.id && vote.user_id === userId
+          );
+
+          // The total votes for the post, including votes from other users.
+          const totalVotes = response.data.reduce(
+            (acc, cur) => acc + cur.vote,
+            0
+          );
+          this.currentScore = totalVotes;
+
+          if (existingVote) {
+            this.userVote = existingVote.vote;
+            this.userId = existingVote.id;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    changePostVotesBy(n) {
+      const token = localStorage.getItem("access");
+      const decodedToken = jwt_decode(token);
+      const userId = decodedToken.user_id;
+      let data = {
+        id: this.userId,
+        // Either -1, 0, or 1 to represent downvotes/no vote/upvote.
+        vote: n,
+        // The id field in the forum_post table.
+        post_id: this.post.id,
+        // The id field in the auth_user table.
+        user_id: userId,
+      };
+
+      // Always send a post request, it's scuffed anyway.
+      getAPI
+        .post(`/api/v1/posts/${data.post_id}/votes/`, data, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => this.refreshVotes());
+    },
+    upvote() {
+      // If the user has previously upvoted the post, then undo the upvote.
+      let n = this.userVote == 1 ? 0 : 1;
+      this.changePostVotesBy(n);
+    },
+    downvote() {
+      // If the user has previously downvoted the post, then undo the downvote.
+      let n = this.userVote == -1 ? 0 : -1;
+      this.changePostVotesBy(n);
+    },
     deletePost() {
-      console.log("delete post");
       const token = localStorage.getItem("access");
       const config = {
         headers: {
@@ -169,75 +201,6 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-    },
-    upvote() {
-      if (this.userVote && this.userVote.vote === 1) {
-        this.vote = 0;
-        this.updateVote();
-      } else {
-        this.vote = 1;
-        this.updateVote().then(() => {
-          this.$emit("vote-updated", this.post.id, this.vote);
-        });
-      }
-    },
-    downvote() {
-      if (this.userVote && this.userVote.vote === -1) {
-        this.vote = 0;
-        this.updateVote();
-      } else {
-        this.vote = -1;
-        this.updateVote().then(() => {
-          this.$emit("vote-updated", this.post.id, this.vote);
-        });
-      }
-    },
-
-    updateVote() {
-      const token = localStorage.getItem("access");
-      const decodedToken = jwt_decode(token);
-      const userId = decodedToken.user_id;
-
-      const data = {
-        post_id: this.post.id,
-        user_id: userId,
-        vote: this.vote,
-        id: this.userVote ? this.userVote.id : null,
-      };
-
-      if (data.id) {
-        getAPI
-          .put(
-            `/api/v1/posts/${this.post.id}/votes/${this.userVote.id}/`,
-            data,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          )
-          .then((response) => {
-            this.userVote = reactive(response.data);
-            this.$emit("vote-updated", this.totalScore);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      } else {
-        getAPI
-          .post(`/api/v1/posts/${this.post.id}/votes/`, data, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then((response) => {
-            this.userVote = reactive(response.data);
-            this.$emit("vote-updated", this.totalScore);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
     },
   },
 };
