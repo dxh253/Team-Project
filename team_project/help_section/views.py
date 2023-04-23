@@ -33,13 +33,6 @@ class ProblemsView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    def delete(self, request, pk, format=None):
-        try:
-            problem = Problems.objects.get(pk=pk)
-            problem.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except Problems.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
     
 class ProblemsDetail(APIView):
     permission_classes = [IsAuthenticated]
@@ -64,5 +57,5 @@ class ProblemsDetail(APIView):
         if problems.owner != request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
-        problems.delete_event()
+        problems.delete_problem()
         return Response(status=status.HTTP_204_NO_CONTENT)

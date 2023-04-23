@@ -15,3 +15,6 @@ class Problems(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def delete_problem(self, user=None, *args, **kwargs):
+        super().delete(*args, **kwargs)

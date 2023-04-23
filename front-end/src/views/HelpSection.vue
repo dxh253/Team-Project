@@ -135,7 +135,6 @@ export default {
             problemInfo: {
                 title: '',
                 description: '',
-                isOwner: false,
                 filterByOwner: false,
             },
             renderComponent: true,
@@ -238,8 +237,6 @@ export default {
                 this.allProblems = response.data;
                 this.displayedProblems = response.data;
                 this.$store.state.APIData = response.data
-
-                this.problemInfo.isOwner = true;
             })
             .catch((error) => {
                 console.log('API error:', error);
