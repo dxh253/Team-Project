@@ -82,7 +82,6 @@
 
 <script>
 import { getAPI } from "@/plugins/axios";
-/* import { reactive } from "@vue/reactivity"; */
 import jwt_decode from "jwt-decode";
 
 export default {
@@ -137,11 +136,10 @@ export default {
           );
 
           // The total votes for the post, including votes from other users.
-          const totalVotes = response.data.reduce(
+          this.currentScore = response.data.reduce(
             (acc, cur) => acc + cur.vote,
             0
           );
-          this.currentScore = totalVotes;
 
           if (existingVote) {
             this.userVote = existingVote.vote;
