@@ -6,11 +6,6 @@
           {{ post.title }}
         </router-link>
       </p>
-      <div class="card-header-icon">
-        <span class="icon">
-          <i class="fas fa-angle-down"></i>
-        </span>
-      </div>
     </div>
     <div class="card-content">
       <div class="content">
