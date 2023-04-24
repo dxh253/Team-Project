@@ -56,6 +56,11 @@ import { RouterView } from "vue-router";
   import Accessibility from '@/components/AccessibilityPage.vue';
 
   export default {
+    data() {
+      return {
+        showMobileMenu: false,
+      };
+    },
     computed: mapState(['accessToken']),
     components:{
       Accessibility
