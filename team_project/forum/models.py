@@ -40,7 +40,7 @@ class Category(TimeStampedModel):
 
 
 class Post(TimeStampedModel):
-    title = CharField(max_length=32, help_text='Enter Post Title')
+    title = CharField(max_length=100, help_text='Enter Post Title')
     description = TextField("Post Description", blank=True)
     owner = ForeignKey(
         settings.AUTH_USER_MODEL,

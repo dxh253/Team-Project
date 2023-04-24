@@ -18,7 +18,7 @@
         <div v-if="post.get_image" class="has-text-centered">
           <figure class="image is-16by9">
             <a :href="post.get_image" target="_blank"><img :src="post.get_image"
-                :style="{ filter: blur ? 'blur(10px)' : 'none' }" @click="enlargeImage" /></a>
+                :style="{ filter: blur ? 'blur(100px)' : 'none' }" @click="enlargeImage" /></a>
           </figure>
         </div>
       </div>
