@@ -47,6 +47,7 @@ import { faBookmark as farBookmark } from '@fortawesome/free-regular-svg-icons';
 import '@fortawesome/fontawesome-free/css/all.css';
 import '@/plugins/accessibility.js';
 
+
 const app = createApp(App);
 app.use(router);
 

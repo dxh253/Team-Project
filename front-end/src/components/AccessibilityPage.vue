@@ -144,16 +144,28 @@ title {
     color: white;
 }
 
-.high-contrast div.event-card {
-    border: block 1px;
-}
-
 .high-contrast input::placeholder {
     color: black;
 }
 
 .high-contrast textarea::placeholder {
     color: black;
+}
+
+.high-contrast div.your-events, .high-contrast div.your-studyg, .high-contrast div.upcoming{
+    border: solid 1px;
+    background-color: black;
+    color: white;
+}
+
+.high-contrast div.event-card {
+    border: solid 1px;
+    background-color: black !important;
+    color: white ;
+}
+
+.high-contrast i{
+    color: white !important;
 }
 
 .no-focus {
