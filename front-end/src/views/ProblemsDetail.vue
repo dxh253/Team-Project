@@ -9,8 +9,8 @@
                     style="font-size: 35px; display: grid; align-self: center; text-align: end;"
                     @click="deleteProblem">delete</i>
             </div>
-            <p class="is-size-6" style="text-indent: 5%;">{{ problems.date_added }}</p>
-            <p class="is-size-6" style="text-indent: 5%;">{{ problems.description }}</p>
+            <p class="is-size-6" style="margin-left: 4%; margin-bottom: 1%;">{{ problems.date_added }} by {{ problems.author }}</p>
+            <p class="is-size-6" style="margin-left: 4%; margin-right: 20%;">{{ problems.description }}</p>
         </div>
 
     </div>

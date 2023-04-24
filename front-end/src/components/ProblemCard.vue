@@ -2,17 +2,19 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     <div>
-        <router-link :to="{ name: 'ProblemsDetail', params: { problem_id: problem.id } }"
-            class="box column is-three-fifths is-clickable" @click="viewProblem"
-            style="display: inline-table; margin-bottom: 1%; ">
+        <router-link 
+        :to="{ name: 'ProblemsDetail', params: { problem_id: problem.id } }"
+        class="box column is-three-fifths is-clickable" @click="viewProblem"
+        style="display: inline-table; margin-bottom: 1%;">
             <div>
                 <p class="is-size-3">{{ problem.title }}</p>
-                <p class="is-size-7">{{ problem.date_added }} {{ problem.author }}</p>
+                <p class="is-size-7">{{ problem.date_added }} by {{ problem.author }}</p>
             </div>
-            <p class="is-size-5" style="overflow: hidden; text-overflow: ellipsis; margin-right:10% ;"> {{
-                problem.description }}</p>
+            <p
+            class="is-size-5" 
+            style="overflow: hidden; text-overflow: ellipsis; margin-right:10%; white-space: nowrap; max-width: 1000px;"> 
+            {{ problem.description }}</p>
         </router-link>
-        <!-- <i class="column is-1 material-icons deleting" style="font-size: 35px;" @click="deleteProblem">delete</i> -->
     </div>
 </template>
 
