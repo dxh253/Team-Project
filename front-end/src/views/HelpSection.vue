@@ -52,14 +52,14 @@
                 <div class="field">
                     <label>Title of your problem</label>
                     <input class="input" ows="1" type="text" placeholder="Enter Title" style="width: 400px; 
-                        border:1px solid grey;
-                        background-color: white;" v-model.trim="problemInfo.title" required>
+                    border:1px solid grey;
+                    background-color: white;" v-model.trim="problemInfo.title" required>
                 </div>
                 <div class="field">
                     <label>Describe your problem</label>
                     <textarea class="textarea" type="text" placeholder="Describe your problem here"
                         style="border:1px solid grey;" v-model.trim="problemInfo.description" required>
-                        </textarea>
+                    </textarea>
                     <div style="text-align: right;">
                         <button class="button is-info" type="submit" style="margin-top: 5px;">Submit</button>
                     </div>
@@ -114,7 +114,6 @@ export default {
             problemInfo: {
                 title: '',
                 description: '',
-                isOwner: false,
                 filterByOwner: false,
             },
             renderComponent: true,
@@ -217,8 +216,6 @@ export default {
                 this.allProblems = response.data;
                 this.displayedProblems = response.data;
                 this.$store.state.APIData = response.data
-
-                this.problemInfo.isOwner = true;
             })
             .catch((error) => {
                 console.log('API error:', error);
