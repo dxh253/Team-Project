@@ -1,398 +1,171 @@
-from rest_framework import generics, permissions, status
+from .models import Reply
+from django.contrib.auth import get_user_model
+from rest_framework import serializers
+from .models import Category, Post, PostVotes, Category, Comment, CommentVote, Reply
 from rest_framework.response import Response
-from .serializers import (
-    PostSerializer,
-    AllPostsSerializer,
-    PostVotesSerializer,
-    CategorySerializer,
-    CommentSerializer,
-    CommentReplySerializer,
-    CommentReplySerializer,
-)
-from .models import Category, Post, PostVotes, Comment, CommentVote, Reply, ReplyVote
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from django.core.exceptions import ValidationError
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from django.http import HttpResponseBadRequest
-from django.views.generic.base import View
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.decorators.csrf import csrf_exempt
-# from django.utils.decorators import method_decorator
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
-class IsOwnerOrReadOnly(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        if request.user.is_authenticated:
-            if isinstance(obj, PostVotes):
-                return obj.user_id == request.user
-            return True
-        return False
+class PostSerializer(serializers.ModelSerializer):
+    category = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all()
+    )
+    get_image = serializers.ImageField(
+        max_length=None, use_url=True, required=False)
+    isBlurred = serializers.BooleanField(
+        default=False)  # set default value to False
+
+    class Meta:
+        model = Post
+        fields = ["id", "created", "modified", 'time_since_post', "title", "description", "description_br", "owner", 'score', "username", "owner_url", "category", "category_name", 'slug', 'category_slug', 'full_url', 'user_vote', 'get_image', 'isBlurred',
+                  ]
+        extra_kwargs = {
+            "url": {"view_name": "api:posts", "lookup_field": "title"}
+        }
+
+    def create(self, validated_data):
+        owner = validated_data.pop('owner', None)
+        image = validated_data.pop('get_image', None)
+        if owner:
+            validated_data['owner_id'] = owner.pk
+        if image:
+            validated_data['image'] = image
+        return super().create(validated_data)
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if instance.image and instance.image.storage.exists(instance.image.name):
+            representation['get_image'] = instance.image.url
+        return representation
 
 
-class PostList(generics.ListCreateAPIView):
-    # ALLOWED_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
+class PostVotesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostVotes
+        fields = ['post_id', 'user_id', 'vote', 'id']
+
+    def validate(self, data):
+        post_id = data.get('post_id')
+        user_id = data.get('user_id')
+        vote = data.get('vote')
+
+        # Check if the user has already voted for the post
+        if PostVotes.objects.filter(post_id=post_id, user_id=user_id).exists():
+            # If the user has already voted, allow them to change their vote
+            post_vote = PostVotes.objects.get(post_id=post_id, user_id=user_id)
+            if vote == post_vote.vote:
+                return data
+
+        # Check if the vote is valid
+        if vote not in [choice[0] for choice in PostVotes.VOTE_CHOICES]:
+            raise serializers.ValidationError('Invalid vote')
+
+        return data
+
+
+class AllPostsSerializer(serializers.ModelSerializer):
+    category = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all()
+    )
     queryset = Post.objects.all()
-    serializer_class = PostSerializer
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+    class Meta:
+        model = Post
+        fields = ["id", "created", "modified", 'time_since_post', "title", "description", "description_br", "owner", "username", "owner_url", "category", "category_name", 'slug', 'category_slug', 'score', 'full_url', 'user_vote', 'user_up_style', 'user_down_style', 'weighted_score', 'age_in_days', 'number_of_comments',
+                  ]
+        extra_kwargs = {
+            "url": {"view_name": "api:allposts", "lookup_field": "title"}
+        }
+        # extra_kwargs = {
+        #     "url": {"view_name": "api:user-detail", "lookup_field": "username"}
+        # }
 
 
-class PostDetail(generics.RetrieveUpdateDestroyAPIView):
-    # ALLOWED_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
 
-    def put(self, request, *args, **kwargs):
-        return super().put(request, *args, **kwargs)
+# class CommentSerializer(serializers.ModelSerializer):
+#     children = serializers.SerializerMethodField()
+#     owner = serializers.SerializerMethodField()
+#     upvotes = serializers.IntegerField(read_only=True)
+#     downvotes = serializers.IntegerField(read_only=True)
+#     user_vote = serializers.SerializerMethodField()
 
-class PostVotesList(generics.ListCreateAPIView):
-    queryset = PostVotes.objects.all()
-    serializer_class = PostVotesSerializer
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+#     class Meta:
+#         model = Comment
+#         fields = ["id", "created_date", "owner", "upvotes", "downvotes", "children", "parent_comment", "user_vote"]
+#         read_only_fields = ["created", "upvotes", "downvotes"]
 
-    def get_queryset(self):
-        pk = self.kwargs.get("pk")
-        user_id = self.request.query_params.get("user_id")
-        # if user_id:
-        #     queryset = PostVotes.objects.filter(post_id=pk, user_id=user_id)
-        # else:
-        #     queryset = PostVotes.objects.filter(post_id=pk)
-        queryset = PostVotes.objects.filter(post_id=pk)
-        return queryset
+#     def get_children(self, obj):
+#         children = Comment.objects.filter(parent_comment=obj)
+#         return CommentSerializer(children, many=True, context=self.context).data
 
-    def post(self, request, pk):
-        user_id = request.data.get("user_id")
-        vote_value = request.data.get("vote")
-        if user_id is None or vote_value is None:
-            return Response(
-                {"error": "Invalid request."}, status=status.HTTP_400_BAD_REQUEST
-            )
 
+#     def get_owner(self, obj):
+#         return obj.author.username
+
+#     def get_user_vote(self, obj):
+#         if not self.context.get('request').user.is_authenticated:
+#             return None
+#         try:
+#             vote = CommentVote.objects.get(user=self.context.get('request').user, comment=obj)
+#             return vote.vote_type
+#         except CommentVote.DoesNotExist:
+#             return None
+
+        # fields = ["id", "created_date", "modified", "content", "owner", "upvotes", "downvotes", "children", "parent_comment", "user_vote"]
+        # read_only_fields = ["created", "modified", "upvotes", "downvotes"]
+
+    # def get_children(self, obj):
+    #     return CommentSerializer(obj.children.all(), many=True).data
+
+    # def get_owner(self, obj):
+    #     if obj.owner:
+    #         return obj.owner.username
+    #     return ""
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    upvoted_by = serializers.StringRelatedField(many=True, read_only=True)
+    downvoted_by = serializers.StringRelatedField(many=True, read_only=True)
+    children = serializers.SerializerMethodField()
+    owner = serializers.SerializerMethodField()
+    upvotes = serializers.IntegerField(read_only=True)
+    downvotes = serializers.IntegerField(read_only=True)
+    user_vote = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Comment
+        fields = ["id", "created_date", "owner", "upvotes", "downvotes", "upvoted_by",
+                  "downvoted_by", "children", "parent_comment", "user_vote", "text"]
+        read_only_fields = ["created", "upvotes",
+                            "downvotes", "upvoted_by", "downvoted_by"]
+
+    def get_children(self, obj):
+        children = Comment.objects.filter(parent_comment=obj)
+        return CommentSerializer(children, many=True, context=self.context).data
+
+    def get_owner(self, obj):
+        return obj.author.username
+
+    def get_user_vote(self, obj):
+        if not self.context.get('request').user.is_authenticated:
+            return None
         try:
-            vote = PostVotes.objects.get(user_id=user_id, post_id=pk)
-            vote.vote = vote_value
-            vote.save()
-            serializer = PostVotesSerializer(vote)
-        except PostVotes.DoesNotExist:
-            data = {"user_id": user_id, "vote": vote_value, "post_id": pk}
-            serializer = PostVotesSerializer(data=data)
-            if serializer.is_valid():
-                serializer.save()
-            else:
-                return Response(
-                    {"error": "Invalid request."}, status=status.HTTP_400_BAD_REQUEST
-                )
-
-        return Response(serializer.data)
-
-    def delete(self, request, pk):
-        user_id = request.query_params.get("user_id")
-        if user_id is None:
-            return Response(
-                {"error": "Invalid request."}, status=status.HTTP_400_BAD_REQUEST
-            )
-        try:
-            vote = PostVotes.objects.get(user_id=user_id, post_id=pk)
-            vote.delete()
-            return Response(
-                {"message": "Vote deleted"}, status=status.HTTP_204_NO_CONTENT
-            )
-        except PostVotes.DoesNotExist:
-            return Response(
-                {"error": "Vote not found."}, status=status.HTTP_404_NOT_FOUND
-            )
+            vote = CommentVote.objects.get(
+                user=self.context.get('request').user, comment=obj)
+            return vote.vote_type
+        except CommentVote.DoesNotExist:
+            return None
 
 
-class PostVotesDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = PostVotes.objects.all()
-    serializer_class = PostVotesSerializer
-    lookup_url_kwarg = "id"
-    lookup_field = "id"
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-
-    def get_queryset(self):
-        post_id = self.kwargs["pk"]
-        id = self.kwargs["id"]
-        return PostVotes.objects.filter(post_id=post_id, id=id)
-
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response(serializer.data)
-
-
-class AllPostsList(generics.ListAPIView):
-    queryset = Post.objects.all()
-    serializer_class = AllPostsSerializer
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-
-class CategoryList(generics.ListCreateAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def post(self, request):
-        serializer = CategorySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class CommentList(generics.ListCreateAPIView):
-    serializer_class = CommentSerializer
-
-    def get_queryset(self):
-        # This view should return a list of all the comments for the post as determined by the post_pk portion of the URL.
-        post_pk = self.kwargs["post_pk"]
-        return Comment.objects.filter(post=post_pk)
-
-    def perform_create(self, serializer):
-        post = generics.get_object_or_404(Post, pk=self.kwargs["post_pk"])
-        serializer.save(post=post, author=self.request.user)
-
-    # def perform_create(self, serializer):
-    #     post = generics.get_object_or_404(Post, pk=self.kwargs["post_pk"])
-    #     serializer.save(post=post)
-
-
-class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = CommentSerializer
-
-    def get_queryset(self):
-        # This view should return a single comment for the post as determined by the post_pk and pk portions of the URL.
-        post_pk = self.kwargs["post_pk"]
-        comment_pk = self.kwargs["pk"]
-        return Comment.objects.filter(post=post_pk, pk=comment_pk)
-
-
-class CommentVote(generics.UpdateAPIView):
-    serializer_class = CommentSerializer
-
-    def get_queryset(self):
-        # This view should return a single comment for the post as determined by the post_pk and pk portions of the URL.
-        post_pk = self.kwargs["post_pk"]
-        comment_pk = self.kwargs["pk"]
-        return Comment.objects.filter(post=post_pk, pk=comment_pk)
-
-    def patch(self, request, *args, **kwargs):
-        comment = self.get_object()
-        vote = request.data.get("vote")
-
-        if vote == "up":
-            comment.votes += 1
-        elif vote == "down":
-            comment.votes -= 1
-        else:
-            raise ValidationError("Invalid vote value.")
-
-        comment.save()
-        serializer = self.get_serializer(comment)
-        return Response(serializer.data)
-
-
-class CommentDelete(generics.DestroyAPIView):
-    serializer_class = CommentSerializer
-    lookup_field = "pk"
-
-    def get_queryset(self):
-        post_pk = self.kwargs["post_pk"]
-        comment_pk = self.kwargs["comment_pk"]
-        reply_pk = self.kwargs.get("pk")
-
-        if reply_pk is not None:
-            return Reply.objects.filter(comment_id=comment_pk, pk=reply_pk)
-        else:
-            return Comment.objects.filter(post_id=post_pk, pk=comment_pk)
-
-    def delete(self, request, *args, **kwargs):
-        comment = self.get_object()
-
-        if comment.user != request.user:
-            raise ValidationError("You cannot delete someone else's comment.")
-
-        return super().delete(request, *args, **kwargs)
-
-
-class CommentReply(generics.CreateAPIView):
-    serializer_class = CommentSerializer
-
-    def get_queryset(self):
-        # This view should return a single comment for the post as determined by the post_pk and pk portions of the URL.
-        post_pk = self.kwargs["post_pk"]
-        comment_pk = self.kwargs["pk"]
-        return Comment.objects.filter(post=post_pk, pk=comment_pk)
-
-    def perform_create(self, serializer):
-        parent_comment = generics.get_object_or_404(Comment, pk=self.kwargs["pk"])
-        serializer.save(post=parent_comment.post, parent=parent_comment)
-
-
-class CommentReplyCreateView(generics.CreateAPIView):
-    queryset = Reply.objects.all()
-    serializer_class = CommentReplySerializer
-
-    def perform_create(self, serializer):
-        comment = generics.get_object_or_404(Comment, pk=self.kwargs["comment_pk"])
-        parent_reply_id = self.request.data.get("parent_reply", None)
-        parent_reply = None
-        if parent_reply_id:
-            parent_reply = generics.get_object_or_404(Reply, pk=parent_reply_id)
-        serializer.save(
-            comment=comment, user=self.request.user, parent_reply=parent_reply
-        )
-
-
-class CommentUpvoteView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self, post_pk, comment_pk):
-        return get_object_or_404(Comment, post__pk=post_pk, pk=comment_pk)
-
-    def put(self, request, post_pk, comment_pk):
-        comment = self.get_object(post_pk, comment_pk)
-        comment.upvote(request.user)
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class CommentDownvoteView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self, post_pk, comment_pk):
-        return get_object_or_404(Comment, post__pk=post_pk, pk=comment_pk)
-
-    def put(self, request, post_pk, comment_pk):
-        comment = self.get_object(post_pk, comment_pk)
-        comment.downvote(request.user)
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class CommentReplyUpvoteView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self, post_pk, comment_pk, reply_pk):
-        return get_object_or_404(
-            Reply, pk=reply_pk, comment_id=comment_pk, comment__post_id=post_pk
-        )
-
-    def put(self, request, post_pk, comment_pk, reply_pk):
-        reply = self.get_object(post_pk, comment_pk, reply_pk)
-        user = request.user
-        vote_type = request.data.get("vote_type")
-
-        # Check if the user has already voted on this reply
-        try:
-            reply_vote = ReplyVote.objects.get(reply=reply, user=user)
-        except ReplyVote.DoesNotExist:
-            reply_vote = None
-
-        if vote_type == "upvote":
-            if reply_vote is None:
-                reply.upvotes += 1
-                reply_vote = ReplyVote.objects.create(
-                    reply=reply, user=user, vote_type="up"
-                )
-            elif reply_vote.vote_type == "up":
-                # User already upvoted, so remove the upvote
-                reply.upvotes -= 1
-                reply_vote.delete()
-            elif reply_vote.vote_type == "down":
-                # User downvoted before, now they are upvoting
-                reply_vote.vote_type = "up"
-                reply_vote.save()
-                reply.upvotes += 1
-                reply.downvotes -= 1
-        elif vote_type == "downvote":
-            if reply_vote is None:
-                reply.downvotes += 1
-                reply_vote = ReplyVote.objects.create(
-                    reply=reply, user=user, vote_type="down"
-                )
-            elif reply_vote.vote_type == "down":
-                # User already downvoted, so remove the downvote
-                reply.downvotes -= 1
-                reply_vote.delete()
-            elif reply_vote.vote_type == "up":
-                # User upvoted before, now they are downvoting
-                reply_vote.vote_type = "down"
-                reply_vote.save()
-                reply.downvotes += 1
-                reply.upvotes -= 1
-
-        reply.save()
-
-        return Response({"upvotes": reply.upvotes, "downvotes": reply.downvotes})
-
-
-class ReplyVoteView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self, post_pk, comment_pk, reply_pk):
-        return get_object_or_404(
-            Reply, pk=reply_pk, comment_id=comment_pk, comment__post_id=post_pk
-        )
-
-    def put(self, request, post_pk, comment_pk, reply_pk):
-        reply = self.get_object(post_pk, comment_pk, reply_pk)
-        user = request.user
-        vote_type = request.data.get("vote_type")
-
-        # Check if the user has already voted on this reply
-        try:
-            reply_vote = ReplyVote.objects.get(reply=reply, user=user)
-        except ReplyVote.DoesNotExist:
-            reply_vote = None
-
-        if vote_type == "upvote":
-            if reply_vote is None:
-                reply.upvotes += 1
-                reply_vote = ReplyVote.objects.create(
-                    reply=reply, user=user, vote_type="up"
-                )
-            elif reply_vote.vote_type == "up":
-                # User already upvoted, so remove the upvote
-                reply.upvotes -= 1
-                reply_vote.delete()
-            elif reply_vote.vote_type == "down":
-                # User downvoted before, now they are upvoting
-                reply_vote.vote_type = "up"
-                reply_vote.save()
-                reply.upvotes += 1
-                reply.downvotes -= 1
-        elif vote_type == "downvote":
-            if reply_vote is None:
-                reply.downvotes += 1
-                reply_vote = ReplyVote.objects.create(
-                    reply=reply, user=user, vote_type="down"
-                )
-            elif reply_vote.vote_type == "down":
-                # User already downvoted, so remove the downvote
-                reply.downvotes -= 1
-                reply_vote.delete()
-            elif reply_vote.vote_type == "up":
-                # User upvoted before, now they are downvoting
-                reply_vote.vote_type = "down"
-                reply_vote.save()
-                reply.downvotes += 1
-                reply.upvotes -= 1
-
-        reply.save()
-
-        return Response({"upvotes": reply.upvotes, "downvotes": reply.downvotes})
+class CommentReplySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reply
+        fields = ['id', 'body', 'created_at']
+        read_only_fields = ['id', 'created_at']
