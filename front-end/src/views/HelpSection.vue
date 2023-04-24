@@ -261,12 +261,18 @@ export default {
       }
 
       return this.allProblems.filter((problem) => {
-        // shows the searched problems
         this.showing = false;
         this.introText = "";
-        return problem.title
-          .toLowerCase()
-          .includes(this.searchValue.toLowerCase());
+
+        // Checks that all characters in `this.searchValue` appear in the same
+        // order in `this.problem.title` e.g. `prty` will match `party` but
+        // not `piracy` or `try please`
+        let charIndex = 0;
+        let searchValue = this.searchValue.toLowerCase();
+        for (const c of problem.title.toLowerCase()) {
+          if (c == searchValue[charIndex]) ++charIndex;
+        }
+        return charIndex == searchValue.length;
       });
     },
   },
