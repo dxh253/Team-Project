@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <div class="main2">
       <div class="event-card" style="background-color: #c5aaf0;">
@@ -184,5 +184,407 @@ export default {
   font-weight: 400;
   font-size: 14px;
   color: #888;
+}
+</style> -->
+
+<!-- 
+<template>
+  <div>
+    <div class="main2">
+      <div class="event-card has-background-purple">
+        <router-link v-a11y-link="'Events'" to="/events"
+          class="has-text-white is-size-3 has-text-weight-bold has-text-centered">
+          <i class="far fa-calendar is-block  fa-5x has-text-primary"></i> Events and Study
+          group
+        </router-link>
+      </div>
+      <div class="event-card has-background-purple">
+        <router-link v-a11y-link="'Discussions'" to="/posts"
+          class="has-text-white is-size-3 has-text-weight-bold has-text-centered">
+          <i class="fas fa-file-alt is-block fa-5x has-text-primary"> </i> Resources and
+          Discussions
+        </router-link>
+      </div>
+      <div class="event-card has-background-purple">
+        <router-link v-a11y-link="'Help'" to="/help"
+          class="has-text-white is-size-3 has-text-weight-bold has-text-centered">
+          <i class="fa fa-question-circle is-block fa-5x has-text-primary"></i> Help
+        </router-link>
+      </div>
+      <div class="your-events">
+        <h3 class="title is-3 has-text-weight-bold">
+          <i class="fas fa-bookmark has-text-purple"></i> SAVED EVENTS:
+        </h3>
+        <ul class="has-text-weight-bold">
+          <li v-for="event in userEvents" :key="event.id">
+            <router-link :to="'' + event.event.get_absolute_url" v-a11y-link="event.event.name" class="event-link"
+              v-if="event.event.category === 1">
+              <i class="far fa-calendar event-icon has-text-primary"></i> {{ event.event.name }}
+            </router-link>
+          </li>
+        </ul>
+      </div>
+      <div class="your-studyg">
+        <h3 class="title is-3 has-text-weight-bold">
+          <i class="fas fa-bookmark has-text-purple"></i> SAVED STUDY GROUP:
+        </h3>
+        <ul class="has-text-weight-bold">
+          <li v-for="event in userEvents" :key="event.id">
+            <router-link :to="'' + event.event.get_absolute_url" v-a11y-link="event.event.name" class="event-link"
+              v-if="event.event.category === 2">
+              <i class="fas fa-users event-icon has-text-primary"></i> {{ event.event.name }}
+            </router-link>
+          </li>
+        </ul>
+      </div>
+      <div class="upcoming">
+        <h3 class="title is-3 has-text-weight-bold">
+          <i class="fas fa-arrow-up-from-bracket has-text-purple"></i> UPCOMING:
+        </h3>
+        <ul class="has-text-weight-bold">
+          <li v-for="event in userEvents" :key="event.id">
+            <router-link :to="'' + event.event.get_absolute_url" v-a11y-link="event.event.name" class="event-link">
+              <i class="fas fa-clock event-icon has-text-primary"></i>
+              <span class="event-name">{{ event.event.name }}</span>
+              <span class="event-reminder">{{ getReminder(event.event.date) }}</span>
+            </router-link>
+          </li>
+    </ul>
+  </div>
+</div>
+  </div>
+</template>
+
+<script>
+import { getAPI } from '@/plugins/axios'
+
+export default {
+  name: 'DashBoard',
+  data() {
+    return {
+      userEvents: []
+    };
+  },
+  created() {
+    this.getUserEvents();
+  },
+  methods: {
+    getUserEvents() {
+      getAPI.get('/api/v1/saved-events/', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access')}`
+        }
+      })
+        .then(response => {
+          this.userEvents = response.data.sort((b, a) => {
+            return new Date(a.event.date) - new Date(b.event.date);
+          });
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    getReminder(eventDate) {
+      const m = 24 * 60 * 60 * 1000;
+      const a = new Date();
+      const t = new Date(eventDate).getTime();
+      const r = t - m;
+      const d = r - a.getTime();
+      const dd = Math.abs(Math.floor(d / m));
+      return `${dd} day${dd > 1 ? 's' : ''} left`;
+    }
+  }
+};
+</script> -->
+
+
+<!-- <template>
+  <div class="container">
+    <div class="columns">
+      <div class="column is-4">
+        <div class="card event-card has-background-primary">
+          <router-link v-a11y-link="'Events'" to="/events"
+            class="card-content has-text-white is-size-3 has-text-weight-bold has-text-centered">
+            <i class="far fa-calendar is-block  fa-5x has-text-white"></i> Events and Study
+            group
+          </router-link>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="card event-card has-background-primary">
+          <router-link v-a11y-link="'Discussions'" to="/posts"
+            class="card-content has-text-white is-size-3 has-text-weight-bold has-text-centered">
+            <i class="fas fa-file-alt is-block fa-5x has-text-white"> </i> Resources and
+            Discussions
+          </router-link>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="card event-card has-background-primary">
+          <router-link v-a11y-link="'Help'" to="/help"
+            class="card-content has-text-white is-size-3 has-text-weight-bold has-text-centered">
+            <i class="fa fa-question-circle is-block fa-5x has-text-white"></i> Help
+          </router-link>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns">
+      <div class="column is-half">
+        <h3 class="title is-3 has-text-weight-bold">
+          <i class="fas fa-bookmark has-text-primary"></i> SAVED EVENTS:
+        </h3>
+        <ul class="has-text-weight-bold">
+          <li v-for="event in userEvents" :key="event.id">
+            <router-link :to="'' + event.event.get_absolute_url" v-a11y-link="event.event.name" class="event-link"
+              v-if="event.event.category === 1">
+              <i class="far fa-calendar event-icon has-text-primary"></i> {{ event.event.name }}
+            </router-link>
+          </li>
+        </ul>
+      </div>
+      <div class="column is-half">
+        <h3 class="title is-3 has-text-weight-bold">
+          <i class="fas fa-bookmark has-text-primary"></i> SAVED STUDY GROUP:
+        </h3>
+        <ul class="has-text-weight-bold">
+          <li v-for="event in userEvents" :key="event.id">
+            <router-link :to="'' + event.event.get_absolute_url" v-a11y-link="event.event.name" class="event-link"
+              v-if="event.event.category === 2">
+              <i class="fas fa-users event-icon has-text-primary"></i> {{ event.event.name }}
+            </router-link>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="upcoming">
+      <h3 class="title is-3 has-text-weight-bold">
+        <i class="fas fa-arrow-up-from-bracket has-text-primary"></i> UPCOMING:
+      </h3>
+      <ul class="has-text-weight-bold">
+        <li v-for="event in userEvents" :key="event.id">
+          <router-link :to="'' + event.event.get_absolute_url" v-a11y-link="event.event.name" class="event-link">
+            <i
+            class="fas fa-clock event-icon has-text-primary"></i>
+        <span class="event-name">{{ event.event.name }}</span>
+        <span class="event-reminder">{{ getReminder(event.event.date) }}</span>
+      </router-link>
+    </li>
+  </ul>
+</div>
+
+  </div>
+</template>
+
+
+<script>
+import { getAPI } from '@/plugins/axios'
+
+export default {
+  name: 'DashBoard',
+  data() {
+    return {
+      userEvents: []
+    };
+  },
+  created() {
+    this.getUserEvents();
+  },
+  methods: {
+    getUserEvents() {
+      getAPI.get('/api/v1/saved-events/', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access')}`
+        }
+      })
+        .then(response => {
+          this.userEvents = response.data.sort((b, a) => {
+            return new Date(a.event.date) - new Date(b.event.date);
+          });
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    getReminder(eventDate) {
+      const m = 24 * 60 * 60 * 1000;
+      const a = new Date();
+      const t = new Date(eventDate).getTime();
+      const r = t - m;
+      const d = r - a.getTime();
+      const dd = Math.abs(Math.floor(d / m));
+      return `${dd} day${dd > 1 ? 's' : ''} left`;
+    }
+  }
+};
+</script>
+<style scoped>
+.event-card {
+  border-radius: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.event-icon {
+  margin-right: 0.5rem;
+}
+
+.event-name {
+  font-weight: bold;
+}
+.event-link {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.event-reminder {
+  margin-left: auto;
+}
+</style> -->
+
+
+<template>
+  <div class="container">
+    <div class="columns">
+      <div class="column is-4">
+        <div class="card event-card has-background-primary">
+          <router-link v-a11y-link="'Events'" to="/events"
+            class="card-content has-text-white is-size-3 has-text-weight-bold has-text-centered">
+            <i class="far fa-calendar is-block  fa-5x has-text-white"></i> Events and Study
+            group
+          </router-link>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="card event-card has-background-primary">
+          <router-link v-a11y-link="'Discussions'" to="/posts"
+            class="card-content has-text-white is-size-3 has-text-weight-bold has-text-centered">
+            <i class="fas fa-file-alt is-block fa-5x has-text-white"> </i> Resources and
+            Discussions
+          </router-link>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="card event-card has-background-primary">
+          <router-link v-a11y-link="'Help'" to="/help"
+            class="card-content has-text-white is-size-3 has-text-weight-bold has-text-centered">
+            <i class="fa fa-question-circle is-block fa-5x has-text-white"></i> Help
+          </router-link>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns">
+      <div class="column is-half">
+        <div class="box">
+          <h3 class="title is-3 has-text-weight-bold">
+            <i class="fas fa-bookmark has-text-primary"></i> SAVED EVENTS:
+          </h3>
+          <ul class="has-text-weight-bold">
+            <li v-for="event in userEvents" :key="event.id">
+              <router-link :to="'' + event.event.get_absolute_url" v-a11y-link="event.event.name" class="event-link"
+                v-if="event.event.category === 1">
+                <i class="far fa-calendar event-icon has-text-primary"></i> {{ event.event.name }}
+              </router-link>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="box">
+          <h3 class="title is-3 has-text-weight-bold">
+            <i class="fas fa-bookmark has-text-primary"></i> SAVED STUDY GROUP:
+          </h3>
+          <ul class="has-text-weight-bold">
+            <li v-for="event in userEvents" :key="event.id">
+              <router-link :to="'' + event.event.get_absolute_url" v-a11y-link="event.event.name" class="event-link"
+                v-if="event.event.category === 2">
+                <i class="fas fa-users event-icon has-text-primary"></i> {{ event.event.name }}
+              </router-link>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <h3 class="title is-3 has-text-weight-bold">
+        <i class="fas fa-arrow-up-from-bracket has-text-primary"></i> UPCOMING:
+      </h3>
+      <ul class="has-text-weight-bold">
+        <li v-for="event in userEvents" :key="event.id">
+          <router-link :to="'' + event.event.get_absolute_url" v-a11y-link="event.event.name" class="event-link">
+            <i class="fas fa-clock event-icon has-text-primary"></i>
+            <span class="event-name">{{ event.event.name }}</span>
+            <span class="event-reminder">{{ getReminder(event.event.date) }}</span>
+          </router-link>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script>
+import { getAPI } from '@/plugins/axios'
+
+export default {
+  name: 'DashBoard',
+  data() {
+    return {
+      userEvents: []
+    };
+  },
+  created() {
+    this.getUserEvents();
+  },
+  methods: {
+    getUserEvents() {
+      getAPI.get('/api/v1/saved-events/', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access')}`
+        }
+      })
+        .then(response => {
+          this.userEvents = response.data.sort((b, a) => {
+            return new Date(a.event.date) - new Date(b.event.date);
+          });
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    getReminder(eventDate) {
+      const m = 24 * 60 * 60 * 1000;
+      const a = new Date();
+      const t = new Date(eventDate).getTime();
+      const r = t - m;
+      const d = r - a.getTime();
+      const dd = Math.abs(Math.floor(d / m));
+      return `${dd} day${dd > 1 ? 's' : ''} left`;
+    }
+  }
+};
+</script>
+
+<style scoped>
+.event-card {
+  border-radius: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.event-icon {
+  margin-right: 0.5rem;
+}
+
+.event-name {
+  font-weight: bold;
+}
+.event-link {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.event-reminder {
+  margin-left: auto;
 }
 </style>
