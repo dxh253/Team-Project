@@ -8,14 +8,14 @@
                 rows="10"></textarea>
             <br>
             <div class="bottom">
-                <button type="submit">Create Post</button>
+                <!-- <button type="submit">Create Post</button> -->
                 <br>
                 <select class="category" id="category" v-model="category" required>
                     <option value="" disabled>Category</option>
                     <option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}
                     </option>
                 </select>
-                <label>
+                <label class="image-selector">
                     <i class="fa-solid fa-image fa-xl"></i>
                     <input type="file" @change="onFileSelected" style="display:none"/>
                 </label>
@@ -26,6 +26,7 @@
                     <span class="slider round"></span>
                     </label>
                 </div>
+                <button type="submit">Create Post</button>
             </div>
         </form>
     </div>
