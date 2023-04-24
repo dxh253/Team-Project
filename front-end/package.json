@@ -21,7 +21,6 @@
     "vue": "^3.2.47",
     "vue-a11y": "^1.0.0",
     "vue-event-bus": "^1.0.2",
-    "vue-js-modal": "^2.0.1",
     "vue-notify-me": "^1.1.0",
     "vue-router": "^4.1.6",
     "vuex": "^4.1.0"
