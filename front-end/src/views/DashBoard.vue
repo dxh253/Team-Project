@@ -84,7 +84,7 @@
   </h3>
       <ul>
         <li v-for="event in userEvents" :key="event.id">
-          <router-link :to="'' + event.event.get_absolute_url" v-a11y-link="event.event.name" class="event-link">
+          <router-link :to="'' + event.event.get_absolute_url" v-a11y-link="event.event.name" class="event-link" v-if="(getReminderNum(event.event.date)) > 0" >
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-sharp fa-solid fa-clock event-icon"></i>
     <span class="event-name">{{ event.event.name }}</span>
     <span class="event-reminder">{{ getReminder(event.event.date) }}</span>
@@ -121,7 +121,7 @@ export default {
         }
       })
         .then(response => {
-          //this.userEvents = response.data;
+          
           this.userEvents = response.data.sort((b, a) => {
             return new Date(a.event.date) - new Date(b.event.date);
           });
@@ -137,8 +137,18 @@ export default {
       const t = new Date(eventDate).getTime();
       const r = t - m;
       const d = r - a.getTime();
-      const dd = Math.abs(Math.floor(d / m));
+      const dd = Math.floor(d / m);
       return `${dd} day${dd > 1 ? 's' : ''} left`;
+    },
+
+    getReminderNum(eventDate) {
+      const m = 24 * 60 * 60 * 1000; 
+      const a = new Date();
+      const t = new Date(eventDate).getTime();
+      const r = t - m;
+      const d = r - a.getTime();
+      const dd = Math.floor(d / m);
+      return dd;
     }
   }
 };
