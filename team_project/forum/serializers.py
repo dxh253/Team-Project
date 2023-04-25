@@ -20,7 +20,9 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ["id", "created", "modified", 'time_since_post', "title", "description", "description_br", "owner", 'score', "username", "owner_url", "category", "category_name", 'slug', 'category_slug', 'full_url', 'user_vote', 'get_image', 'isBlurred',
+        fields = ["id", "created", "modified", 'time_since_post', "title", "description", "description_br",
+                   "owner", 'score', "username", "owner_url", "category", "category_name", 'slug', 'category_slug',
+                 'full_url', 'user_vote', 'get_image', 'isBlurred',
                   ]
         extra_kwargs = {
             "url": {"view_name": "api:posts", "lookup_field": "title"}

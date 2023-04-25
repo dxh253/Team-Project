@@ -30,10 +30,11 @@
           </router-link>
         </div>
         <div class="column">
-          <span class="icon is-small"><i class="fas fa-arrow-up" @click="upvote"
+          <span class="icon is-small"><i class="fas fa-arrow-up" @click="upvote" tabindex="0" role="button" @keydown.enter="upvote"
+
               :style="{ color: this.userVote === 1 ? 'orange' : 'grey' }"></i></span>
           <span>{{ currentScore }}</span>
-          <span class="icon is-small"><i class="fas fa-arrow-down" @click="downvote"
+          <span class="icon is-small"><i class="fas fa-arrow-down" @click="downvote" tabindex="0" role="button" @keydown.enter="downvote"
               :style="{ color: this.userVote === -1 ? 'blue' : 'grey' }"></i></span>
         </div>
         <div v-if="post.get_image" class="column">
@@ -52,7 +53,7 @@
         <router-link v-if="isPostCreator" :to="{ name: 'edit-post', params: { id: post.id } }">
           <span class="icon"><i class="fas fa-edit"></i></span>
         </router-link>
-        <span v-if="isPostCreator" class="icon" @click="deletePost"><i class="fas fa-trash"></i></span>
+        <span v-if="isPostCreator" class="icon" @click="deletePost" tabindex="0" role="button" @keydown.enter="deletePost"><i class="fas fa-trash"></i></span>
       </div>
     </div>
   </div>
