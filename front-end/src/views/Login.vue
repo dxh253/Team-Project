@@ -17,7 +17,10 @@
             <RouterLink to="/register">
                 <button id="register-button" type="submit" formaction="register">Register</button>
             </RouterLink>
-
+            <br>
+            <RouterLink to="/forgot-password">
+                Forgot Password?
+            </RouterLink>
         </form>
     </div>
 

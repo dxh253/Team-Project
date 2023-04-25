@@ -2,12 +2,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from homepage.views import register_user
+from homepage.views import register_user, reset_password
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('api/v1/register/', register_user),
+    path('api/v1/forgot-password/', reset_password),
     path('api-token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api-token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/', include('djoser.urls')),

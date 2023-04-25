@@ -12,6 +12,7 @@ import EditPost from "../views/EditPost.vue"
 import PostDetail from "../views/PostDetail.vue"
 import HelpSection from "../views/HelpSection.vue"
 import ProblemsDetail from "../views/ProblemsDetail.vue"
+import ForgotPassword from "../views/ForgotPassword.vue"
 
 
 const router = createRouter({
@@ -32,7 +33,14 @@ const router = createRouter({
             meta: {
                 requiresLogin: false
             }
-
+        },
+        {
+            path: "/forgot-password/",
+            name: "ForgotPassword",
+            component: ForgotPassword,
+            meta: {
+                requiresLogin: false
+            }
         },
         {
             path: "/register/",
