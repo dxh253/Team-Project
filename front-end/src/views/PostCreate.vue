@@ -10,19 +10,19 @@
             <div class="bottom">
                 <!-- <button type="submit">Create Post</button> -->
                 <br>
-                <select class="category" id="category" v-model="category" required>
+                <select class="category" id="category" v-model="category" required style="margin-left: auto;">
                     <option value="" disabled>Category</option>
                     <option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}
                     </option>
-                </select>
-                <label class="image-selector">
-                    <i class="fa-solid fa-image fa-xl"></i>
-                    <input type="file" @change="onFileSelected" style="display:none"/>
-                </label>
+                </select>                                                                                               
+                <!-- <label class="image-selector" tabindex="0" @keydown.enter="onFileSelected"> -->
+                    <!-- <i class="fa-solid fa-image fa-xl"></i> -->
+                    <input type="file" @change="onFileSelected"/>
+                <!-- </label> -->
                 <div style="margin-left: auto; display: flex; align-items: center;">
-                    <p style="padding: 9px;">Sensitive Content ?</p>
-                    <label class="switch">
-                    <input type="checkbox" id="isBlurred" v-model="isBlurred">
+                    <p>Sensitive Content ?</p>
+                    <label class="switch" tabindex="0" @keydown.enter="toggleBlur">
+                    <input type="checkbox" id="isBlurred" v-model="isBlurred" @keydown.enter="toggleBlur">
                     <span class="slider round"></span>
                     </label>
                 </div>
@@ -61,9 +61,11 @@ export default {
                     console.log(error);
                 });
         },
-        onFileSelected(event) {
-            this.get_image = event.target.files[0];
-        },
+        toggleBlur(event) {
+  if (event.type === 'click' || (event.type === 'keydown' && event.key === 'Enter')) {
+    this.isBlurred = !this.isBlurred;
+  }
+},
         handleSubmit() {
             // Decode the JWT token to get the user ID
             const token = localStorage.getItem("access");
