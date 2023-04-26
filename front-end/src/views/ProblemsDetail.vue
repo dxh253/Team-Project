@@ -4,7 +4,7 @@
     <div>
         <form class="box" style="margin:0 5%; min-width: 80%;">
             <div class="columns">
-                <p class="is-size-1 column is-10" style="text-indent: 5%;">{{ problems.title }}</p>
+                <p class="is-size-1 column is-10" style="margin-left: 4%;">{{ problems.title }}</p>
                 <i v-show="owned" class="column is-1 material-icons deleting"
                     style="font-size: 35px; display: grid; align-self: center; text-align: end;"
                     @click="deleteProblem">delete</i>
