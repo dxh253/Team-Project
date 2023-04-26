@@ -5,7 +5,7 @@
         <p v-if="incorrectAuth"> Incorrect username and/or password entered. Please try again.</p>
         <form @submit.prevent="login" class="login-form">
             <div class="form-group">
-                <label for="email">Email address:</label>
+                <label for="email">Username:</label>
                 <input type="text" id="email" name="email" v-model="username" required>
             </div>
             <div class="form-group">
