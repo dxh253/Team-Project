@@ -7,12 +7,12 @@
         class="box column is-three-fifths is-clickable" @click="viewProblem"
         style="display: inline-table; margin-bottom: 1%;">
             <div>
-                <p class="is-size-3">{{ problem.title }}</p>
-                <p class="is-size-7">{{ problem.date_added }} by {{ problem.author }}</p>
+                <p class="is-size-3" style="margin-left: 1%;">{{ problem.title }}</p>
+                <p class="is-size-7" style="margin-left: 1%;">{{ problem.date_added }} by {{ problem.author }}</p>
             </div>
             <p
             class="is-size-5" 
-            style="overflow: hidden; text-overflow: ellipsis; margin-right:10%; white-space: nowrap; max-width: 1000px;"> 
+            style="overflow: hidden; text-overflow: ellipsis; margin-right:10%;margin-left: 1%; white-space: nowrap; max-width: 850px;"> 
                 {{ problem.description }}
             </p>
         </router-link>
@@ -57,7 +57,7 @@ export default {
 <style scoped>
 .box {
     margin-left: 4.3%;
-    text-indent: 1%;
+    min-width: 900px;
 }
 
 .box:hover {
