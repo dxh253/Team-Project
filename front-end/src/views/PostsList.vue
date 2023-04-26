@@ -1,36 +1,45 @@
 <template>
-    <div class="columns is-mobile">
-        <div class="column is-one-quarter-desktop is-hidden-mobile">
-            <div class="box">
-                <p class="title is-5">hello</p>
-            </div>
-        </div>
-        <div class="column">
-            <h2 class="title is-4" style="margin-bottom: 1rem; display: flex; align-items: center;">
-                <span style="flex-grow: 1;">Posts</span>
-                <router-link to="/create">
-                    <button class="button is-primary">New Post</button>
-                </router-link>
-            </h2>
-            <div class="searchbar">
-                <input class="search" type="text" v-model="searchTerm" placeholder="Search posts">
-            </div>
-            <div v-if="filteredPosts.length > 0">
-                <div v-for="post in filteredPosts" :key="post.id">
-                    <div class="box">
-                        <div class="columns is-vcentered">
-                            <div class="column">
-                                <post-box :post="post" @postDeleted="removePostFromList" @vote-updated="updatePostVote" />
+    <div class="container">
+        <div class="columns is-custom-width">
+            <!-- <router-link to="/dashboard">
+                <button>
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+            </router-link> -->
+            <div class="column">
+                <h2 class="title is-4" style="margin-bottom: 1rem; display: flex; align-items: center;">
+                    <span style="flex-grow: 1;">Posts</span>
+                    <router-link to="/create">
+                        <button class="button is-primary">New Post</button>
+                    </router-link>
+                </h2>
+                <div class="searchbar">
+                    <input class="search" type="text" v-model="searchTerm" placeholder="Search posts">
+                </div>
+                <div v-if="filteredPosts.length > 0">
+                    <div v-for="post in filteredPosts" :key="post.id">
+                        <div class="box">
+                            <div class="columns is-vcentered">
+                                <div class="column">
+                                    <post-box :post="post" @postDeleted="removePostFromList"
+                                        @vote-updated="updatePostVote" />
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <button @click="scrollToTop" class="button is-info is-hidden-desktop is-fullwidth">Scroll to
+                        top</button>
                 </div>
-                <button @click="scrollToTop" class="button is-info is-hidden-desktop is-fullwidth">Scroll to top</button>
             </div>
         </div>
+        <button @click="scrollToTop" class="myBtn is-hidden-mobile">Scroll to top</button>
     </div>
-    <button @click="scrollToTop" class="myBtn is-hidden-mobile">Scroll to top</button>
 </template>
+
+
+
+
+
 
 
 <script>

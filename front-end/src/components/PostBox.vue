@@ -7,10 +7,10 @@
         </router-link>
       </p>
       <div class="card-header-icon">
-        <span class="icon">
-          <i class="fas fa-angle-down"></i>
-        </span>
-      </div>
+          <span class="icon">
+            <i class="fas fa-angle-down"></i>
+          </span>
+        </div>
     </div>
     <div class="card-content">
       <div class="content">
@@ -30,11 +30,10 @@
           </router-link>
         </div>
         <div class="column">
-          <span class="icon is-small"><i class="fas fa-arrow-up" @click="upvote" tabindex="0" role="button" @keydown.enter="upvote"
-
+          <span class="icon is-small"><i class="fas fa-arrow-up" @click="upvote"
               :style="{ color: this.userVote === 1 ? 'orange' : 'grey' }"></i></span>
           <span>{{ currentScore }}</span>
-          <span class="icon is-small"><i class="fas fa-arrow-down" @click="downvote" tabindex="0" role="button" @keydown.enter="downvote"
+          <span class="icon is-small"><i class="fas fa-arrow-down" @click="downvote"
               :style="{ color: this.userVote === -1 ? 'blue' : 'grey' }"></i></span>
         </div>
         <div v-if="post.get_image" class="column">
@@ -49,7 +48,6 @@
       <span class="card-footer-item"><i class="far fa-clock"></i> {{ post.time_since_post }}</span>
       <span class="card-footer-item"><i class="fas fa-rss"></i> {{ post.category_name }}</span>
       <div class="card-footer-item">
-        <!-- <router-link v-if="isPostCreator" :to="{ name: 'edit-post', params: { id: post.id } }"> -->
         <router-link v-if="isPostCreator" :to="{ name: 'edit-post', params: { id: post.id } }">
           <span class="icon"><i class="fas fa-edit"></i></span>
         </router-link>
@@ -182,4 +180,3 @@ export default {
   },
 };
 </script>
-

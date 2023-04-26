@@ -1,5 +1,12 @@
 <template>
   <div class="container">
+    <div class="column is-one-quarter-desktop is-hidden-mobile">
+              <router-link to="/posts">
+                  <button>
+                      <i class="fas fa-arrow-left"></i>
+                  </button>
+              </router-link>
+          </div>
     <div v-if="loading">
       <div class="notification is-primary">
         Loading...
