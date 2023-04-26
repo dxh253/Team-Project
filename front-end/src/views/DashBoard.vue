@@ -9,7 +9,8 @@
       </div>
       <div class="event-card" style="background-color: #c5aaf0;">
         <router-link v-a11y-link="'Discussions'" to="/posts" style="color: white; font-size: 30px; font-weight: bold; font-family: 'Times New Roman', sans-serif;">
-          <i class="fas fa-file-alt" style="display: block;  font-size: 100px; color: #7B57AA;"> </i> Resources and Discussions
+          <i class="fas fa-file-alt" style="display: block;  font-size: 100px; color: #7B57AA;"> </i> Discussions 
+          forum
         </router-link>
       </div>
       <!--
@@ -122,7 +123,7 @@ export default {
       })
         .then(response => {
           
-          this.userEvents = response.data.sort((a, b) => {
+          this.userEvents = response.data.sort((b, a) => {
             return new Date(a.event.date) - new Date(b.event.date);
           });
 
