@@ -38,8 +38,8 @@
               :style="{ color: this.userVote === -1 ? 'blue' : 'grey' }"></i></span>
         </div>
         <div v-if="post.get_image" class="column">
-          <span class="icon is-small">
-            <i class="fas fa-eye" @click="toggleBlur"></i>
+          <span class="icon is-small" >
+            <i class="fas fa-eye" @click="toggleBlur" @keydown.enter="toggleBlur" tabindex="0"></i>
           </span>
         </div>
       </div>

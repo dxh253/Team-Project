@@ -8,17 +8,12 @@
                 rows="10"></textarea>
             <br>
             <div class="bottom">
-                <!-- <button type="submit">Create Post</button> -->
-                <br>
                 <select class="category" id="category" v-model="category" required style="margin-left: auto;">
                     <option value="" disabled>Category</option>
                     <option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}
                     </option>
                 </select>                                                                                               
-                <!-- <label class="image-selector" tabindex="0" @keydown.enter="onFileSelected"> -->
-                    <!-- <i class="fa-solid fa-image fa-xl"></i> -->
                     <input type="file" @change="onFileSelected"/>
-                <!-- </label> -->
                 <div style="margin-left: auto; display: flex; align-items: center;">
                     <p>Sensitive Content ?</p>
                     <label class="switch" tabindex="0" @keydown.enter="toggleBlur">
