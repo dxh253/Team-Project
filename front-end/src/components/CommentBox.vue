@@ -3,7 +3,11 @@
     <div class="comments">
       <div v-if="comments.length === 0">No comments yet.</div>
       <div v-else>
-        <div v-for="comment in comments" :key="comment.id" class="comment">
+        <div
+          v-for="comment in parentComments"
+          :key="comment.id"
+          class="comment"
+        >
           <div class="comment-header">
             <h3 class="comment-owner">{{ comment.owner }}</h3>
           </div>
@@ -29,6 +33,7 @@
               Submit
             </button>
           </div>
+          <!-- This section shows the children comments only. -->
           <div
             class="replies"
             v-if="comment.children && comment.children.length > 0"
@@ -79,6 +84,14 @@ export default {
       });
       this.replyText[commentId] = "";
       this.visibleReplyForm = null;
+    },
+  },
+  computed: {
+    parentComments() {
+      let parents = this.comments.filter(
+        (comment) => comment.parent_comment == null
+      );
+      return parents;
     },
   },
 };
