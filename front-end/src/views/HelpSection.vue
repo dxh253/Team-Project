@@ -187,20 +187,28 @@ export default {
     },
     computed: {
         searchProblems() {
-            console.log("you searched for " + this.searchValue)
+            console.log("you searched for " + this.searchValue);
             if (!this.searchValue) {
-                return this.allProblems.filter(problem => {
+                return this.allProblems.filter((problem) => {
                     this.showing = true;
-                    this.introText = 'Here are some useful articles';
+                    this.introText = "Here are some useful articles";
                     return problem;
                 });
             }
 
-            return this.allProblems.filter(problem => {
-                // shows the searched problems
+            return this.allProblems.filter((problem) => {
                 this.showing = false;
-                this.introText = '';
-                return problem.title.toLowerCase().includes(this.searchValue.toLowerCase());
+                this.introText = "";
+
+                // Checks that all characters in `this.searchValue` appear in the same
+                // order in `this.problem.title` e.g. `prty` will match `party` but
+                // not `piracy` or `try please`
+                let charIndex = 0;
+                let searchValue = this.searchValue.toLowerCase();
+                for (const c of problem.title.toLowerCase()) {
+                    if (c == searchValue[charIndex]) ++charIndex;
+                }
+                return charIndex == searchValue.length;
             });
         },
     },
