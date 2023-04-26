@@ -1,5 +1,11 @@
 <template>
   <div class="container">
+    <section class="hero is-medium is-dark mb-6">
+      <div class="hero-body has-text-centered">
+        <h1 class="title">Looking For Answers?</h1>
+        <p class="subtitle">Ask away!</p>
+      </div>
+    </section>
     <div class="columns is-custom-width">
       <div class="column">
         <h2 class="title is-4" style="margin-bottom: 1rem; display: flex; align-items: center;">

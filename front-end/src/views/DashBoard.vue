@@ -746,6 +746,10 @@ export default {
 <template>
    <div class="container">
     <section class="hero is-medium is-dark mb-6 is-fullwidth" style="padding: 0 20px;">
+      <div class="has-text-centered">
+        <h1 class="title">Welcome to BrumConnect</h1>
+        <p class="subtitle">Connect with other students, get involved.</p>
+      </div>
       <div class="columns is-multiline is-mobile">
         <div class="column is-full-mobile">
           <button class="button is-primary event-card is-small is-fullwidth" style="height: 150px;">
