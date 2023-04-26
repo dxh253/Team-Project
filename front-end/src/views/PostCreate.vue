@@ -14,7 +14,7 @@
                     </option>
                 </select>                                                                                               
                     <input type="file" @change="onFileSelected"/>
-                <div style="margin-left: auto; display: flex; align-items: center;">
+                    <div style="margin-left: auto; display: flex; align-items: center;">
                     <p>Sensitive Content ?</p>
                     <label class="switch" tabindex="0" @keydown.enter="toggleBlur">
                     <input type="checkbox" id="isBlurred" v-model="isBlurred" @keydown.enter="toggleBlur">
@@ -57,10 +57,14 @@ export default {
                 });
         },
         toggleBlur(event) {
-  if (event.type === 'click' || (event.type === 'keydown' && event.key === 'Enter')) {
-    this.isBlurred = !this.isBlurred;
-  }
-},
+            if (event.type === 'click' || (event.type === 'keydown' && event.key === 'Enter')) {
+                this.isBlurred = !this.isBlurred;
+            }
+        },
+        onFileSelected(event) {
+            this.get_image = event.target.files[0];
+        },
+
         handleSubmit() {
             // Decode the JWT token to get the user ID
             const token = localStorage.getItem("access");
