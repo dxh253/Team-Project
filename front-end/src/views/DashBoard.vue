@@ -748,7 +748,7 @@ export default {
     <section class="hero is-medium is-dark mb-6 is-fullwidth" style="padding: 0 20px;">
       <div class="has-text-centered">
         <h1 class="title">Welcome to BrumConnect</h1>
-        <p class="subtitle">Connect with other students, get involved.</p>
+        <p class="subtitle">Connect with other students in The University of Birmingham, get involved.</p>
       </div>
       <div class="columns is-multiline is-mobile">
         <div class="column is-full-mobile">
