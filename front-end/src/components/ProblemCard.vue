@@ -13,7 +13,8 @@
             <p
             class="is-size-5" 
             style="overflow: hidden; text-overflow: ellipsis; margin-right:10%; white-space: nowrap; max-width: 1000px;"> 
-            {{ problem.description }}</p>
+                {{ problem.description }}
+            </p>
         </router-link>
     </div>
 </template>

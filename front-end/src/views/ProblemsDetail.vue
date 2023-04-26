@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     <div>
-        <div class="box" style="margin:0 5%">
+        <form class="box" style="margin:0 5%; min-width: 80%;">
             <div class="columns">
                 <p class="is-size-1 column is-10" style="text-indent: 5%;">{{ problems.title }}</p>
                 <i v-show="owned" class="column is-1 material-icons deleting"
@@ -12,7 +12,7 @@
             <p class="is-size-6" style="margin-left: 4%; margin-bottom: 1%;">{{ problems.date_added }} by {{ problems.author }}</p>
             <p class="is-size-6" 
             style="margin-left: 4%; margin-right: 20%; overflow-wrap: break-word;">{{ problems.description }}</p>
-        </div>
+        </form>
         <form class="box" @submit.prevent="submitComment" style="margin:1% 10%; min-width: 70%; max-width: 70%;">
             <textarea class="textarea" v-model="commentInfo.text" placeholder="add response"></textarea>
             <div style="text-align: right; margin-top: 5px;">
