@@ -44,9 +44,10 @@
 
         <div class="hero" style="margin-bottom: 3%; margin-left: 5%;">
             <p class="title is-4">Or you can submit your problem here</p>
-            <div class="columns" style="align-items: center;">
+            <!-- <div class="columns" style="align-items: center;">
                 <i class="column is-1 material-icons" style="font-size: 40px;">person</i>
-            </div>
+                <p class="column"> </p>
+            </div> -->
 
             <form class="event-card" style="margin: 0%; width: 1000px;" @submit.prevent="submitProblem">
                 <div class="field">
