@@ -1,6 +1,6 @@
 <template>
-  <div class="home">
-    <section class="hero is-medium is-dark mb-6">
+  <div class="container">
+    <section class="hero is-medium is-dark mb-6 is-fullwidth">
       <div class="hero-body has-text-centered">
         <h1 class="title">Looking For Something To Do?</h1>
         <p class="subtitle">Here are some upcoming events!</p>
