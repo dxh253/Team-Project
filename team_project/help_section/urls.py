@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ProblemsDetail, ProblemsView
+from .views import ProblemsDetail, ProblemsView, CommentList
 from help_section import views
 
 
@@ -10,4 +10,5 @@ urlpatterns = [
     path('api-token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/help/<int:problem_id>/', views.ProblemsDetail.as_view()),
     path('api/v1/help/', views.ProblemsView.as_view(), name="ProblemView"),
+    path('api/v1/help/<int:problem_id>/comments/', views.CommentList.as_view())
 ]
