@@ -14,7 +14,6 @@
             style="margin-left: 4%; margin-right: 20%; overflow-wrap: break-word;">{{ problems.description }}</p>
         </form>
         <form class="box" @submit.prevent="submitComment" style="margin:1% 10%; min-width: 70%; max-width: 70%;">
-            <p style="color: grey;">comment as {{ problems.author }}</p>
             <textarea class="textarea" v-model="commentInfo.text" placeholder="add response"></textarea>
             <div style="text-align: right; margin-top: 5px;">
             <button class="button is-info" type="submit"> Submit </button>
