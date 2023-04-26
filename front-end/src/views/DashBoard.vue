@@ -122,7 +122,7 @@ export default {
       })
         .then(response => {
           
-          this.userEvents = response.data.sort((b, a) => {
+          this.userEvents = response.data.sort((a, b) => {
             return new Date(a.event.date) - new Date(b.event.date);
           });
 
