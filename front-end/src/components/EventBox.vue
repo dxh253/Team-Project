@@ -157,7 +157,8 @@ export default {
       <h3 class="is-size-4">{{ event.name }}</h3>
       <p class="is-size-6 has-text-grey">{{ event.date }}</p>
       <router-link :to="event.get_absolute_url" class="button is-dark mt-4">View details</router-link>
-      <span class="icon is-large is-clickable" @click="saveEvent(event.id)">
+      <!-- <span class="icon is-large is-clickable" @click="saveEvent(event.id)"> -->
+      <span class="icon is-large is-clickable" @click="saveEvent(event.id)" @keydown.enter="saveEvent(event.id)" tabindex="0">
         <span v-if="!isSaved">
           <font-awesome-icon class="right" :icon="['far', 'bookmark']" />
         </span>
