@@ -62,10 +62,14 @@ export default {
                 });
         },
         toggleBlur(event) {
-  if (event.type === 'click' || (event.type === 'keydown' && event.key === 'Enter')) {
-    this.isBlurred = !this.isBlurred;
-  }
-},
+            if (event.type === 'click' || (event.type === 'keydown' && event.key === 'Enter')) {
+                this.isBlurred = !this.isBlurred;
+            }
+        },
+        onFileSelected(event) {
+            this.get_image = event.target.files[0];
+        },
+
         handleSubmit() {
             // Decode the JWT token to get the user ID
             const token = localStorage.getItem("access");
