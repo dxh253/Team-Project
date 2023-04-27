@@ -46,12 +46,10 @@
 
 .post select {
   border: none;
-  outline: none;
   font-size: 16px;
   padding: 9px;
   width: 112px;
   background-color: #fff;
-  border-radius: 25px;
 }
 
 .bottom {

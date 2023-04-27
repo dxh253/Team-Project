@@ -292,7 +292,6 @@ export default {
     right: 30px;
     z-index: 99;
     border: none;
-    outline: none;
     background-color: hsl(171, 100%, 41%);
     color: white;
     cursor: pointer;
