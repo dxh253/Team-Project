@@ -62,10 +62,20 @@ export default {
     align-items: center;
 }
 
-.accessibility__button:hover,
-.accessibility__button:focus {
-    background-color: #eee;
-    outline: none;
+.accessibility__button:hover{
+    background-color: #3ec487;
+}
+
+:focus-visible{
+    outline: 3px solid red;
+}
+
+.button:focus-visible{
+    outline: 3px solid red;
+}
+
+.select:focus-visible{
+    outline: 3px solid red;
 }
 
 .large-text {
