@@ -82,6 +82,13 @@ export default {
     outline: 3px solid red;
 }
 
+.button.is-info:focus-visible{
+    outline: 3px solid red;
+}
+
+.button.is-link:focus-visible{
+    outline: 3px solid red;
+}
 
 .button.is-success:focus{
     outline: 3px solid red;
