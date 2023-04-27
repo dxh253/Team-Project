@@ -13,6 +13,9 @@ import PostDetail from "../views/PostDetail.vue"
 import HelpSection from "../views/HelpSection.vue"
 import ProblemsDetail from "../views/ProblemsDetail.vue"
 import ForgotPassword from "../views/ForgotPassword.vue"
+import HelpAccessibility from  "../views/HelpAccessibility.vue"
+import HelpFeatures from "../views/HelpFeatures.vue"
+
 
 
 const router = createRouter({
@@ -54,13 +57,11 @@ const router = createRouter({
             meta: {
                 requiresLogin: true
             }
-
         },
         {
             path: "/help/",
             name: "HelpSection",
             component: HelpSection,
-
         },
         {
             path: "/help/:problem_id/",
@@ -69,6 +70,16 @@ const router = createRouter({
             meta: {
                 requiresLogin: true
             }
+        },
+        {
+            path: "/help_accessibility/",
+            name: "HelpAccessibility",
+            component: HelpAccessibility,
+        },
+        {
+            path: "/help_features/",
+            name: "HelpFeatures",
+            component: HelpFeatures,
         },
         {
             path: '/posts/:id/edit',
@@ -93,7 +104,7 @@ const router = createRouter({
             meta: {
                 requiresLogin: true
             }
-          },
+        },
         {
             path: "/create/",
             name: "create",
@@ -155,7 +166,7 @@ const router = createRouter({
             meta:{
                 requiresLogin: true
             },
-          }
+        }
     ]
 });
 
@@ -164,34 +175,33 @@ router.beforeEach((to, from, next) => {
     const loggedIn = localStorage.getItem("access") !== null;
     const requiresLogin = to.matched.some((record) => record.meta.requiresLogin);
     const token = localStorage.getItem("access");
-  
+
     if (to.name === "Login" && to.query.sessionExpired) {
       // If already on login page with sessionExpired prop, don't redirect again
-      return next();
+        return next();
     }
-  
+
     if (loggedIn && token) {
-      const decodedToken = jwtDecode(token);
-      const currentTime = Date.now() / 1000;
-  
+        const decodedToken = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+
       // If token is expired, redirect to login page with sessionExpired prop set to true
-      if (currentTime > decodedToken.exp) {
+    if (currentTime > decodedToken.exp) {
         localStorage.removeItem("access");
         return next({ name: "Login", query: { sessionExpired: true } });
-      }
-  
+    }
+
       // If already logged in, redirect to dashboard
-      if (to.name === "Login") {
+    if (to.name === "Login") {
         return next({ name: "Dashboard" });
-      }
     }
-  
+    }
+
     if (requiresLogin && !loggedIn) {
-      next({ name: "Login" });
+        next({ name: "Login" });
     } else {
-      next();
+        next();
     }
-  });
-  
-  
+});
+
 export default router 

@@ -3,26 +3,46 @@
         <div class="comments">
             <div v-if="comments.length === 0">No comments yet.</div>
             <div v-else>
-                <div v-for="comment in comments" :key="comment.id" class="comment">
+                <div v-for="comment in parentComments" :key="comment.id" class="comment">
                     <div class="comment-header">
                         <h3 class="comment-owner">{{ comment.owner }}</h3>
                     </div>
                     <div class="comment-body">
                         <p>{{ comment.text }}</p>
                     </div>
-                    <button @click="showReplyForm(comment.id)" class="button is-small is-light">Reply</button>
+                    <button @click="showReplyForm(comment.id)" class="button is-small is-light">
+                        Reply
+                    </button>
                     <div v-if="visibleReplyForm === comment.id" class="reply-form">
                         <textarea class="textarea" v-model="replyText[comment.id]"
                             placeholder="Write your reply here"></textarea>
-                        <button @click="submitReply(comment.id)" class="button is-small is-primary">Submit</button>
+                        <button @click="submitReply(comment.id)" class="button is-small is-primary">
+                            Submit
+                        </button>
                     </div>
+                    <!-- This section shows the children comments only. -->
                     <div class="replies" v-if="comment.children && comment.children.length > 0">
                         <div v-for="reply in comment.children" :key="reply.id" class="reply">
                             <div class="reply-footer">
                                 <span class="reply-owner">{{ reply.owner }}</span>
                             </div>
                             <div class="reply-body">
-                                <p>{{ reply.text }}</p>
+                                <span v-for="word in reply.text.split(' ')" :key="word">
+                                    <span v-if="word[0] == '@'" style="color: #0000ee">{{ word }}&nbsp;
+                                    </span>
+                                    <span v-else>{{ word }}&nbsp;</span>
+                                </span>
+                                <span>&nbsp;</span>
+                            </div>
+                            <button @click="showReplyForm(reply.id)" class="button is-small is-light">
+                                Reply
+                            </button>
+                            <div v-if="visibleReplyForm === reply.id" class="reply-form">
+                                <textarea class="textarea" v-model="replyText[comment.id]"
+                                    placeholder="Write your reply here"></textarea>
+                                <button @click="submitReply(comment.id)" class="button is-small is-primary">
+                                    Submit
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -49,15 +69,25 @@ export default {
     },
     methods: {
         showReplyForm(commentId) {
-            this.visibleReplyForm = this.visibleReplyForm === commentId ? null : commentId;
+            this.visibleReplyForm =
+                this.visibleReplyForm === commentId ? null : commentId;
         },
         submitReply(commentId) {
-            this.$emit('add-reply', {
+            this.$emit("add-reply", {
                 parentCommentId: commentId,
                 text: this.replyText[commentId],
             });
-            this.replyText[commentId] = '';
+            this.replyText[commentId] = "";
             this.visibleReplyForm = null;
+        },
+        childComments() { },
+    },
+    computed: {
+        parentComments() {
+            let parents = this.comments.filter(
+                (comment) => comment.parent_comment == null
+            );
+            return parents;
         },
     },
 };
@@ -151,4 +181,5 @@ export default {
 
 .button.is-primary:hover {
     background-color: #363636;
-}</style>
+}
+</style>
