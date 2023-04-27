@@ -47,7 +47,13 @@
                 <span class="reply-owner">{{ reply.owner }}</span>
               </div>
               <div class="reply-body">
-                <p>{{ reply.text }}</p>
+                <span v-for="word in reply.text.split(' ')" :key="word">
+                  <span v-if="word[0] == '@'" style="color: #0000ee"
+                    >{{ word }}&nbsp;
+                  </span>
+                  <span v-else>{{ word }}&nbsp;</span>
+                </span>
+                <span>&nbsp;</span>
               </div>
               <button
                 @click="showReplyForm(reply.id)"
@@ -92,9 +98,6 @@ export default {
     };
   },
   methods: {
-    dbg() {
-      console.log(this.reply);
-    },
     showReplyForm(commentId) {
       this.visibleReplyForm =
         this.visibleReplyForm === commentId ? null : commentId;
