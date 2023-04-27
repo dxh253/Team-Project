@@ -100,6 +100,22 @@ export default {
     },
   },
   methods: {
+    getPostById(comments, id) {
+      let res = undefined;
+      function search(node, id) {
+        if (node.id == id) {
+          res = node;
+          return;
+        }
+        for (const child of node.children) {
+          search(child, id);
+        }
+      }
+      for (const comment of comments) {
+        search(comment, id);
+      }
+      return res;
+    },
     async fetchPost() {
       const token = localStorage.getItem("access");
       const post_slug = this.postSlug;
@@ -143,12 +159,12 @@ export default {
       }
     },
 
-    async addComment() {
+    addComment() {
       const token = localStorage.getItem("access");
       const post_slug = this.postSlug;
 
-      try {
-        const response = await getAPI.post(
+      getAPI
+        .post(
           `/api/v1/posts/${post_slug}/comments/`,
           {
             text: this.newCommentText,
@@ -159,21 +175,24 @@ export default {
               Authorization: `Bearer ${token}`,
             },
           }
-        );
-        console.log("Comment has been added");
-        this.post.comments.push(response.data);
-        this.newCommentText = "";
-      } catch (error) {
-        console.log(error);
-      }
+        )
+        .then((response) => {
+          console.log("Comment has been added");
+          this.post.comments.push(response.data);
+          this.newCommentText = "";
+          this.fetchPost();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     // ...
-    async addReply({ parentCommentId, text }) {
+    addReply({ parentCommentId, text }) {
       const token = localStorage.getItem("access");
       const post_slug = this.postSlug;
 
-      try {
-        const response = await getAPI.post(
+      getAPI
+        .post(
           `/api/v1/posts/${post_slug}/comments/`,
           {
             text: text,
@@ -185,19 +204,14 @@ export default {
               Authorization: `Bearer ${token}`,
             },
           }
-        );
-        console.log("Reply has been added");
-
-        // Find the parent comment and add the reply to its children
-        const parentComment = this.post.comments.find(
-          (comment) => comment.id === parentCommentId
-        );
-        if (parentComment) {
+        )
+        .then((response) => {
+          const parentComment = this.getPostById(
+            this.post.comments,
+            parentCommentId
+          );
           parentComment.children.push(response.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+        });
     },
   },
   unmounted() {
