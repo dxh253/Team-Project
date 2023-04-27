@@ -100,22 +100,6 @@ export default {
     },
   },
   methods: {
-    getPostById(comments, id) {
-      let res = undefined;
-      function search(node, id) {
-        if (node.id == id) {
-          res = node;
-          return;
-        }
-        for (const child of node.children) {
-          search(child, id);
-        }
-      }
-      for (const comment of comments) {
-        search(comment, id);
-      }
-      return res;
-    },
     async fetchPost() {
       const token = localStorage.getItem("access");
       const post_slug = this.postSlug;
@@ -206,9 +190,8 @@ export default {
           }
         )
         .then((response) => {
-          const parentComment = this.getPostById(
-            this.post.comments,
-            parentCommentId
+          const parentComment = this.post.comments.find(
+            (comment) => comment.id === parentCommentId
           );
           parentComment.children.push(response.data);
         });
