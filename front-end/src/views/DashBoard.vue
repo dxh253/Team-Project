@@ -747,12 +747,12 @@ export default {
   <div class="container">
     <section class="hero is-medium is-dark mb-6 is-fullwidth" style="padding: 0 20px;">
       <div class="has-text-centered">
-        <h1 class="title">Welcome to BrumConnect</h1>
+        <h1 class="title" style="margin-top:90px;">Welcome to BrumConnect</h1>
         <p class="subtitle">Connect with other students in The University of Birmingham, get involved.</p>
       </div>
       <div class="columns is-multiline is-mobile">
         <div class="column is-full-mobile">
-          <button class="button is-primary event-card is-small is-fullwidth" style="height: 150px;">
+          <button class="button is-primary event-card is-small is-fullwidth" style="height: 150px;" tabindex="-1">
             <router-link v-a11y-link="'Events'" to="/events"
               class="card-content has-text-white is-size-5 has-text-weight-bold has-text-centered is-flex is-flex-direction-column is-align-items-center is-justify-content-center"
               style="width: 100%;">
@@ -766,7 +766,7 @@ export default {
           </button>
         </div>
         <div class="column is-full-mobile">
-          <button class="button is-primary event-card is-small is-fullwidth" style="height: 150px;">
+          <button class="button is-primary event-card is-small is-fullwidth" style="height: 150px;" tabindex="-1">
             <router-link v-a11y-link="'Discussions'" to="/posts"
               class="card-content has-text-white is-size-5 has-text-weight-bold has-text-centered is-flex is-flex-direction-column is-align-items-center is-justify-content-center"
               style="width: 100%;">
@@ -780,7 +780,7 @@ export default {
           </button>
         </div>
         <div class="column is-full-mobile">
-          <button class="button is-primary event-card is-small is-fullwidth" style="height: 150px;">
+          <button class="button is-primary event-card is-small is-fullwidth" style="height: 150px;" tabindex="-1">
             <router-link v-a11y-link="'Help'" to="/help"
               class="card-content has-text-white is-size-5 has-text-weight-bold has-text-centered is-flex is-flex-direction-column is-align-items-center is-justify-content-center"
               style="width: 100%;">
@@ -948,6 +948,10 @@ export default {
 
 .box ul li:last-child {
   margin-bottom: 0;
+}
+
+.columns{
+  margin-top: 0rem;
 }
 
 

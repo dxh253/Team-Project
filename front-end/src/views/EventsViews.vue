@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <section class="hero is-medium is-dark mb-6 is-fullwidth">
+  <div class="home">
+    <section class="hero is-medium is-dark mb-6">
       <div class="hero-body has-text-centered">
         <h1 class="title">Looking For Something To Do?</h1>
         <p class="subtitle">Here are some upcoming events!</p>
@@ -30,7 +30,7 @@
       </div>
       <div class="column is-1">
         <router-link to="/events_form">
-          <button class="button is-primary is-light">Add Event</button>
+          <button class="button is-primary is-light" tabindex="-1">Add Event</button>
         </router-link>
       </div>
     </div>
@@ -40,6 +40,16 @@
     </div>
   </div>
 </template>
+
+<style scoped>
+.field:not(:last-child) {
+    margin-bottom:0;
+}
+
+.select:not(.is-multiple) {
+    height:100px;
+}
+</style>
 
 <script>
 import { getAPI } from "@/plugins/axios";

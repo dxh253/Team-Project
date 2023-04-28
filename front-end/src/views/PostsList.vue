@@ -164,7 +164,7 @@ export default {
                 <h2 class="title is-4" style="margin-bottom: 1rem; display: flex; align-items: center;">
                     <span style="flex-grow: 1;">Posts</span>
                     <router-link to="/create">
-                        <button class="button is-primary">New Post</button>
+                        <button class="button is-primary" tabindex="-1">New Post</button>
                     </router-link>
                 </h2>
                 <div class="searchbar">
