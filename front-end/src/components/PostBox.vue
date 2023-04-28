@@ -15,11 +15,10 @@
     <div class="card-content">
       <div class="content">
         <p>{{ post.description }}</p>
-        <div v-if="post.get_image" class="has-text-centered">
-          <figure class="image is-16by9">
-            <a :href="post.get_image" target="_blank"><img :src="post.get_image"
-                :style="{ filter: blur ? 'blur(100px)' : 'none' }" @click="enlargeImage" /></a>
-          </figure>
+        <div v-if="post.get_image">
+                <img :src="post.get_image"
+                    :style="{ filter: blur ? 'blur(100px)' : 'none', maxWidth: '30%', maxHeight: '30%' }"
+                    @click="enlargeImage" />
         </div>
       </div>
       <div class="columns is-mobile is-gapless">
