@@ -1,12 +1,12 @@
 <template>
   <div class="container">
     <div class="column is-one-quarter-desktop is-hidden-mobile">
-              <router-link to="/posts">
-                  <button>
-                      <i class="fas fa-arrow-left"></i>
-                  </button>
-              </router-link>
-          </div>
+      <router-link to="/posts">
+        <button>
+          <i class="fas fa-arrow-left"></i>
+        </button>
+      </router-link>
+    </div>
     <div v-if="loading">
       <div class="notification is-primary">
         Loading...
@@ -46,7 +46,8 @@
           <hr>
           <h2 class="subtitle">Comments</h2>
           <div class="comments">
-            <form class="mt-3" @submit.prevent="addComment">
+            <button class="button is-primary" @click="showCommentForm = !showCommentForm">{{ showCommentForm ? 'Cancel' : 'Add Comment' }}</button>
+            <form class="mt-3" v-if="showCommentForm" @submit.prevent="addComment">
               <div class="field">
                 <label class="label">Add Comment</label>
                 <div class="control">
@@ -79,6 +80,8 @@ export default {
     return {
       post: undefined,
       loading: false,
+      newCommentText: '',
+      showCommentForm: false,
       newCommentText: '',
     };
   },
