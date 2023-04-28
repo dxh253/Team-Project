@@ -17,7 +17,7 @@ prerequisities:
   stage: check
   only:
     - master
-    - all-features-small-fixes
+    - all-features
 
   script:
     - pip install -r requirements.txt
@@ -29,7 +29,7 @@ django-test:
   stage: test
   only:
     - master
-    - all-features-small-fixes
+    - all-features
 
   script:
     - pip install -r requirements.txt
@@ -40,7 +40,7 @@ publish-docker:
   stage: publish
   only:
     - master
-    - all-features-small-fixes
+    - all-features
   
   services:
     - docker:dind
@@ -66,7 +66,7 @@ deploy-git:
   stage: deploy
   only:
     - master
-    - all-features-small-fixes
+    - all-features
     
   when: on_success
   before_script:
