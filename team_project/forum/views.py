@@ -236,6 +236,7 @@ class CommentDelete(generics.DestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
 
+
 class CommentReply(generics.CreateAPIView):
     serializer_class = CommentSerializer
 
