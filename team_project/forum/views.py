@@ -178,7 +178,7 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         # This view should return a single comment for the post as determined by the post_pk and pk portions of the URL.
-        post_pk = self.kwargs["post_pk"]
+        post_pk = self.kwargs["pk"]
         comment_pk = self.kwargs["pk"]
         return Comment.objects.filter(post=post_pk, pk=comment_pk)
 
@@ -206,33 +206,6 @@ class CommentVote(generics.UpdateAPIView):
         comment.save()
         serializer = self.get_serializer(comment)
         return Response(serializer.data)
-
-
-# class CommentDelete(generics.DestroyAPIView):
-#     serializer_class = CommentSerializer
-#     lookup_field = "pk"
-
-#     def get_queryset(self):
-#         post_pk = self.kwargs["post_pk"]
-#         comment_pk = self.kwargs["pk"]
-#         # comment_pk = self.kwargs["comment_pk"]
-#         reply_pk = self.kwargs.get("pk")
-
-#         print("post_pk:", post_pk)
-#         print("comment_pk:", comment_pk)
-
-#         if reply_pk is not None:
-#             return Reply.objects.filter(comment_id=comment_pk, pk=reply_pk)
-#         else:
-#             return Comment.objects.filter(post_id=post_pk, pk=comment_pk)
-
-#     def delete(self, request, *args, **kwargs):
-#         comment = self.get_object()
-
-#         if comment.user != request.user:
-#             raise ValidationError("You cannot delete someone else's comment.")
-
-#         return super().delete(request, *args, **kwargs)
 
 
 class CommentDelete(generics.DestroyAPIView):
@@ -276,6 +249,28 @@ class CommentReply(generics.CreateAPIView):
     def perform_create(self, serializer):
         parent_comment = generics.get_object_or_404(Comment, pk=self.kwargs["pk"])
         serializer.save(post=parent_comment.post, parent=parent_comment)
+
+
+# class CommentReplyList(generics.ListAPIView):
+#     serializer_class = CommentReplySerializer
+#     authentication_classes = [JWTAuthentication]
+#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+#     def get_queryset(self):
+#         comment_id = self.kwargs['comment_id']
+#         return Reply.objects.filter(comment_id=comment_id)
+
+class CommentReplyList(generics.ListAPIView):
+    serializer_class = CommentReplySerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        comment_id = self.kwargs['comment_id']
+        # add this line to print the comment_id
+        print('comment_id:', comment_id)
+        return Reply.objects.filter(comment_id=comment_id)
+
 
 
 class CommentReplyCreateView(generics.CreateAPIView):
