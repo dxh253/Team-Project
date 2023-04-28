@@ -97,7 +97,13 @@ export default {
           this.$router.push({ name: "EventsView" });
         })
         .catch((error) => {
-          console.log(error.response.data);
+          const data = error.response.data;
+          // Terrible way to do it, but oh well.
+          if (
+            data.username[0] === "A user with that username already exists."
+          ) {
+            alert("Username taken");
+          }
           this.incorrectAuth = true;
         });
     },
