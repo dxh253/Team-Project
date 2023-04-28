@@ -23,14 +23,30 @@
           placeholder="Search posts"
         />
       </div>
-      <div class="select field column is-3">
-        <select v-model="choice">
-          <option value="0">Show all</option>
-          <option value="1">Study Resources only</option>
-        </select>
-      </div>
+      <div class="columns">
+        <div class="column">
+          <button @click="toggleView" class="button is-primary">
+            {{ viewMode ? 'List View' : 'Gallery View' }}
+          </button>
+        </div>
+        <div class="column is-3">
+          <div class="select">
+            <select v-model="choice">
+              <option value="0">Show all</option>
+              <option value="1">Study Resources only</option>
+            </select>
+          </div>
+        </div>
+    </div>
+
       <div v-if="filteredPosts.length > 0">
-        <div v-for="post in filteredPosts" :key="post.id">
+        <div v-if="viewMode" class="columns is-multiline">
+          <div v-for="post in filteredPosts" :key="post.id" class="column is-one-third">
+           <post-box :post="post" @postDeleted="removePostFromList" @vote-updated="updatePostVote" />
+          </div>
+        </div>
+        <div v-else>
+          <div v-for="post in filteredPosts" :key="post.id">
           <div class="box">
             <div class="columns is-vcentered">
               <div class="column">
@@ -43,6 +59,8 @@
             </div>
           </div>
         </div>
+        </div>
+        
         <button
           @click="scrollToTop"
           class="button is-info is-hidden-desktop is-fullwidth"
@@ -69,6 +87,7 @@ export default {
   data() {
     return {
       allposts: [],
+      viewMode: false,
       choice: "0",
       searchTerm: "",
     };
@@ -94,6 +113,9 @@ export default {
     },
   },
   methods: {
+    toggleView(){
+      this.viewMode = !this.viewMode;
+    },
     scrollToTop() {
       // Scroll to top with smooth behavior
       window.scrollTo({ top: 0, behavior: "instant" });
