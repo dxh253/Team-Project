@@ -40,7 +40,7 @@
                             <button @click="showReplyForm(reply.id)" class="button is-small is-light">
                                 Reply
                             </button>
-                            <button @click="deleteComment(comment.id)" class="button is-small is-danger">
+                            <button @click="deleteReply(reply.id)" class="button is-small is-danger">
                                 Delete
                             </button>
                             <div v-if="visibleReplyForm === reply.id" class="reply-form">
@@ -89,6 +89,9 @@ export default {
         childComments() { },
         deleteComment(commentId) {
             this.$emit("delete-comment", commentId);
+        },
+        deleteReply(replyId) {
+            this.$emit("delete-comment", replyId);
         },
     },
     computed: {

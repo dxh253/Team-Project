@@ -188,16 +188,16 @@ export default {
       const token = localStorage.getItem("access");
       const post_slug = this.postSlug;
 
-      // delete a comment
-      getAPI.delete(`/api/v1/posts/${post_slug}/comments/${commentId}/delete/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-    }
-  },
-  unmounted() {
-    localStorage.removeItem("post_slug");
+      getAPI
+        .delete(`/api/v1/posts/${post_slug}/comments/${commentId}/delete/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+    },
+    unmounted() {
+      localStorage.removeItem("post_slug");
+    },
   },
 };
 </script>
