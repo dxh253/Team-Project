@@ -159,15 +159,41 @@ export default {
         });
     },
     // ...
+    // addReply({ parentCommentId, text }) {
+    //   const token = localStorage.getItem("access");
+    //   const post_slug = this.postSlug;
+
+    //   getAPI
+    //     .post(
+    //       `/api/v1/posts/${post_slug}/comments/`,
+    //       {
+    //         text: text,
+    //         post_slug: post_slug,
+    //         parent_comment: parentCommentId,
+    //       },
+    //       {
+    //         headers: {
+    //           Authorization: `Bearer ${token}`,
+    //         },
+    //       }
+    //     )
+    //     .then((response) => {
+    //       const parentComment = this.post.comments.find(
+    //         (comment) => comment.id === parentCommentId
+    //       );
+    //       parentComment.children.push(response.data);
+    //     });
+    // },
     addReply({ parentCommentId, text }) {
       const token = localStorage.getItem("access");
       const post_slug = this.postSlug;
 
       getAPI
         .post(
-          `/api/v1/posts/${post_slug}/comments/`,
+          // api / v1 / comments / 9 / replies / create /
+          `/api/v1/comments/${parentCommentId}/replies/create/`,
           {
-            text: text,
+            body: text,
             post_slug: post_slug,
             parent_comment: parentCommentId,
           },
