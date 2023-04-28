@@ -51,7 +51,7 @@
         <router-link v-if="isPostCreator" :to="{ name: 'edit-post', params: { id: post.id } }">
           <span class="icon"><i class="fas fa-edit"></i></span>
         </router-link>
-        <span v-if="isPostCreator" class="icon" @click="deletePost"><i class="fas fa-trash"></i></span>
+        <span v-if="isPostCreator" class="icon is-danger" @click="confirmDeletion"><i class="fas fa-trash"></i></span>
       </div>
     </div>
   </div>
@@ -159,6 +159,12 @@ export default {
       // If the user has previously downvoted the post, then undo the downvote.
       let n = this.userVote == -1 ? 0 : -1;
       this.changePostVotesBy(n);
+    },
+
+    confirmDeletion(){
+      if (confirm("Are you sure you want to delete this post?")) {
+        this.deletePost();
+      }
     },
     deletePost() {
       const token = localStorage.getItem("access");
