@@ -271,6 +271,7 @@ class CommentReplyList(generics.ListAPIView):
         print('comment_id:', comment_id)
         return Reply.objects.filter(comment_id=comment_id)
 
+    
 
 
 class CommentReplyCreateView(generics.CreateAPIView):

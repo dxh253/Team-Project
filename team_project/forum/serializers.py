@@ -167,7 +167,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class CommentReplySerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='user.username')
     class Meta:
         model = Reply
-        fields = ['id', 'body', 'created_at']
+        fields = ['id', 'body', 'created_at', 'user', 'owner']
         read_only_fields = ['id', 'created_at']

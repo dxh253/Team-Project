@@ -218,6 +218,21 @@ class Comment(models.Model):
     def can_be_deleted(self, user):
         return self.is_owner(user) or self.post.is_owner(user)
 
+class Reply(models.Model):
+    comment = models.ForeignKey('Comment', on_delete=models.CASCADE, related_name='comment_replies')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    body = models.TextField()
+    parent_reply = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    upvotes = models.IntegerField(default=0)
+    downvotes = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.body
 class CommentVote(models.Model):
     UPVOTE = 1
     DOWNVOTE = -1
@@ -235,21 +250,6 @@ class CommentVote(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.comment.id} - {self.vote}"
 
-class Reply(models.Model):
-    comment = models.ForeignKey('Comment', on_delete=models.CASCADE, related_name='comment_replies')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    body = models.TextField()
-    parent_reply = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    upvotes = models.IntegerField(default=0)
-    downvotes = models.IntegerField(default=0)
-
-    class Meta:
-        ordering = ['-created_at']
-
-    def __str__(self):
-        return self.body
 
 class ReplyVote(models.Model):
     reply = models.ForeignKey(Reply, on_delete=models.CASCADE, related_name='votes')
