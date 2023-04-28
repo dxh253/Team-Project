@@ -2,8 +2,8 @@
     <div class="container is-max-desktop">
         <div class="box">
             <h1 class="title is-1">Features</h1>
-            <p style="text-align: center;"> BrumHub is made for students of the University of Birminghan to get informed about and involved with university events, both academic and extracurricular.</p>
-            <p style="text-align: center;">A description of the features available in BrumHub. It will provide a simple description regarding the various features available.</p>
+            <p style="text-align: center;"> BrumConnect is made for students of the University of Birminghan to get informed about and involved with university events, both academic and extracurricular.</p>
+            <p style="text-align: center;">A description of the features available in BrumConnect. It will provide a simple description regarding the various features available.</p>
         </div>
         <div class="box">
             <h2 class="title is-2">Homepage</h2>
@@ -35,9 +35,9 @@
         </div>
         <div class="box">
             <h2 class="title is-2">Help</h2>
-            <p>In the help section, users can search problems about the BrumHub or any other problem they may have regarding the University.</p>
+            <p>In the help section, users can search problems about the BrumConnect or any other problem they may have regarding the University.</p>
             <p style="margin-top: 2%;">
-            There are 3 buttons in the help section which redirect the user to different articles which explains about the features and accessibility of the BrumHub, as well as our privacy policy.
+            There are 3 buttons in the help section which redirect the user to different articles which explains about the features and accessibility of the BrumConnect, as well as our privacy policy.
             </p>
             <p style="margin-top: 2%;">
             If you have any other question, please do not hesitate to post your problems in the help section.

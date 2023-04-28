@@ -23,23 +23,18 @@
         <div v-show="showing">
             <div class="columns is-mobile is-centered is-multiline has-text-centered" style="margin-bottom: 2%;">
                 <div class="column">
-                    <RouterLink to="/help_features/">
-                        <button class="button is-large is-link is-light is-outlined"
-                            style="width: 250px; height: 125px; margin: 3px 25px;">
+                    <RouterLink to="/help_features/" class="button is-large is-link is-light is-outlined" style="width: 250px; height: 125px;">
                             Features
-                        </button>
                     </RouterLink>
-                    <RouterLink to="/help_accessibility/">
-                        <button class="button is-large is-link is-light is-outlined"
-                            style="width: 250px; height: 125px; margin: 3px 25px;">
+                </div>
+                <div class="column">
+                    <RouterLink to="/help_accessibility/" class="button is-large is-link is-light is-outlined" style="width: 250px; height: 125px;">
                             Accessibility
-                        </button>
                     </RouterLink>
-                    <RouterLink to="/privacy_policy/">
-                        <button class="button is-large is-link is-light is-outlined"
-                            style="width: 250px; height: 125px; margin: 3px 25px;">
+                </div>
+                <div class="column">
+                    <RouterLink to="/privacy_policy/" class="button is-large is-link is-light is-outlined" style="width: 250px; height: 125px;">
                             Privacy Policy
-                        </button>
                     </RouterLink>
                 </div>
             </div>
@@ -74,7 +69,7 @@
                 <div class="column is-10">
                     <h2 class="title is-3"> {{ listTitle }} </h2>
                 </div>
-                <div class="column is-8 is-offset 8">
+                <div class="column is-2 is-offset 8">
                     <button class="button is-underlined is-link is-light is-outlined" @click="filterProblems"> My problems
                     </button>
                 </div>
@@ -90,7 +85,7 @@
                 <div class="column is-10">
                     <h2 class="title is-3">You searched for problems containing "{{ searchValue }}"</h2>
                 </div>
-                <div class="column is-8 is-offset">
+                <div class="column is-2 is-offset">
                     <button type="button" class="button is-underlined is-link is-light" @click="filterProblems"> My problems
                     </button>
                 </div>
@@ -144,9 +139,15 @@ export default {
             const ownerId = decodedToken.user_id;
 
             const formData = new FormData();
-            formData.append('title', this.problemInfo.title);
-            formData.append('description', this.problemInfo.description);
-            formData.append('owner', parseInt(ownerId));
+            if  (this.problemInfo.length < 100){
+                formData.append('title', this.problemInfo.title);
+                formData.append('description', this.problemInfo.description);
+                formData.append('owner', parseInt(ownerId));
+            }
+            else {
+                alert("gg title limit exceeded 100 words")
+                return
+            }
             getAPI
                 .post('/api/v1/help/', formData, {
                     headers: {
@@ -166,6 +167,9 @@ export default {
 
         filterProblems() {
             if (this.filterByOwner) {
+                // filterByOwner set false by default
+                // starts at else part
+                // when user clicks button again - filterByOwner is true is will run
                 this.displayedProblems = this.allProblems;
                 this.filterByOwner = false;
                 this.listTitle = 'Here is a list of problems submitted by other users';

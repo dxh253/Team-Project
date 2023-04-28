@@ -63,9 +63,4 @@ export default {
 .box:hover {
     font-weight: bold;
 }
-
-.deleting:hover {
-    color: darkred;
-    cursor: pointer;
-}
 </style>
