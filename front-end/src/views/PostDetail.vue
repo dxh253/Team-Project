@@ -15,7 +15,11 @@
     <div v-else-if="post" class="box">
       <article class="media">
         <div class="media-content">
-          <h1 class="title">{{ post.title }}</h1>
+          <div class="level">
+            <div class="level-left">
+              <h1 class="title">{{ post.title }}</h1>
+            </div>
+          </div>
           <p class="subtitle">{{ post.description }}</p>
           <figure class="image">
             <a :href="post.get_image" target="_blank">
@@ -24,13 +28,14 @@
                 alt="Post image">
             </a>
           </figure>
+          <hr>
           <div class="level">
             <div class="level-left">
               <p class="level-item">
                 <span class="icon is-small">
                   <i class="fas fa-user"></i>
                 </span>
-                {{ post.author }}
+                {{ post.username }}
               </p>
               <p class="level-item">
                 <span class="icon is-small">
@@ -39,14 +44,17 @@
                 {{ post.time_since_post }}
               </p>
             </div>
-            <div class="level-right">
-              <span class="tag is-info">{{ post.category }}</span>
-            </div>
           </div>
           <hr>
-          <h2 class="subtitle">Comments</h2>
+          <h2 class="subtitle level">
+            <div class="level-left">
+              Comments
+            </div>
+            <div class="level-right">
+              <button class="button is-primary" @click="showCommentForm = !showCommentForm">{{ showCommentForm ? 'Cancel' : 'Add Comment' }}</button>
+            </div>
+          </h2>
           <div class="comments">
-            <button class="button is-primary" @click="showCommentForm = !showCommentForm">{{ showCommentForm ? 'Cancel' : 'Add Comment' }}</button>
             <form class="mt-3" v-if="showCommentForm" @submit.prevent="addComment">
               <div class="field">
                 <label class="label">Add Comment</label>
@@ -65,6 +73,7 @@
     </div>
   </div>
 </template>
+
 
 
 <script>
