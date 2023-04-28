@@ -23,6 +23,12 @@
           placeholder="Search posts"
         />
       </div>
+      <div class="select field column is-3">
+        <select v-model="choice">
+          <option value="0">Show all</option>
+          <option value="1">Study Resources only</option>
+        </select>
+      </div>
       <div v-if="filteredPosts.length > 0">
         <div v-for="post in filteredPosts" :key="post.id">
           <div class="box">
@@ -63,12 +69,17 @@ export default {
   data() {
     return {
       allposts: [],
+      choice: "0",
       searchTerm: "",
     };
   },
   computed: {
     filteredPosts() {
-      return this.allposts.filter((post) => {
+      let filteredPosts = this.allposts;
+      if (this.choice == "1")
+        filteredPosts = this.allposts.filter((post) => post.category_name === "resources");
+      if(this.searchTerm){
+        filteredPosts = this.allposts.filter((post) => {
         let searchTerm = this.searchTerm.toLowerCase();
         let textToMatch = post.title.toLowerCase();
         let charIndex = 0;
@@ -77,6 +88,9 @@ export default {
         }
         return charIndex == searchTerm.length;
       });
+      }
+      
+      return filteredPosts;
     },
   },
   methods: {
