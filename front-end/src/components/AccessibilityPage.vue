@@ -8,10 +8,6 @@
             <span class="sr-only">Toggle Contrast</span>
             <i class="fas fa-adjust"></i>
         </button>
-        <button class="accessibility__button" @click="toggleFocus">
-            <span class="sr-only">Toggle Focus</span>
-            <i class="fas fa-crosshairs"></i>
-        </button>
     </div>
 </template>
 
@@ -33,10 +29,6 @@ export default {
         toggleContrast() {
             this.contrast = !this.contrast;
             document.body.classList.toggle('high-contrast');
-        },
-        toggleFocus() {
-            this.focus = !this.focus;
-            document.body.classList.toggle('no-focus');
         },
     },
 };
@@ -82,6 +74,10 @@ export default {
     outline: 3px solid red;
 }
 
+.button.is-light:focus-visible{
+    outline: 3px solid red;
+}
+
 .button.is-info:focus-visible{
     outline: 3px solid red;
 }
@@ -90,11 +86,11 @@ export default {
     outline: 3px solid red;
 }
 
-.button.is-success:focus{
+.button.is-success:focus-visible{
     outline: 3px solid red;
 }
 
-.button.is-primary:focus{
+.button.is-primary:focus-visible{
     outline: 3px solid red;
 }
 
@@ -215,7 +211,4 @@ export default {
 .high-contrast i{
     color: white !important;
 }
-
-.no-focus {
-    outline: none;
-}</style>
+</style>
