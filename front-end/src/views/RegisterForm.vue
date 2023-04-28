@@ -100,9 +100,13 @@ export default {
           const data = error.response.data;
           // Terrible way to do it, but oh well.
           if (
+            data.username &&
             data.username[0] === "A user with that username already exists."
           ) {
             alert("Username taken");
+          }
+          if (data[0] === "This email is already in use.") {
+            alert("Email taken");
           }
           this.incorrectAuth = true;
         });
