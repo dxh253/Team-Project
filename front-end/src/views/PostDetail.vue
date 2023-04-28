@@ -51,7 +51,7 @@
               </div>
             </form>
           </div>
-          <CommentBox :comments="post.comments" @add-comment="addComment" @add-reply="addReply" />
+          <CommentBox :comments="post.comments" @add-comment="addComment" @add-reply="addReply" @delete-comment="deleteComment"/>
         </div>
       </article>
     </div>
@@ -184,6 +184,16 @@ export default {
           parentComment.children.push(response.data);
         });
     },
+    deleteComment(commentId) {
+      const token = localStorage.getItem("access");
+
+      // delete a comment
+      getAPI.delete(`/api/v1/posts/5/comments/${commentId}/delete/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    }
   },
   unmounted() {
     localStorage.removeItem("post_slug");

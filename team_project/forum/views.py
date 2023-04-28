@@ -214,18 +214,23 @@ class CommentDelete(generics.DestroyAPIView):
 
     def get_queryset(self):
         post_pk = self.kwargs["post_pk"]
-        comment_pk = self.kwargs["comment_pk"]
-        reply_pk = self.kwargs.get("pk")
+        comment_pk = self.kwargs["pk"]
+        reply_pk = self.kwargs.get("reply_pk")
 
         if reply_pk is not None:
             return Reply.objects.filter(comment_id=comment_pk, pk=reply_pk)
         else:
             return Comment.objects.filter(post_id=post_pk, pk=comment_pk)
 
+    def get_object(self):
+        queryset = self.get_queryset()
+        obj = generics.get_object_or_404(queryset, author=self.request.user)
+        return obj
+
     def delete(self, request, *args, **kwargs):
         comment = self.get_object()
 
-        if comment.user != request.user:
+        if comment.author != request.user:
             raise ValidationError("You cannot delete someone else's comment.")
 
         return super().delete(request, *args, **kwargs)
