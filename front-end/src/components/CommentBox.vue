@@ -91,7 +91,7 @@ export default {
             this.$emit("delete-comment", commentId);
         },
         deleteReply(replyId) {
-            this.$emit("delete-comment", replyId);
+            this.$emit("delete-reply", replyId);
         },
     },
     computed: {

@@ -51,7 +51,7 @@
               </div>
             </form>
           </div>
-          <CommentBox :comments="post.comments" @add-comment="addComment" @add-reply="addReply" @delete-comment="deleteComment"/>
+          <CommentBox :comments="post.comments" @add-comment="addComment" @add-reply="addReply" @delete-comment="deleteComment" @delete-reply="deleteReply"/>
         </div>
       </article>
     </div>
@@ -194,6 +194,29 @@ export default {
             Authorization: `Bearer ${token}`,
           },
         })
+        .then(() => {
+          const index = this.post.comments.findIndex(comment => comment.id === commentId);
+          this.post.comments.splice(index, 1);
+        });
+    },
+    deleteReply(replyId) {
+      const token = localStorage.getItem("access");
+      const post_slug = this.postSlug;
+
+      getAPI
+        .delete(`/api/v1/posts/${post_slug}/comments/${replyId}/delete/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => {
+          // Find the parent comment of the reply
+          const parentComment = this.post.comments.find(comment => comment.children.some(reply => reply.id === replyId));
+
+          // Remove the reply from the parent comment's children array
+          const index = parentComment.children.findIndex(reply => reply.id === replyId);
+          parentComment.children.splice(index, 1);
+        });
     },
     unmounted() {
       localStorage.removeItem("post_slug");
