@@ -745,7 +745,7 @@ export default {
 
 <template>
   <div class="container">
-    <section class="hero is-medium is-dark mb-6 is-fullwidth" style="padding: 0 20px;">
+    <section class="hero is-medium is-dark mb-6 is-fullwidth" style="padding: 0 20px; margin-bottom: 10px;">
       <div class="has-text-centered">
         <h1 class="title">Welcome to BrumConnect</h1>
         <p class="subtitle">Connect with other students in The University of Birmingham, get involved.</p>

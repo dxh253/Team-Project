@@ -1,224 +1,210 @@
 <template>
-  <div class="container mt-6 has-text-centered">
-    <div class="columns is-multiline">
-      <div class="column is-4">
-        <div class="image-wrapper">
-          <figure class="image is-cropped is-256x256">
-            <img :src="events.get_image" alt="" style="object-fit: cover; width: 100%; height: 100%" />
+  <div class="container">
+    <div v-if="loading">
+      <div class="notification is-primary">Loading...</div>
+    </div>
+    <div v-else-if="post" class="box">
+      <article class="media">
+        <div class="media-content">
+          <h1 class="title">{{ post.title }}</h1>
+          <p class="subtitle">{{ post.description }}</p>
+          <figure class="image">
+            <a :href="post.get_image" target="_blank">
+              <img :src="post.get_image" :style="{
+                  filter: blur ? 'blur(10px)' : 'none',
+                  'max-height': '300px',
+                  'max-width': '300px',
+                }" alt="Post image" />
+            </a>
           </figure>
-        </div>
-      </div>
-      <div class="column is-8">
-        <div class="box">
-          <h1 class="title">{{ events.name }}</h1>
-          <p>{{ eventIdToName() }}</p>
-          <div class="event-details">
-            <div class="event-detail">
-              <h2 class="subtitle is-4">Venue</h2>
-              <p>{{ events.venue }}</p>
-            </div>
-            <div class="event-detail">
-              <h2 class="subtitle is-4">Date</h2>
-              <p>{{ events.date }}</p>
-            </div>
-          </div>
-          <hr />
-          <div class="description">
-            <h2 class="subtitle is-4">Description</h2>
-            <p>{{ events.description }}</p>
-          </div>
-          <hr />
-
-          <div v-if="isOwner" class="dropdown is-hoverable">
-            <div class="dropdown-trigger">
-              <button class="button is-small" aria-haspopup="true" aria-controls="dropdown-menu">
-                <span>Options</span>
+          <div class="level">
+            <div class="level-left">
+              <p class="level-item">
                 <span class="icon is-small">
-                  <i class="fas fa-angle-down" aria-hidden="true"></i>
+                  <i class="fas fa-user"></i>
                 </span>
-              </button>
+                {{ post.author }}
+              </p>
+              <p class="level-item">
+                <span class="icon is-small">
+                  <i class="fas fa-clock"></i>
+                </span>
+                {{ post.time_since_post }}
+              </p>
             </div>
-            <div class="dropdown-menu" id="dropdown-menu" role="menu">
-              <div class="dropdown-content">
-                <a href="#" class="dropdown-item" @click="showEditForm">
-                  <span class="icon">
-                    <i class="fas fa-edit"></i>
-                  </span>
-                  <span>Edit Event</span>
-                </a>
-                <a href="#" class="dropdown-item" @click="deleteEvents">
-                  <span class="icon">
-                    <i class="fas fa-trash-alt"></i>
-                  </span>
-                  <span>Delete Event</span>
-                </a>
-              </div>
+            <div class="level-right">
+              <span class="tag is-info">{{ post.category }}</span>
             </div>
           </div>
-          <div v-if="showForm" class="container mt-6 has-text-centered">
-            <div class="columns is-centered">
-              <div class="column is-half">
-                <form>
-                  <div class="field">
-                    <label class="label">Name</label>
-                    <div class="control">
-                      <input class="input" type="text" v-model="updatedName" />
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="label">Venue</label>
-                    <div class="control">
-                      <input class="input" type="text" v-model="updatedVenue" />
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="label">Description</label>
-                    <div class="control">
-                      <textarea class="textarea" v-model="updatedDescription"></textarea>
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="label">Date</label>
-                    <div class="control">
-                      <input class="input" type="date" v-model="updatedDate" />
-                    </div>
-                  </div>
-                  <div class="field">
-                    <div class="control">
-                      <button class="button is-primary" type="submit" @click.prevent="updateEvents">
-                        Save Changes
-                      </button>
-                    </div>
-                  </div>
-                </form>
+          <hr />
+          <h2 class="subtitle">Comments</h2>
+          <div class="comments">
+            <form class="mt-3" @submit.prevent="addComment">
+              <div class="field">
+                <label class="label">Add Comment</label>
+                <div class="control">
+                  <textarea class="textarea" v-model="newCommentText" placeholder="Write your comment here"></textarea>
+                </div>
               </div>
-            </div>
+              <div class="control">
+                <button type="submit" class="button is-primary">Submit</button>
+              </div>
+            </form>
           </div>
+          <CommentBox :comments="post.comments" @add-comment="addComment" @add-reply="addReply" @delete-comment="deleteComment"/>
         </div>
-      </div>
+      </article>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 import { getAPI } from "@/plugins/axios";
-import jwt_decode from "jwt-decode";
+import CommentBox from "@/components/CommentBox.vue";
 
 export default {
-  name: "EventsDetail",
+  name: "PostDetail",
+  components: {
+    CommentBox,
+  },
   data() {
     return {
-      events: {},
-      editEvents: false,
-      name: "",
-      venue: "",
-      description: "",
-      date: "",
-      showForm: false,
-      isOwner: false,
+      post: undefined,
+      loading: false,
+      newCommentText: "",
     };
   },
-  mounted() {
-    this.getEvents();
+  computed: {
+    postSlug() {
+      return this.$route.params.slug;
+    },
+  },
+  watch: {
+    postSlug: {
+      immediate: true,
+      handler: async function () {
+        await this.fetchPost();
+      },
+    },
   },
   methods: {
-    getEvents() {
-      const category_slug = this.$route.params.category_slug;
-      const events_slug = this.$route.params.events_slug;
-      const token = this.$store.state.accessToken;
-      const decodedToken = jwt_decode(token);
-      const userId = decodedToken.user_id;
+    async fetchPost() {
+      const token = localStorage.getItem("access");
+      const post_slug = this.postSlug;
 
-      axios;
-      getAPI
-        .get(`api/v1/events/${category_slug}/${events_slug}/`, {
-          headers: { Authorization: `Bearer ${this.$store.state.accessToken}` },
-        })
-        .then((response) => {
-          this.events = response.data;
-          // Check if the user is the owner of the event
-          if (this.events.owner === userId) {
-            this.isOwner = true;
+      if (!post_slug) {
+        this.$router.go();
+      }
+
+      console.log("API endpoint:", getAPI.defaults.baseURL);
+      console.log("postSlug:", post_slug);
+
+      this.loading = true;
+
+      try {
+        const response = await getAPI.get(`/api/v1/posts/${post_slug}/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        console.log("Post API has received data");
+        this.post = Object.assign({}, response.data);
+
+        const commentsResponse = await getAPI.get(
+          `/api/v1/posts/${this.post.id}/comments/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-          console.log("user:", this.$store.state.user);
-          console.log("event owner:", this.events.owner);
+        );
+        this.post.comments = commentsResponse.data;
+
+        localStorage.setItem("post_slug", post_slug);
+      } catch (error) {
+        console.log(error);
+        this.error = error;
+        return Promise.reject(error);
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    addComment() {
+      const token = localStorage.getItem("access");
+      const post_slug = this.postSlug;
+
+      getAPI
+        .post(
+          `/api/v1/posts/${post_slug}/comments/`,
+          {
+            text: this.newCommentText,
+            post_slug: post_slug,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log("Comment has been added");
+          this.post.comments.push(response.data);
+          this.newCommentText = "";
+          this.fetchPost();
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    deleteEvents() {
-      const category_slug = this.$route.params.category_slug;
-      const events_slug = this.$route.params.events_slug;
+    // ...
+    addReply({ parentCommentId, text }) {
+      const token = localStorage.getItem("access");
+      const post_slug = this.postSlug;
 
-      axios;
       getAPI
-        .delete(`/api/v1/events/${category_slug}/${events_slug}/`, {
-          headers: { Authorization: `Bearer ${this.$store.state.accessToken}` },
-        })
-        .then(() => {
-          // Redirect the user to the /events page
-          window.location.href = "/events";
-        })
-        .catch((error) => {
-          if (error.response.status === 403) {
-            alert("You are not authorized to delete this event.");
-          } else {
-            console.log(error);
-          }
-        });
-    },
-    toggleEditEvents() {
-      this.editEvents = !this.editEvents;
-      this.name = this.events.name;
-      this.venue = this.events.venue;
-      this.description = this.events.description;
-      this.date = this.events.date;
-    },
-    updateEvents() {
-      this.submitEditEvents();
-    },
-    eventIdToName() {
-      const categories = ["Event", "Study group"];
-      return categories[this.events.category - 1];
-    },
-    submitEditEvents() {
-      const category_slug = this.$route.params.category_slug;
-      const events_slug = this.$route.params.events_slug;
-
-      axios;
-      getAPI
-        .put(
-          `/api/v1/events/${category_slug}/${events_slug}/`,
+        .post(
+          `/api/v1/posts/${post_slug}/comments/`,
           {
-            name: this.updatedName,
-            venue: this.updatedVenue,
-            description: this.updatedDescription,
-            date: this.updatedDate,
+            text: text,
+            post_slug: post_slug,
+            parent_comment: parentCommentId,
           },
           {
             headers: {
-              Authorization: `Bearer ${this.$store.state.accessToken}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         )
-        .then(() => {
-          this.editEvents = false;
-          this.getEvents();
-          this.showEditForm();
-        })
-        .catch((error) => {
-          if (error.response.status === 403) {
-            alert("You are not authorized to delete this event.");
-          } else {
-            console.log(error);
-          }
+        .then((response) => {
+          const parentComment = this.post.comments.find(
+            (comment) => comment.id === parentCommentId
+          );
+          parentComment.children.push(response.data);
         });
     },
-    showEditForm() {
-      this.showForm = !this.showForm;
-    },
+    deleteComment(commentId) {
+      const token = localStorage.getItem("access");
+
+      // delete a comment
+      getAPI.delete(`/api/v1/posts/5/comments/${commentId}/delete/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    }
+  },
+  unmounted() {
+    localStorage.removeItem("post_slug");
   },
 };
 </script>
+
+<style scoped>
+@media screen and (max-width: 768px) {
+  .comments form {
+    width: 100%;
+  }
+}
+</style>

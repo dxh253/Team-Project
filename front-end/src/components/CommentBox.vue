@@ -13,6 +13,9 @@
                     <button @click="showReplyForm(comment.id)" class="button is-small is-light">
                         Reply
                     </button>
+                    <button @click="deleteComment(comment.id)" class="button is-small is-danger">
+                                Delete
+                    </button>
                     <div v-if="visibleReplyForm === comment.id" class="reply-form">
                         <textarea class="textarea" v-model="replyText[comment.id]"
                             placeholder="Write your reply here"></textarea>
@@ -36,6 +39,9 @@
                             </div>
                             <button @click="showReplyForm(reply.id)" class="button is-small is-light">
                                 Reply
+                            </button>
+                            <button @click="deleteComment(comment.id)" class="button is-small is-danger">
+                                Delete
                             </button>
                             <div v-if="visibleReplyForm === reply.id" class="reply-form">
                                 <textarea class="textarea" v-model="replyText[comment.id]"
@@ -81,6 +87,9 @@ export default {
             this.visibleReplyForm = null;
         },
         childComments() { },
+        deleteComment(commentId) {
+            this.$emit("delete-comment", commentId);
+        },
     },
     computed: {
         parentComments() {
