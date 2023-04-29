@@ -13,10 +13,7 @@
           <option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}
           </option>
         </select>
-        <label class="image-selector">
-          <i class="fa-solid fa-image fa-xl"></i>
-          <input type="file" @change="onFileSelected" style="display:none" />
-        </label>
+        <input type="file" @change="onFileSelected"/>
         <div style="margin-left: auto; display: flex; align-items: center;">
           <p style="padding: 9px;">Sensitive Content ?</p>
           <label class="switch">
@@ -43,7 +40,7 @@
         owner: '',
         category: '',
         categories: [],
-        image: null,
+        get_image: null,
         isBlurred: false,
       }
     },

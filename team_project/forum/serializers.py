@@ -42,6 +42,12 @@ class PostSerializer(serializers.ModelSerializer):
         if instance.image and instance.image.storage.exists(instance.image.name):
             representation['get_image'] = instance.image.url
         return representation
+    
+    def update(self, instance, validated_data):
+        image = validated_data.pop('get_image', None)
+        if image:
+            instance.image = image
+        return super().update(instance, validated_data)
 
 
 class PostVotesSerializer(serializers.ModelSerializer):
