@@ -168,7 +168,7 @@ export default {
                     </router-link>
                 </h2>
                 <div class="searchbar">
-                    <input class="search" type="text" v-model="searchTerm" placeholder="Search posts">
+                    <input class="search" type="text" v-model="searchTerm" placeholder="Search posts or category">
                 </div>
                 <div v-if="filteredPosts.length > 0">
                     <div v-for="post in filteredPosts" :key="post.id">
@@ -218,8 +218,12 @@ export default {
             return this.allposts.filter((post) => {
                 let searchTerm = this.searchTerm.toLowerCase();
                 let textToMatch = post.title.toLowerCase();
+                let categoryToMatch = post.category_name.toLowerCase();
                 let charIndex = 0;
                 for (const c of textToMatch) {
+                    if (c == searchTerm[charIndex]) ++charIndex;
+                }
+                for (const c of categoryToMatch) {
                     if (c == searchTerm[charIndex]) ++charIndex;
                 }
                 return charIndex == searchTerm.length;

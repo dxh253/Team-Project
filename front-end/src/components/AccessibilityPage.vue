@@ -66,9 +66,17 @@ export default {
     outline: 3px solid red;
 }
 
-/* .input.input:focus-visible {
-    outline: 3px solid red;
-} */
+.input.input:focus-visible {
+    outline: 3px solid blue;
+}
+
+.input.search:focus-visible {
+    outline: 3px solid blue;
+}
+
+.input[type=text]:focus-visible {
+    outline: 3px solid blue;
+}
 
 .select:focus-visible {
     outline: 3px solid red;
