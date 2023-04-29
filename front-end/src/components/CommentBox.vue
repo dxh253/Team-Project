@@ -13,8 +13,8 @@
                     <button @click="showReplyForm(comment.id)" class="button is-small is-light">
                         Reply
                     </button>
-                    <button @click="deleteComment(comment.id)" class="button is-small is-danger">
-                                Delete
+                    <button v-if="isOwner(comment)" @click="deleteComment(comment.id)" class="button is-small is-danger">
+                    Delete
                     </button>
                     <div v-if="visibleReplyForm === comment.id" class="reply-form">
                         <textarea class="textarea" v-model="replyText[comment.id]"
@@ -40,8 +40,8 @@
                             <button @click="showReplyForm(reply.id)" class="button is-small is-light">
                                 Reply
                             </button>
-                            <button @click="deleteReply(reply.id)" class="button is-small is-danger">
-                                Delete
+                            <button v-if="isOwner(reply)" @click="deleteReply(reply.id)" class="button is-small is-danger">
+                            Delete
                             </button>
                             <div v-if="visibleReplyForm === reply.id" class="reply-form">
                                 <textarea class="textarea" v-model="replyText[comment.id]"
@@ -59,51 +59,78 @@
 </template>
 
 <script>
+import jwtDecode from "jwt-decode";
+
 export default {
-    name: "CommentBox",
-    props: {
-        comments: {
-            type: Array,
-            default: () => [],
-        },
+  name: "CommentBox",
+  props: {
+    comments: {
+      type: Array,
+      default: () => [],
     },
-    data() {
-        return {
-            visibleReplyForm: null,
-            replyText: {},
-        };
+    authToken: {
+      type: String,
+      default: "",
     },
-    methods: {
-        showReplyForm(commentId) {
-            this.visibleReplyForm =
-                this.visibleReplyForm === commentId ? null : commentId;
-        },
-        submitReply(commentId) {
-            this.$emit("add-reply", {
-                parentCommentId: commentId,
-                text: this.replyText[commentId],
-            });
-            this.replyText[commentId] = "";
-            this.visibleReplyForm = null;
-        },
-        childComments() { },
-        deleteComment(commentId) {
-            this.$emit("delete-comment", commentId);
-        },
-        deleteReply(replyId) {
-            this.$emit("delete-reply", replyId);
-        },
+  },
+  data() {
+    return {
+      visibleReplyForm: null,
+      replyText: {},
+      currentUser: null,
+    };
+  },
+  methods: {
+    showReplyForm(commentId) {
+      this.visibleReplyForm =
+        this.visibleReplyForm === commentId ? null : commentId;
     },
-    computed: {
-        parentComments() {
-            let parents = this.comments.filter(
-                (comment) => comment.parent_comment == null
-            );
-            return parents;
-        },
+    submitReply(commentId) {
+      this.$emit("add-reply", {
+        parentCommentId: commentId,
+        text: this.replyText[commentId],
+      });
+      this.replyText[commentId] = "";
+      this.visibleReplyForm = null;
     },
+    childComments() {},
+    deleteComment(commentId) {
+      this.$emit("delete-comment", commentId);
+    },
+    deleteReply(replyId) {
+      this.$emit("delete-reply", replyId);
+    },
+    isOwner(comment) {
+        const token = this.$store.state.accessToken;
+        const decodedToken = jwtDecode(token);
+        const userId = decodedToken.user_id;
+        console.log(comment.owner);
+        console.log(comment.author_id)
+        console.log(userId);
+
+        if (comment.author_id === userId) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+  },
+  computed: {
+    parentComments() {
+      let parents = this.comments.filter(
+        (comment) => comment.parent_comment == null
+      );
+      return parents;
+    },
+  },
+  created() {
+    if (this.authToken) {
+      this.currentUser = jwtDecode(this.authToken);
+    }
+  },
 };
 </script>
+
 
 <style lang="scss">
 .comment-container {

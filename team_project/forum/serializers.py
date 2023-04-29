@@ -132,7 +132,41 @@ class CategorySerializer(serializers.ModelSerializer):
     #     return ""
 
 
+# class CommentSerializer(serializers.ModelSerializer):
+#     upvoted_by = serializers.StringRelatedField(many=True, read_only=True)
+#     downvoted_by = serializers.StringRelatedField(many=True, read_only=True)
+#     children = serializers.SerializerMethodField()
+#     owner = serializers.SerializerMethodField()
+#     upvotes = serializers.IntegerField(read_only=True)
+#     downvotes = serializers.IntegerField(read_only=True)
+#     user_vote = serializers.SerializerMethodField()
+
+#     class Meta:
+#         model = Comment
+#         fields = ["id", "created_date", "owner", "upvotes", "downvotes", "upvoted_by",
+#                   "downvoted_by", "children", "parent_comment", "user_vote", "text"]
+#         read_only_fields = ["created", "upvotes",
+#                             "downvotes", "upvoted_by", "downvoted_by"]
+
+#     def get_children(self, obj):
+#         children = Comment.objects.filter(parent_comment=obj)
+#         return CommentSerializer(children, many=True, context=self.context).data
+
+#     def get_owner(self, obj):
+#         return obj.author.username
+
+#     def get_user_vote(self, obj):
+#         if not self.context.get('request').user.is_authenticated:
+#             return None
+#         try:
+#             vote = CommentVote.objects.get(
+#                 user=self.context.get('request').user, comment=obj)
+#             return vote.vote_type
+#         except CommentVote.DoesNotExist:
+#             return None
+
 class CommentSerializer(serializers.ModelSerializer):
+    author_id = serializers.IntegerField(source='author.id', read_only=True)
     upvoted_by = serializers.StringRelatedField(many=True, read_only=True)
     downvoted_by = serializers.StringRelatedField(many=True, read_only=True)
     children = serializers.SerializerMethodField()
@@ -144,7 +178,7 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ["id", "created_date", "owner", "upvotes", "downvotes", "upvoted_by",
-                  "downvoted_by", "children", "parent_comment", "user_vote", "text"]
+                  "downvoted_by", "children", "parent_comment", "user_vote", "text", "author_id"]
         read_only_fields = ["created", "upvotes",
                             "downvotes", "upvoted_by", "downvoted_by"]
 
@@ -164,6 +198,7 @@ class CommentSerializer(serializers.ModelSerializer):
             return vote.vote_type
         except CommentVote.DoesNotExist:
             return None
+
 
 
 class CommentReplySerializer(serializers.ModelSerializer):
