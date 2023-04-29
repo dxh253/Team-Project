@@ -245,7 +245,7 @@ export default {
             if (postToUpdate) {
                 postToUpdate.score = updatedScore;
             }
-        }
+        },
     },
     created() {
         const token = localStorage.getItem("access");
