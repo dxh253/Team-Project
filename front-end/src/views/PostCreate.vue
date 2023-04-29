@@ -8,14 +8,25 @@
                 rows="10"></textarea>
             <br>
             <div class="bottom">
-                <button type="submit">Create Post</button>
+                <!-- <button type="submit">Create Post</button> -->
                 <br>
-                <select class="category" id="category" v-model="category" required>
+                <select class="category" id="category" v-model="category" required style="margin-left: auto;">
                     <option value="" disabled>Category</option>
                     <option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}
                     </option>
-                </select>
-                <input type="file" @change="onFileSelected"/>
+                </select>                                                                                               
+                <!-- <label class="image-selector" tabindex="0" @keydown.enter="onFileSelected"> -->
+                    <!-- <i class="fa-solid fa-image fa-xl"></i> -->
+                    <input type="file" @change="onFileSelected"/>
+                <!-- </label> -->
+                <div style="margin-left: auto; display: flex; align-items: center;">
+                    <p>Sensitive Content ?</p>
+                    <label class="switch" tabindex="0" @keydown.enter="toggleBlur">
+                    <input type="checkbox" id="isBlurred" v-model="isBlurred" @keydown.enter="toggleBlur">
+                    <span class="slider round"></span>
+                    </label>
+                </div>
+                <button type="submit">Create Post</button>
             </div>
         </form>
     </div>
@@ -34,6 +45,7 @@ export default {
             category: '',
             categories: [],
             image: null,
+            isBlurred: false,
         };
     },
     mounted() {
@@ -41,7 +53,7 @@ export default {
     },
     methods: {
         fetchCategories() {
-            getAPI.get('/categories/')
+            getAPI.get('/api/v1/categories/')
                 .then(response => {
                     this.categories = response.data;
                 })
@@ -49,9 +61,11 @@ export default {
                     console.log(error);
                 });
         },
-        onFileSelected(event) {
-            this.get_image = event.target.files[0];
-        },
+        toggleBlur(event) {
+  if (event.type === 'click' || (event.type === 'keydown' && event.key === 'Enter')) {
+    this.isBlurred = !this.isBlurred;
+  }
+},
         handleSubmit() {
             // Decode the JWT token to get the user ID
             const token = localStorage.getItem("access");
@@ -64,10 +78,11 @@ export default {
                 category: this.category,
                 owner: userId,
                 get_image: this.get_image,
+                isBlurred: this.isBlurred,
             };
 
             getAPI
-                .post("/posts/", payload, {
+                .post("/api/v1/posts/", payload, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'multipart/form-data',
