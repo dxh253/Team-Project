@@ -44,3 +44,6 @@ class Comment(models.Model):
 
     def date(self):
         return self.created_date.date()
+    
+    def delete_comment(self, user=None, *args, **kwargs):
+        super().delete(*args, **kwargs)
