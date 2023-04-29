@@ -15,9 +15,9 @@
         </select>
         <input type="file" @change="onFileSelected"/>
         <div style="margin-left: auto; display: flex; align-items: center;">
-          <p style="padding: 9px;">Sensitive Content ?</p>
-          <label class="switch">
-            <input type="checkbox" id="isBlurred" v-model="isBlurred">
+            <p>Sensitive Content ?</p>
+            <label class="switch" tabindex="0" @keydown.enter="toggleBlur">
+            <input type="checkbox" id="isBlurred" v-model="isBlurred" @keydown.enter="toggleBlur">
             <span class="slider round"></span>
           </label>
         </div>
@@ -61,6 +61,11 @@
             console.log(error);
           });
       },
+      toggleBlur(event) {
+            if (event.type === 'click' || (event.type === 'keydown' && event.key === 'Enter')) {
+                this.isBlurred = !this.isBlurred;
+            }
+        },
       editPost() {
         const token = localStorage.getItem("access");
         const decodedToken = jwt_decode(token);
