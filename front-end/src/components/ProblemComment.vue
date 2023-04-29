@@ -55,5 +55,8 @@ export default {
 </script>
 
 <style scoped>
-
+.deleting:hover {
+    color: darkred;
+    cursor: pointer;
+}
 </style>
