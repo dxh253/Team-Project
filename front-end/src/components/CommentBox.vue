@@ -14,7 +14,7 @@
                         Reply
                     </button>
                     <button @click="deleteComment(comment.id)" class="button is-small is-danger">
-                        Delete
+                                Delete
                     </button>
                     <div v-if="visibleReplyForm === comment.id" class="reply-form">
                         <textarea class="textarea" v-model="replyText[comment.id]"

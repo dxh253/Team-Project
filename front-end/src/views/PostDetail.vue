@@ -6,17 +6,7 @@
     <div v-else-if="post" class="box">
       <article class="media">
         <div class="media-content">
-          <!-- <h1 class="title">{{ post.title }}</h1> -->
-          <div class="level">
-            <div class="level-left">
-              <!-- <h1 class="title">{{ post.title }}</h1> -->
-              <div class="level">
-                <div class="level-left">
-                  <h1 class="title">{{ post.title }}</h1>
-                </div>
-              </div>
-            </div>
-          </div>
+          <h1 class="title">{{ post.title }}</h1>
           <p class="subtitle">{{ post.description }}</p>
           <figure class="image">
             <a :href="post.get_image" target="_blank">
@@ -27,14 +17,13 @@
                 }" alt="Post image" />
             </a>
           </figure>
-          <hr>
           <div class="level">
             <div class="level-left">
               <p class="level-item">
                 <span class="icon is-small">
                   <i class="fas fa-user"></i>
                 </span>
-                {{ post.username }}
+                {{ post.author }}
               </p>
               <p class="level-item">
                 <span class="icon is-small">
@@ -48,19 +37,16 @@
             </div>
           </div>
           <hr />
-          <!-- <h2 class="subtitle">Comments</h2> -->
           <h2 class="subtitle level">
             <div class="level-left">
               Comments
             </div>
             <div class="level-right">
-              <button class="button is-primary" @click="showCommentForm = !showCommentForm">{{ showCommentForm ? 'Cancel'
-                : 'Add Comment' }}</button>
+              <button class="button is-primary" @click="showCommentForm = !showCommentForm">{{ showCommentForm ? 'Cancel' : 'Add Comment' }}</button>
             </div>
           </h2>
-
           <div class="comments">
-            <form class="mt-3" @submit.prevent="addComment">
+            <form class="mt-3" v-if="showCommentForm" @submit.prevent="addComment">
               <div class="field">
                 <label class="label">Add Comment</label>
                 <div class="control">
@@ -72,8 +58,7 @@
               </div>
             </form>
           </div>
-          <CommentBox :comments="post.comments" @add-comment="addComment" @add-reply="addReply"
-            @delete-comment="deleteComment" @delete-reply="deleteReply" />
+          <CommentBox :comments="post.comments" @add-comment="addComment" @add-reply="addReply" @delete-comment="deleteComment" @delete-reply="deleteReply"/>
         </div>
       </article>
     </div>
@@ -94,6 +79,7 @@ export default {
       post: undefined,
       loading: false,
       newCommentText: "",
+      showCommentForm: false,
     };
   },
   computed: {
