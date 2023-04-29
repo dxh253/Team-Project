@@ -7,19 +7,17 @@
         </router-link>
       </p>
       <div class="card-header-icon">
-          <span class="icon">
-            <i class="fas fa-angle-down"></i>
-          </span>
-        </div>
+        <span class="icon">
+          <i class="fas fa-angle-down"></i>
+        </span>
+      </div>
     </div>
     <div class="card-content">
       <div class="content">
         <p>{{ post.description }}</p>
-        <div v-if="post.get_image" class="has-text-centered">
-          <figure class="image is-16by9">
-            <a :href="post.get_image" target="_blank"><img :src="post.get_image"
-                :style="{ filter: blur ? 'blur(100px)' : 'none' }" @click="enlargeImage" /></a>
-          </figure>
+        <div v-if="post.get_image">
+          <img :src="post.get_image" :style="{ filter: blur ? 'blur(100px)' : 'none', maxWidth: '30%', maxHeight: '30%' }"
+            @click="enlargeImage" />
         </div>
       </div>
       <div class="columns is-mobile is-gapless">
@@ -31,12 +29,12 @@
         </div>
         <div class="column">
           <!-- <span class="icon is-small"><i class="fas fa-arrow-up" @click="upvote" -->
-          <span class="icon is-small"><i class="fas fa-arrow-up" @click="upvote" tabindex="0" role="button" @keydown.enter="upvote"
-              :style="{ color: this.userVote === 1 ? 'orange' : 'grey' }"></i></span>
+          <span class="icon is-small"><i class="fas fa-arrow-up" @click="upvote" tabindex="0" role="button"
+              @keydown.enter="upvote" :style="{ color: this.userVote === 1 ? 'orange' : 'grey' }"></i></span>
           <span>{{ currentScore }}</span>
           <!-- <span class="icon is-small"><i class="fas fa-arrow-down" @click="downvote" -->
-             <span class="icon is-small"><i class="fas fa-arrow-down" @click="downvote" tabindex="0" role="button" @keydown.enter="downvote"
-              :style="{ color: this.userVote === -1 ? 'blue' : 'grey' }"></i></span>
+          <span class="icon is-small"><i class="fas fa-arrow-down" @click="downvote" tabindex="0" role="button"
+              @keydown.enter="downvote" :style="{ color: this.userVote === -1 ? 'blue' : 'grey' }"></i></span>
         </div>
         <div v-if="post.get_image" class="column">
           <span class="icon is-small">
@@ -54,7 +52,8 @@
           <span class="icon"><i class="fas fa-edit"></i></span>
         </router-link>
         <!-- <span v-if="isPostCreator" class="icon" @click="deletePost"><i class="fas fa-trash"></i></span> -->
-        <span v-if="isPostCreator" class="icon" @click="deletePost" tabindex="0" role="button" @keydown.enter="deletePost"><i class="fas fa-trash"></i></span>
+        <span v-if="isPostCreator" class="icon" @click="deletePost" tabindex="0" role="button"
+          @keydown.enter="deletePost"><i class="fas fa-trash"></i></span>
       </div>
     </div>
   </div>

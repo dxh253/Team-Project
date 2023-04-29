@@ -16,10 +16,10 @@
             <input type="password" name="password2" id="password2" v-model="password2" required>
             <div class="field">
                 <div class="control">
-                <label class="checkbox">
-                    <input type="checkbox" name="privacy_policy" v-model="privacyPolicy" required>
-                    I agree to the <a href="/privacy_policy">privacy policy</a>.
-                </label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="privacy_policy" v-model="privacyPolicy" required>
+                        I agree to the <a href="/privacy_policy">privacy policy</a>.
+                    </label>
                 </div>
             </div>
             <button id="register-button" type="submit">Register</button>
@@ -58,10 +58,20 @@ export default {
             })
                 .then(response => {
                     console.log(response.data);
-                    this.$router.push({name: 'EventsView'});
+                    this.$router.push({ name: 'EventsView' });
                 })
                 .catch(error => {
-                    console.log(error.response.data);
+                    const data = error.response.data;
+                    // Terrible way to do it, but oh well.
+                    if (
+                        data.username &&
+                        data.username[0] === "A user with that username already exists."
+                    ) {
+                        alert("Username taken");
+                    }
+                    if (data[0] === "This email is already in use.") {
+                        alert("Email taken");
+                    }
                     this.incorrectAuth = true;
                 });
         },

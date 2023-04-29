@@ -6,9 +6,12 @@ class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     def create(self, validated_data):
+        email = validated_data['email']
+        if User.objects.filter(email=email).exists():
+            raise serializers.ValidationError("This email is already in use.")
         user = User.objects.create(
             username=validated_data['username'],
-            email=validated_data['email'],
+            email=email,
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name']
         )
@@ -18,4 +21,5 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'password']
+        fields = ['id', 'username', 'email',
+                  'first_name', 'last_name', 'password']

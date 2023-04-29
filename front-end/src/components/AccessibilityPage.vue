@@ -54,43 +54,47 @@ export default {
     align-items: center;
 }
 
-.accessibility__button:hover{
+.accessibility__button:hover {
     background-color: #3ec487;
 }
 
-:focus-visible{
+:focus-visible {
     outline: 3px solid red;
 }
 
-.button:focus-visible{
+.button:focus-visible {
     outline: 3px solid red;
 }
 
-.select:focus-visible{
+.input.input:focus-visible {
     outline: 3px solid red;
 }
 
-.button.is-dark:focus-visible{
+.select:focus-visible {
     outline: 3px solid red;
 }
 
-.button.is-light:focus-visible{
+.button.is-dark:focus-visible {
     outline: 3px solid red;
 }
 
-.button.is-info:focus-visible{
+.button.is-light:focus-visible {
     outline: 3px solid red;
 }
 
-.button.is-link:focus-visible{
+.button.is-info:focus-visible {
     outline: 3px solid red;
 }
 
-.button.is-success:focus-visible{
+.button.is-link:focus-visible {
     outline: 3px solid red;
 }
 
-.button.is-primary:focus-visible{
+.button.is-success:focus-visible {
+    outline: 3px solid red;
+}
+
+.button.is-primary:focus-visible {
     outline: 3px solid red;
 }
 
@@ -151,7 +155,7 @@ export default {
     border: solid 1px;
 }
 
-.high-contrast h1{
+.high-contrast h1 {
     color: white;
 }
 
@@ -171,7 +175,7 @@ export default {
 }
 
 .high-contrast input::placeholder {
-    color: black ;
+    color: black;
 }
 
 .high-contrast input.input::placeholder {
@@ -182,21 +186,23 @@ export default {
     color: white;
 }
 
-.high-contrast input.input{
+.high-contrast input.input {
     border: solid 1px !important;
     border-color: white !important;
     background-color: black !important;
     color: white !important;
 }
 
-.high-contrast textarea.description{
+.high-contrast textarea.description {
     border: solid 1px;
     border-color: white;
     background-color: black;
     color: white;
 }
 
-.high-contrast div.your-events, .high-contrast div.your-studyg, .high-contrast div.upcoming{
+.high-contrast div.your-events,
+.high-contrast div.your-studyg,
+.high-contrast div.upcoming {
     border: solid 1px;
     background-color: black;
     color: white;
@@ -205,10 +211,10 @@ export default {
 .high-contrast div.event-card {
     border: solid 1px;
     background-color: black !important;
-    color: white ;
+    color: white;
 }
 
-.high-contrast i{
+.high-contrast i {
     color: white !important;
 }
 </style>

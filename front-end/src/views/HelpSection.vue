@@ -21,19 +21,19 @@
     <div v-show="showing">
         <div class="columns is-mobile is-centered is-multiline has-text-centered" style="margin-bottom: 2%;">
             <div class="column">
-                <RouterLink to="">
+                <RouterLink to="" tabindex="-1">
                     <button class="button is-large is-link is-light is-outlined"
                         style="width: 250px; height: 125px; margin: 3px 25px;">
                         Testing
                     </button>
                 </RouterLink>
-                <RouterLink to="">
+                <RouterLink to="" tabindex="-1">
                     <button class="button is-large is-link is-light is-outlined"
                         style="width: 250px; height: 125px; margin: 3px 25px;">
                         Testing
                     </button>
                 </RouterLink>
-                <RouterLink to="">
+                <RouterLink to="" tabindex="-1">
                     <button class="button is-large is-link is-light is-outlined"
                         style="width: 250px; height: 125px; margin: 3px 25px;">
                         Testing232

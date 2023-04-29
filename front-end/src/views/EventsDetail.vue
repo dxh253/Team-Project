@@ -3,8 +3,10 @@
     <div class="columns is-multiline">
       <div class="column is-4">
         <div class="image-wrapper">
-          <figure class="image is-cropped is-256x256">
-            <img :src="events.get_image" alt="" style="object-fit: cover; width: 100%; height: 100%" />
+          <!-- <figure class="image is-cropped is-256x256">
+            <img :src="events.get_image" alt="" style="object-fit: cover; width: 100%; height: 100%" /> -->
+           <figure>
+              <img :src="events.get_image" alt="" style="max-width: 30%; max-height: 30%;" />
           </figure>
         </div>
       </div>

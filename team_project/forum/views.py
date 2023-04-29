@@ -50,10 +50,12 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     def put(self, request, *args, **kwargs):
         return super().put(request, *args, **kwargs)
+
 
 class PostVotesList(generics.ListCreateAPIView):
     queryset = PostVotes.objects.all()
@@ -120,7 +122,8 @@ class PostVotesDetail(generics.RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = "id"
     lookup_field = "id"
     authentication_classes = [JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     def get_queryset(self):
         post_id = self.kwargs["pk"]
@@ -129,7 +132,8 @@ class PostVotesDetail(generics.RetrieveUpdateDestroyAPIView):
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
@@ -214,18 +218,23 @@ class CommentDelete(generics.DestroyAPIView):
 
     def get_queryset(self):
         post_pk = self.kwargs["post_pk"]
-        comment_pk = self.kwargs["comment_pk"]
-        reply_pk = self.kwargs.get("pk")
+        comment_pk = self.kwargs["pk"]
+        reply_pk = self.kwargs.get("reply_pk")
 
         if reply_pk is not None:
             return Reply.objects.filter(comment_id=comment_pk, pk=reply_pk)
         else:
             return Comment.objects.filter(post_id=post_pk, pk=comment_pk)
 
+    def get_object(self):
+        queryset = self.get_queryset()
+        obj = generics.get_object_or_404(queryset, author=self.request.user)
+        return obj
+
     def delete(self, request, *args, **kwargs):
         comment = self.get_object()
 
-        if comment.user != request.user:
+        if comment.author != request.user:
             raise ValidationError("You cannot delete someone else's comment.")
 
         return super().delete(request, *args, **kwargs)
@@ -241,7 +250,8 @@ class CommentReply(generics.CreateAPIView):
         return Comment.objects.filter(post=post_pk, pk=comment_pk)
 
     def perform_create(self, serializer):
-        parent_comment = generics.get_object_or_404(Comment, pk=self.kwargs["pk"])
+        parent_comment = generics.get_object_or_404(
+            Comment, pk=self.kwargs["pk"])
         serializer.save(post=parent_comment.post, parent=parent_comment)
 
 
@@ -250,11 +260,13 @@ class CommentReplyCreateView(generics.CreateAPIView):
     serializer_class = CommentReplySerializer
 
     def perform_create(self, serializer):
-        comment = generics.get_object_or_404(Comment, pk=self.kwargs["comment_pk"])
+        comment = generics.get_object_or_404(
+            Comment, pk=self.kwargs["comment_pk"])
         parent_reply_id = self.request.data.get("parent_reply", None)
         parent_reply = None
         if parent_reply_id:
-            parent_reply = generics.get_object_or_404(Reply, pk=parent_reply_id)
+            parent_reply = generics.get_object_or_404(
+                Reply, pk=parent_reply_id)
         serializer.save(
             comment=comment, user=self.request.user, parent_reply=parent_reply
         )
