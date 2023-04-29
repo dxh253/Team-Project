@@ -38,7 +38,7 @@
         </div>
         <div v-if="post.get_image" class="column">
           <span class="icon is-small">
-            <i class="fas fa-eye" @click="toggleBlur"></i>
+            <i class="fas fa-eye" @click="toggleBlur" tabindex="0" @keydown.enter="toggleBlur"></i>
           </span>
         </div>
       </div>
