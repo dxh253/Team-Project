@@ -96,7 +96,7 @@ export default {
     filteredPosts() {
       let filteredPosts = this.allposts;
       if (this.choice == "1")
-        filteredPosts = this.allposts.filter((post) => post.category_name === "resources");
+        filteredPosts = this.allposts.filter((post) => post.category_name.toLowerCase() === "resources");
       if(this.searchTerm){
         filteredPosts = this.allposts.filter((post) => {
         let searchTerm = this.searchTerm.toLowerCase();
