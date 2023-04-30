@@ -2,7 +2,7 @@
     <div class="container is-max-desktop">
         <div class="box">
             <h1 class="title is-1">Accessibility</h1>
-            <p style="text-align: center;">A small description of the accessibilty features of the UoB Forum</p>
+            <p style="text-align: center;">A small description of the accessibilty features of the Brum Connect</p>
         </div>
         <div class="box">
             <h2 class="title is-2">High Contrast Mode</h2>

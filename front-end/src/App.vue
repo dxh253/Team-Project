@@ -60,6 +60,9 @@ import { mapState } from 'vuex';
 import Accessibility from '@/components/AccessibilityPage.vue';
 
 export default {
+  mounted() {
+    document.title = "Brum Connect"; // Change the title here
+  },
   computed: mapState(['accessToken']),
   components: {
     Accessibility
