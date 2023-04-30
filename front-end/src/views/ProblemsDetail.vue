@@ -1,33 +1,47 @@
 <template>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <div class="container">
-        <div>
-            <form class="box" style="margin:0 5%; min-width: 90%;">
-                <div class="columns">
-                    <p class="is-size-1 column is-10" style="margin-left: 4%; overflow-wrap: break-word;">
-                        {{ problems.title }}</p>
-                    <i v-show="owned" class="column is-1 material-icons deleting"
-                        style="font-size: 35px; display: grid; align-self: center; text-align: end;"
-                        @click="deleteProblem">delete</i>
+      <div class="columns is-centered">
+        <div class="column is-10">
+          <div class="box">
+            <div class="columns is-mobile is-vcentered">
+              <div class="column is-10">
+                <h1 class="title is-size-2 has-text-weight-bold">{{ problems.title }}</h1>
+              </div>
+              <div v-if="owned" class="column is-2 has-text-right">
+                <button class="button is-danger is-small" @click="deleteProblem">Delete</button>
+              </div>
+            </div>
+            <p class="subtitle is-size-6 has-text-grey">{{ problems.date_added }} by {{ problems.author }}</p>
+            <hr>
+            <div class="content">
+              <p>{{ problems.description }}</p>
+            </div>
+          </div>
+          <div class="box">
+            <div class="is-flex is-justify-content-space-between is-align-items-center">
+                <h2 class="title is-size-4 has-text-weight-bold">{{ allComments.length }} Responses</h2>
+                <button class="button is-info" @click="showForm = !showForm">{{ showForm ? 'Hide' : 'Add' }} Response</button>
+            </div>
+            <form v-if="showForm" @submit.prevent="submitComment">
+                <div class="field">
+                <div class="control">
+                    <textarea class="textarea" v-model="commentInfo.text" placeholder="Type your response here"></textarea>
                 </div>
-                <p class="is-size-6" style="margin-left: 4%; margin-bottom: 1%;">{{ problems.date_added }} by {{
-                    problems.author }}</p>
-                <p class="is-size-6" style="margin-left: 4%; margin-right: 20%; overflow-wrap: break-word;">{{
-                    problems.description }}</p>
-            </form>
-            <form class="box" @submit.prevent="submitComment" style="margin:1% 10%; min-width: 70%; max-width: 70%;">
-                <textarea class="textarea" v-model="commentInfo.text" placeholder="add response"></textarea>
-                <div style="text-align: right; margin-top: 5px;">
-                    <button class="button is-info" type="submit"> Submit </button>
+                </div>
+                <div class="field has-text-right">
+                <button class="button is-info" type="submit">Submit</button>
                 </div>
             </form>
-            <div>
+            <hr>
+            <div class="content">
                 <ProblemComment v-for="comment in allComments" :comment="comment" :key="comment.id" />
             </div>
+            </div>
         </div>
+      </div>
     </div>
-</template>
-
+  </template>
+  
 <script>
 import ProblemComment from '@/components/ProblemComment.vue';
 import { getAPI } from '@/plugins/axios';
@@ -43,6 +57,7 @@ export default {
             commentInfo: {
                 text: '',
             },
+            showForm: false,
         }
     },
     components: {
@@ -151,10 +166,3 @@ export default {
     },
 }
 </script>
-
-<style scoped>
-.deleting:hover {
-    color: darkred;
-    cursor: pointer;
-}
-</style>
