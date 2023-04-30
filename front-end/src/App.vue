@@ -19,9 +19,9 @@ import { RouterView } from "vue-router";
 
       <div class="navbar-menu" id="navbar-menu" v-bind:class="{ 'is-active': showMobileMenu }">
         <div class="navbar-end">
-          <!-- <router-link to="/events" class="navbar-item">Events</router-link> -->
-          <!-- <router-link to="/posts" class="navbar-item">Discussion</router-link> -->
-          <router-link to="/dashboard" class="navbar-item">Dashboard</router-link>
+          <router-link to="/events" class="navbar-item">Events</router-link>
+          <router-link to="/posts" class="navbar-item">Discussion</router-link>
+          <router-link to="/help" class="navbar-item">Help</router-link>
           <Accessibility />
 
           <div class="navbar-item">
@@ -60,8 +60,13 @@ import { mapState } from 'vuex';
 import Accessibility from '@/components/AccessibilityPage.vue';
 
 export default {
+  data() {
+    return {
+      showMobileMenu: false,
+    }
+  },
   mounted() {
-    document.title = "Brum Connect"; // Change the title here
+    document.title = "BrumConnect"; // Change the title here
   },
   computed: mapState(['accessToken']),
   components: {
