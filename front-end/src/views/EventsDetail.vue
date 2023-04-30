@@ -1,5 +1,6 @@
 <template>
   <div class="container mt-6 has-text-centered">
+    <div class = "box">
     <div class="columns is-multiline">
       <div class="column is-4">
         <div class="image-wrapper">
@@ -99,6 +100,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </template>
