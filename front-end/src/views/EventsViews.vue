@@ -1,8 +1,8 @@
 <template>
-  <div class="home">
+  <div class="container">
     <section class="hero is-medium is-dark mb-6">
       <div class="hero-body has-text-centered">
-        <h1 class="title">Looking For Something To Do?</h1>
+        <h1 class="title">Looking For Something To Do? Or Study pals?</h1>
         <p class="subtitle">Here are some upcoming events!</p>
       </div>
     </section>
@@ -29,8 +29,8 @@
         </button>
       </div>
       <div class="column is-1">
-        <router-link to="/events_form" tabindex="-1">
-          <button class="button is-primary is-light" tabindex="0">Add Event</button>
+        <router-link to="/events_form">
+          <button class="button is-primary is-light" tabindex="-1">Add Event</button>
         </router-link>
       </div>
     </div>
@@ -141,3 +141,4 @@ export default {
   },
 };
 </script>
+
