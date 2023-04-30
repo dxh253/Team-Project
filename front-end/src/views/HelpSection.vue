@@ -37,14 +37,14 @@
             </div>
             <div class="field column is-5">
                 <div class="control">
-                    <input class="input" type="text" placeholder="Search your problem here..." v-model="searchValue">
+                    <input class="input" type="text" placeholder="Search your question here..." v-model="searchValue">
                 </div>
             </div>
             <div class="column is-2">
                 <button class="button is-link is-outlined" @click="filterProblems">My Questions</button>
             </div>
             <div class="column is-2">
-                <button class="button is-link" @click="showForm = !showForm">{{ showForm ? 'Hide form' : 'Submit a problem' }}</button>
+                <button class="button is-link" @click="showForm = !showForm">{{ showForm ? 'Hide form' : 'Submit a Question' }}</button>
             </div>
             
             </div>
