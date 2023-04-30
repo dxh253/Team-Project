@@ -12,8 +12,6 @@
             <input type="email" name="email" id="email" v-model="email" required>
             <label for="password1">Password:</label>
             <input type="password" name="password1" id="password1" v-model="password1" required>
-            <label for="password2">Confirm Password:</label>
-            <input type="password" name="password2" id="password2" v-model="password2" required>
             <div class="field">
                 <div class="control">
                     <label class="checkbox">
@@ -44,7 +42,6 @@ export default {
             username: '',
             email: '',
             password1: '',
-            password2: '',
         };
     },
     methods: {
