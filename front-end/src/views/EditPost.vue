@@ -94,11 +94,6 @@
           get_image: this.get_image,
           isBlurred: this.isBlurred,
         };
-        if (this.get_image) {
-          payload.get_image = this.get_image;
-        } else if (this.post.get_image) { // assuming you have a 'post' object with the current post data
-          payload.get_image = this.post.get_image; // use the existing image URL
-        }
         getAPI.put(`/api/v1/posts/${this.$route.params.id}/`, payload, {
           headers: {
             Authorization: `Bearer ${this.$store.state.accessToken}`,
