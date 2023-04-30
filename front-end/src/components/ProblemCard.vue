@@ -2,8 +2,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     <div>
-        <router-link :to="{ name: 'ProblemsDetail', params: { problem_id: problem.id } }">
-            <div class="box column is-three-fifths is-clickable" @click="viewProblem"
+        <router-link :to="{ name: 'ProblemsDetail', params: { problem_id: problem.id } }" tabindex="-1">
+            <div class="box column is-three-fifths is-clickable" @click="viewProblem" tabindex="0"
                 style="display: inline-table; margin-bottom: 1%;">
                 <p class="is-size-3"
                     style="margin-left: 1%; white-space: nowrap; max-width: 850px; overflow: hidden; text-overflow: ellipsis;">

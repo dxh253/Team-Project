@@ -29,8 +29,8 @@
         </button>
       </div>
       <div class="column is-1">
-        <router-link to="/events_form">
-          <button class="button is-primary is-light" tabindex="-1">Add Event</button>
+        <router-link to="/events_form" tabindex="-1">
+          <button class="button is-primary is-light" tabindex="0">Add Event</button>
         </router-link>
       </div>
     </div>

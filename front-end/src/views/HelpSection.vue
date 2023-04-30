@@ -23,19 +23,19 @@
         <div v-show="showing">
             <div class="columns is-mobile is-centered is-multiline has-text-centered" style="margin-bottom: 2%;">
                 <div class="column">
-                    <RouterLink to="/help_features/" tabindex="-1" class="button is-large is-link is-light is-outlined"
+                    <RouterLink to="/help_features/" class="button is-large is-link is-light is-outlined"
                         style="width: 250px; height: 125px;">
                         Features
                     </RouterLink>
                 </div>
                 <div class="column">
-                    <RouterLink to="/help_accessibility/" tabindex="-1" class="button is-large is-link is-light is-outlined"
+                    <RouterLink to="/help_accessibility/" class="button is-large is-link is-light is-outlined"
                         style="width: 250px; height: 125px;">
                         Accessibility
                     </RouterLink>
                 </div>
                 <div class="column">
-                    <RouterLink to="/privacy_policy/" tabindex="-1" class="button is-large is-link is-light is-outlined"
+                    <RouterLink to="/privacy_policy/" class="button is-large is-link is-light is-outlined"
                         style="width: 250px; height: 125px;">
                         Privacy Policy
                     </RouterLink>
