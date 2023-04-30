@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="column is-2">
-                <button class="button is-link is-outlined" @click="filterProblems">My problems</button>
+                <button class="button is-link is-outlined" @click="filterProblems">My Questions</button>
             </div>
             <div class="column is-2">
                 <button class="button is-link" @click="showForm = !showForm">{{ showForm ? 'Hide form' : 'Submit a problem' }}</button>
@@ -51,16 +51,16 @@
             <div v-show= "showForm" class="columns">
           <div class="column is-half is-offset-one-quarter">
             <div class="box">
-              <h2 class="title is-4">Or you can submit your problem here</h2>
+              <h2 class="title is-4">Submit your Question here</h2>
               <form @submit.prevent="submitProblem">
                 <div class="field">
-                  <label class="label">Title of your problem</label>
+                  <label class="label">Title</label>
                   <div class="control">
                     <input class="input" type="text" placeholder="Enter Title" v-model.trim="problemInfo.title" required>
                   </div>
                 </div>
                 <div class="field">
-                  <label class="label">Describe your problem</label>
+                  <label class="label">What do you want to ask?</label>
                   <div class="control">
                     <textarea class="textarea" placeholder="Describe your problem here" v-model.trim="problemInfo.description" required></textarea>
                   </div>
@@ -83,13 +83,13 @@
         <div v-show="!showing">
             <div class="columns">
                 <div class="column is-10">
-                    <h2 class="title is-3">You searched for problems containing "{{ searchValue }}"</h2>
+                    <h2 class="title is-3">You searched for questions containing "{{ searchValue }}"</h2>
                 </div>
                 <div class="column is-2 is-offset">
-                    <button type="button" class="button is-underlined is-link is-light" @click="filterProblems"> My problems
+                    <button type="button" class="button is-underlined is-link is-light" @click="filterProblems"> My Questions
                     </button>
                 </div>
-                <p v-show="noproblem">You haven't submitted any problems.</p>
+                <p v-show="noproblem">You haven't submitted any questions.</p>
             </div>
 
             <button class="button" @click="clearSearch" style="margin-top: 2px; margin-bottom: 50px;">Clear search</button>
