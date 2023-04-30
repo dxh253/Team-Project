@@ -6,7 +6,7 @@
             <p style="color:gray;">{{ comment.date }} by {{ comment.username }}</p>
             <p style="margin:0% 3%; overflow-wrap: break-word;">{{ comment.text }}</p>
         </form>
-        <i v-show="owned" class="column is-1 material-icons deleting is-clickable" @click="deleteComment">delete</i>
+        <i v-show="owned" class="column is-1 material-icons deleting is-clickable" @click="deleteComment" @keydown.enter="deleteComment" tabindex="0">delete</i>
     </div>
 </template>
 

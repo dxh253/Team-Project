@@ -13,17 +13,17 @@
       <div class="section">
         <div class="columns is-centered is-multiline">
           <div class="column is-one-third">
-            <RouterLink to="/help_features/" tabindex="-1" class="button is-large is-link is-light is-outlined is-fullwidth">
+            <RouterLink to="/help_features/" class="button is-large is-link is-light is-outlined is-fullwidth">
               Features
             </RouterLink>
           </div>
           <div class="column is-one-third">
-            <RouterLink to="/help_accessibility/" tabindex="-1" class="button is-large is-link is-light is-outlined is-fullwidth">
+            <RouterLink to="/help_accessibility/" class="button is-large is-link is-light is-outlined is-fullwidth">
               Accessibility
             </RouterLink>
           </div>
           <div class="column is-one-third">
-            <RouterLink to="/privacy_policy/" tabindex="-1" class="button is-large is-link is-light is-outlined is-fullwidth">
+            <RouterLink to="/privacy_policy/" class="button is-large is-link is-light is-outlined is-fullwidth">
               Privacy Policy
             </RouterLink>
           </div>
