@@ -1,90 +1,69 @@
-from django.shortcuts import render
-from .models import Problems, Comment
-from django.http import HttpResponse
-from django.http import Http404
-
-from rest_framework import generics
-from .serializers import ProblemSerializer, CommentSerializer
-from rest_framework.views import APIView
+from django.core.signing import BadSignature, SignatureExpired, loads
+from django.contrib.auth import get_user_model
+from django.shortcuts import render, redirect
+from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework_simplejwt.tokens import RefreshToken
+import jwt
+from django.core.mail import send_mail
+from django.contrib.auth.models import User
 
-# Create your views here.
-
-
-class ProblemsView(APIView):
-    permission_classes = (IsAuthenticated,)
-    ALLOWED_METHODS = ['GET', 'POST']
-    http_method_names = ['get', 'post']
-
-    def get(self, request, format=None):
-        queryset = Problems.objects.all()
-        serializer = ProblemSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def post(self, request, format=None):
-        data = request.data.copy()
-        serializer = ProblemSerializer(data=data)
-        if serializer.is_valid():
-            instance = serializer.save()
-            instance.save()
-            serializer = ProblemSerializer(instance)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+from .serializers import UserSerializer
+from django.views.decorators.csrf import csrf_exempt
 
 
-class ProblemsDetail(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self, problem_id):
-        print(self.request.user)
-        # print(APIView.request.user)
-        try:
-            return Problems.objects.get(id=problem_id)
-        except Problems.DoesNotExist:
-            raise Http404
-
-    def get(self, request, problem_id, format=None):
-        problems = self.get_object(problem_id)
-        serializer = ProblemSerializer(problems)
-        return Response(serializer.data)
-
-    def delete(self, request, problem_id, format=None):
-        problems = self.get_object(problem_id)
-
-        # Check if the authenticated user is the owner of the event
-        if problems.owner != request.user:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-
-        problems.delete_problem()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+@api_view(['POST'])
+def register_user(request):
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        user = serializer.save()
+        refresh = RefreshToken.for_user(user)
+        data = {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }
+        return Response(data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CommentList(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = CommentSerializer
+@api_view(['POST'])
+def forgot_password(request):
+    email = request.data.get('email')
+    user = User.objects.filter(email=email).first()
+    if user:
+        token = jwt.encode({'user_id': user.id},
+                        'secret_key', algorithm='HS256')
+        link = request.build_absolute_uri(f'/reset-password/{token.decode("utf-8")}/')
+        message = f'Click the link below to reset your password:\n\n{link}'
+        send_mail('Password reset for your account', message, 'from@example.com', [email])
+    return Response({'message': 'If the provided email exists in our database, an email with instructions to reset your password will be sent.'})
 
-    def get(self, request, problem_id):
-        # This view should return a list of all the comments for the post as determined by the post_pk portion of the URL.
-        queryset = Comment.objects.filter(problem=problem_id)
-        serializer = CommentSerializer(queryset, many=True)
-        return Response(serializer.data)
+@csrf_exempt
+@api_view(['POST'])
+def reset_password(request, token):
+    print(f'Token: {token}')
+    UserModel = get_user_model()
 
-    def post(self, request, problem_id):
-        data = request.data.copy()
-        serializer = CommentSerializer(data=data)
-        if serializer.is_valid():
-            instance = serializer.save()
-            instance.save()
-            serializer = CommentSerializer(instance)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # Verify the token's validity
+    try:
+        user_id = loads(token, max_age=86400)  # 1 day
+    except SignatureExpired:
+        return render(request, 'reset_password_expired.html')
+    except BadSignature:
+        return render(request, 'reset_password_invalid.html')
 
-    def delete(self, request, problem_id, comment_id):
-        comments = Comment.objects.get(problem=problem_id, id=comment_id)
+    # Get the user object from the database
+    try:
+        user = UserModel.objects.get(pk=user_id)
+    except UserModel.DoesNotExist:
+        return render(request, 'reset_password_invalid.html')
 
-        comments.delete_comment()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    # Render the password reset form
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        user.set_password(password)
+        user.save()
+        return redirect('/login/')
+    else:
+        return render(request, 'reset_password.html')
