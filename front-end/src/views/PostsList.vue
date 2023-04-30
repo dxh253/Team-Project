@@ -170,30 +170,53 @@ export default {
                 <div class="searchbar">
                     <input class="search" type="text" v-model="searchTerm" placeholder="Search posts or category">
                 </div>
+                <!-- <div class="select field column is-3">
+                    <select v-model="choice">
+                        <option value="0">Show all</option>
+                        <option value="1">Study Resources only</option>
+                    </select>
+                </div> -->
+                <div class="columns">
+                    <div class="column">
+                        <button @click="toggleView" class="button is-primary">
+                        {{ viewMode ? 'Gallery View' : 'List View' }}
+                        </button>
+                    </div>
+                    <div class="column is-3">
+                        <div class="select">
+                            <select v-model="choice">
+                                <option value="0">Show all</option>
+                                <option value="1">Study Resources only</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div v-if="filteredPosts.length > 0">
-                    <div v-for="post in filteredPosts" :key="post.id">
-                        <div class="box">
-                            <div class="columns is-vcentered">
-                                <div class="column">
-                                    <post-box :post="post" @postDeleted="removePostFromList"
-                                        @vote-updated="updatePostVote" />
+                    <!-- <div v-for="post in filteredPosts" :key="post.id"> -->
+                    <div v-if="viewMode" class="columns is-multiline">
+                        <div v-for="post in filteredPosts" :key="post.id" class="column is-one-third">
+                            <post-box :post="post" @postDeleted="removePostFromList" @vote-updated="updatePostVote" />
+                        </div>
+                    </div>
+                    <div v-else>
+                        <div v-for="post in filteredPosts" :key="post.id">
+                            <div class="box">
+                                <div class="columns is-vcentered">
+                                    <div class="column">
+                                        <post-box :post="post" @postDeleted="removePostFromList"
+                                            @vote-updated="updatePostVote" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button @click="scrollToTop" class="button is-info is-hidden-desktop is-fullwidth">Scroll to
-                        top</button>
+                        <button @click="scrollToTop" class="button is-info is-hidden-desktop is-fullwidth">Scroll to top</button>
                 </div>
             </div>
         </div>
         <button @click="scrollToTop" class="myBtn is-hidden-mobile">Scroll to top</button>
     </div>
 </template>
-
-
-
-
-
 
 
 <script>
@@ -208,6 +231,8 @@ export default {
     data() {
         return {
             allposts: [],
+            viewMode: false,
+            choice: "0",
             searchTerm: '',
 
 
@@ -215,22 +240,32 @@ export default {
     },
     computed: {
         filteredPosts() {
-            return this.allposts.filter((post) => {
-                let searchTerm = this.searchTerm.toLowerCase();
-                let textToMatch = post.title.toLowerCase();
-                let categoryToMatch = post.category_name.toLowerCase();
-                let charIndex = 0;
-                for (const c of textToMatch) {
-                    if (c == searchTerm[charIndex]) ++charIndex;
-                }
-                for (const c of categoryToMatch) {
-                    if (c == searchTerm[charIndex]) ++charIndex;
-                }
-                return charIndex == searchTerm.length;
-            });
+            let filteredPosts = this.allposts;
+            if (this.choice == "1")
+                filteredPosts = this.allposts.filter((post) => post.category_name.toLowerCase() === "resources");
+            if (this.searchTerm) {
+                filteredPosts = this.allposts.filter((post) => {
+                    let searchTerm = this.searchTerm.toLowerCase();
+                    let textToMatch = post.title.toLowerCase();
+                    let categoryToMatch = post.category_name.toLowerCase();
+                    let charIndex = 0;
+                    for (const c of textToMatch) {
+                        if (c == searchTerm[charIndex]) ++charIndex;
+                    }
+                    for (const c of categoryToMatch) {
+                        if (c == searchTerm[charIndex]) ++charIndex;
+                    }
+                    return charIndex == searchTerm.length;
+                });
+            }
+            return filteredPosts;
+
         },
     },
     methods: {
+        toggleView() {
+            this.viewMode = !this.viewMode;
+        },
         scrollToTop() {
             // Scroll to top with smooth behavior
             window.scrollTo({ top: 0, behavior: 'instant' });
