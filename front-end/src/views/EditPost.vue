@@ -13,10 +13,7 @@
           <option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}
           </option>
         </select>
-        <input type="file" @change="onFileSelected"/>
-        <div v-if="get_image">
-          <img :src="get_image" style="max-width: 200px; max-height: 200px;"/>
-        </div>
+        <input type="file" style="max-width:200px" @change="onFileSelected"/>
         <div style="margin-left: auto; display: flex; align-items: center;">
             <p>Sensitive Content ?</p>
             <label class="switch" tabindex="0" @keydown.enter="toggleBlur">
@@ -97,6 +94,11 @@
           get_image: this.get_image,
           isBlurred: this.isBlurred,
         };
+        if (this.get_image) {
+          payload.get_image = this.get_image;
+        } else if (this.post.get_image) { // assuming you have a 'post' object with the current post data
+          payload.get_image = this.post.get_image; // use the existing image URL
+        }
         getAPI.put(`/api/v1/posts/${this.$route.params.id}/`, payload, {
           headers: {
             Authorization: `Bearer ${this.$store.state.accessToken}`,

@@ -21,13 +21,13 @@
         </div>
       </div>
       <div class="columns is-mobile is-gapless">
-        <div class="column">
+        <div class="column is-6">
           <router-link :to="{ name: 'PostDetails', params: { id: post.id } }">
             <span class="icon is-small"><i class="fas fa-comment"></i></span>
             <span>Comments</span>
           </router-link>
         </div>
-        <div class="column">
+        <div class="column is-4">
           <!-- <span class="icon is-small"><i class="fas fa-arrow-up" @click="upvote" -->
           <span class="icon is-small"><i class="fas fa-arrow-up" @click="upvote" tabindex="0" role="button"
               @keydown.enter="upvote" :style="{ color: this.userVote === 1 ? 'orange' : 'grey' }"></i></span>
