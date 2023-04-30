@@ -2,7 +2,7 @@
   <div class="container">
     <section class="hero is-medium is-dark mb-6">
       <div class="hero-body has-text-centered">
-        <h1 class="title">Looking For Something To Do?</h1>
+        <h1 class="title">Looking For Something To Do? Or Study pals?</h1>
         <p class="subtitle">Here are some upcoming events!</p>
       </div>
     </section>
