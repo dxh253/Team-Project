@@ -13,7 +13,8 @@ import PostDetail from "../views/PostDetail.vue"
 import HelpSection from "../views/HelpSection.vue"
 import ProblemsDetail from "../views/ProblemsDetail.vue"
 import ForgotPassword from "../views/ForgotPassword.vue"
-
+import HelpAccessibility from  "../views/HelpAccessibility.vue"
+import HelpFeatures from "../views/HelpFeatures.vue"
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -69,6 +70,18 @@ const router = createRouter({
             meta: {
                 requiresLogin: true
             }
+        },
+        {
+            path: "/help_accessibility/",
+            name: "HelpAccessibility",
+            component: HelpAccessibility,
+
+        },
+        {
+            path: "/help_features/",
+            name: "HelpFeatures",
+            component: HelpFeatures,
+
         },
         {
             path: '/posts/:id/edit',

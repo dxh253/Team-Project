@@ -1,101 +1,104 @@
 <template>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <div class="home">
-        <section class="hero is-small is-dark mb-6">
-            <div class="hero-body has-text-centered mt-6">
-                <h1 class="title" style="font-size: 50px;">
-                    How can we help?
-                </h1>
-                <input class="search" type="text" placeholder="Search your problem here..."
-                    style="width: 675px; border-radius: 20px; text-indent: 3%;" v-model="searchValue">
-            </div>
-            <div class="hero-footer has-text-centered mb-5">
-                <p>
-                    {{ introText }}
-                </p>
-            </div>
 
-        </section>
-    </div>
+    <div class="container">
+        <div style="margin-bottom: 2%;">
+            <section class="hero is-small is-dark">
+                <div class="hero-body has-text-centered">
+                    <h1 class="title" style="font-size: 50px; margin-top: 7%;">
+                        How can we help?
+                    </h1>
+                    <input class="search" type="text" placeholder="Search your problem here..."
+                        style="width: 675px; border-radius: 20px; text-indent: 3%;" v-model="searchValue">
+                </div>
+                <div class="hero-footer has-text-centered">
+                    <p style="margin-bottom: 1%;">
+                        {{ introText }}
+                    </p>
+                </div>
 
-    <div v-show="showing">
-        <div class="columns is-mobile is-centered is-multiline has-text-centered" style="margin-bottom: 2%;">
-            <div class="column">
-                <RouterLink to="" tabindex="-1">
-                    <button class="button is-large is-link is-light is-outlined"
-                        style="width: 250px; height: 125px; margin: 3px 25px;">
-                        Testing
-                    </button>
-                </RouterLink>
-                <RouterLink to="" tabindex="-1">
-                    <button class="button is-large is-link is-light is-outlined"
-                        style="width: 250px; height: 125px; margin: 3px 25px;">
-                        Testing
-                    </button>
-                </RouterLink>
-                <RouterLink to="" tabindex="-1">
-                    <button class="button is-large is-link is-light is-outlined"
-                        style="width: 250px; height: 125px; margin: 3px 25px;">
-                        Testing232
-                    </button>
-                </RouterLink>
-            </div>
+            </section>
         </div>
 
-        <div class="hero" style="margin-bottom: 3%; margin-left: 5%;">
-            <p class="title is-4">Or you can submit your problem here</p>
-            <div class="columns" style="align-items: center;">
-                <i class="column is-1 material-icons" style="font-size: 40px;">person</i>
+        <div v-show="showing">
+            <div class="columns is-mobile is-centered is-multiline has-text-centered" style="margin-bottom: 2%;">
+                <div class="column">
+                    <RouterLink to="/help_features/" tabindex="-1" class="button is-large is-link is-light is-outlined"
+                        style="width: 250px; height: 125px;">
+                        Features
+                    </RouterLink>
+                </div>
+                <div class="column">
+                    <RouterLink to="/help_accessibility/" tabindex="-1" class="button is-large is-link is-light is-outlined"
+                        style="width: 250px; height: 125px;">
+                        Accessibility
+                    </RouterLink>
+                </div>
+                <div class="column">
+                    <RouterLink to="/privacy_policy/" tabindex="-1" class="button is-large is-link is-light is-outlined"
+                        style="width: 250px; height: 125px;">
+                        Privacy Policy
+                    </RouterLink>
+                </div>
             </div>
 
-            <form class="event-card" style="margin: 0%; width: 1000px;" @submit.prevent="submitProblem">
-                <div class="field">
-                    <label>Title of your problem</label>
-                    <input class="input" ows="1" type="text" placeholder="Enter Title" style="width: 400px; 
-                    border:1px solid grey;
-                    background-color: white;" v-model.trim="problemInfo.title" required>
-                </div>
-                <div class="field">
-                    <label>Describe your problem</label>
-                    <textarea class="textarea" type="text" placeholder="Describe your problem here"
-                        style="border:1px solid grey;" v-model.trim="problemInfo.description" required>
-                    </textarea>
-                    <div style="text-align: right;">
-                        <button class="button is-info" type="submit" style="margin-top: 5px;">Submit</button>
+            <div class="hero" style="margin-bottom: 3%; margin-left: 5%;">
+                <p class="title is-4">Or you can submit your problem here</p>
+                <!-- <div class="columns" style="align-items: center;">
+                    <i class="column is-1 material-icons" style="font-size: 40px;">person</i>
+                    <p class="column"> </p>
+                </div> -->
+
+                <form class="event-card" style="margin: 0%; width: 1000px;" @submit.prevent="submitProblem">
+                    <div class="field">
+                        <label>Title of your problem</label>
+                        <input class="input" ows="1" type="text" placeholder="Enter Title" style="width: 400px; 
+                        border:1px solid grey;
+                        background-color: white;" v-model.trim="problemInfo.title" required>
                     </div>
+                    <div class="field">
+                        <label>Describe your problem</label>
+                        <textarea class="textarea" type="text" placeholder="Describe your problem here"
+                            style="border:1px solid grey;" v-model.trim="problemInfo.description" required>
+                        </textarea>
+                        <div style="text-align: right;">
+                            <button class="button is-info" type="submit" style="margin-top: 5px;">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="columns">
+                <div class="column is-10">
+                    <h2 class="title is-3"> {{ listTitle }} </h2>
                 </div>
-            </form>
-        </div>
-
-        <div class="columns">
-            <div class="column is-10">
-                <h2 class="title is-3"> {{ listTitle }} </h2>
+                <div class="column is-2 is-offset 8">
+                    <button class="button is-underlined is-link is-light is-outlined" @click="filterProblems"> My problems
+                    </button>
+                </div>
             </div>
-            <div class="column is-8 is-offset 8">
-                <button class="button is-underlined is-link is-light is-outlined" @click="filterProblems"> My problems
-                </button>
+
+            <div>
+                <ProblemCard v-for="problem in displayedProblems" v-bind:key="problem.id" v-bind:problem="problem" />
             </div>
         </div>
 
-        <div v-if="renderComponent">
-            <ProblemCard v-for="problem in displayedProblems" v-bind:key="problem.id" v-bind:problem="problem" />
-        </div>
-    </div>
-
-    <div v-show="!showing">
-        <div class="columns">
-            <div class="column is-10">
-                <h2 class="title is-3">You searched for problems containing "{{ searchValue }}"</h2>
+        <div v-show="!showing">
+            <div class="columns">
+                <div class="column is-10">
+                    <h2 class="title is-3">You searched for problems containing "{{ searchValue }}"</h2>
+                </div>
+                <div class="column is-2 is-offset">
+                    <button type="button" class="button is-underlined is-link is-light" @click="filterProblems"> My problems
+                    </button>
+                </div>
+                <p v-show="noproblem">You haven't submitted any problems.</p>
             </div>
-            <div class="column is-8 is-offset">
-                <button type="button" class="button is-underlined is-link is-light" @click="filterProblems"> My problems
-                </button>
-            </div>
-        </div>
 
-        <button class="button" @click="clearSearch" style="margin-top: 2px; margin-bottom: 50px;">Clear search</button>
-        <!-- roundabout way but works -->
-        <ProblemCard v-for="problem in searchProblems" v-bind:key="problem.id" v-bind:problem="problem" />
+            <button class="button" @click="clearSearch" style="margin-top: 2px; margin-bottom: 50px;">Clear search</button>
+            <!-- roundabout way but works -->
+            <ProblemCard v-for="problem in searchProblems" v-bind:key="problem.id" v-bind:problem="problem" />
+        </div>
     </div>
 </template>
 
@@ -120,7 +123,10 @@ export default {
             searchValue: '',
             showing: true,
             listTitle: 'Here is a list of problems submitted by other users',
-            introText: 'Here are some useful articles'
+            introText: 'Here are some useful articles',
+            noproblem: this.displayedProblems === [],
+            notificationMessage: '',
+            notificationType: '',
         }
     },
     components: {
@@ -134,20 +140,21 @@ export default {
                 return;
             }
 
-            this.renderComponent = false,
-                this.$nextTick(() => {
-                    this.renderComponent = true;
-                });
-
             console.log(this.problemInfo.title + " " + this.problemInfo.description)
             const token = localStorage.getItem("access");
             const decodedToken = jwt_decode(token);
             const ownerId = decodedToken.user_id;
 
             const formData = new FormData();
-            formData.append('title', this.problemInfo.title);
-            formData.append('description', this.problemInfo.description);
-            formData.append('owner', parseInt(ownerId));
+            if (this.problemInfo.title.length < 100) {
+                formData.append('title', this.problemInfo.title);
+                formData.append('description', this.problemInfo.description);
+                formData.append('owner', parseInt(ownerId));
+            }
+            else {
+                alert("Title exceeds 100 character limit.")
+                return
+            }
             getAPI
                 .post('/api/v1/help/', formData, {
                     headers: {
@@ -167,6 +174,9 @@ export default {
 
         filterProblems() {
             if (this.filterByOwner) {
+                // filterByOwner set false by default
+                // starts at else part
+                // when user clicks button again - filterByOwner is true is will run
                 this.displayedProblems = this.allProblems;
                 this.filterByOwner = false;
                 this.listTitle = 'Here is a list of problems submitted by other users';
