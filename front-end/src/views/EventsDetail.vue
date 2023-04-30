@@ -5,28 +5,29 @@
         <div class="image-wrapper">
           <!-- <figure class="image is-cropped is-256x256">
             <img :src="events.get_image" alt="" style="object-fit: cover; width: 100%; height: 100%" /> -->
-           <figure>
-              <img :src="events.get_image" alt="" style="max-width: 30%; max-height: 30%;" />
+          <figure>
+              <img :src="events.get_image" alt="event image" style="width:50vh; height: 35vh;" />
           </figure>
         </div>
       </div>
       <div class="column is-8">
         <div class="box">
-          <h1 class="title">{{ events.name }}</h1>
+          <h1 class="title" style="margin-top: 1%;">{{ events.name }}</h1>
           <p>{{ eventIdToName() }}</p>
+          <br>
           <div class="event-details">
             <div class="event-detail">
-              <h2 class="subtitle is-4">Venue</h2>
-              <p>{{ events.venue }}</p>
+              <h2 class="subtitle is-4" style="margin-bottom: 0%;">Venue</h2>
+              <p style="margin-bottom: 2vh;">{{ events.venue }}</p>
             </div>
             <div class="event-detail">
-              <h2 class="subtitle is-4">Date</h2>
-              <p>{{ events.date }}</p>
+              <h2 class="subtitle is-4" style="margin-bottom: 0%;">Date</h2>
+              <p style="margin-bottom: 0vw;">{{ events.date }}</p>
             </div>
           </div>
           <hr />
           <div class="description">
-            <h2 class="subtitle is-4">Description</h2>
+            <h2 class="subtitle is-4" style="margin-bottom: 0%;">Description</h2>
             <p>{{ events.description }}</p>
           </div>
           <hr />
