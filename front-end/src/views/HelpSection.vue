@@ -75,7 +75,7 @@
           </div>
         </div>
 
-            <div>
+            <div v-show="showing">
                 <ProblemCard v-for="problem in displayedProblems" v-bind:key="problem.id" v-bind:problem="problem" />
             </div>
         </div>
@@ -84,10 +84,6 @@
             <div class="columns">
                 <div class="column is-10">
                     <h2 class="title is-3">You searched for questions containing "{{ searchValue }}"</h2>
-                </div>
-                <div class="column is-2 is-offset">
-                    <button type="button" class="button is-underlined is-link is-light" @click="filterProblems"> My Questions
-                    </button>
                 </div>
                 <p v-show="noproblem">You haven't submitted any questions.</p>
             </div>
@@ -121,9 +117,6 @@ export default {
             showing: true,
             listTitle: 'All Questions',
             introText: 'Here are some useful articles',
-            noproblem: this.displayedProblems === [],
-            notificationMessage: '',
-            notificationType: '',
             showForm: false,
         }
     },
