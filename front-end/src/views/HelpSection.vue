@@ -1,82 +1,79 @@
 <template>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
     <div class="container">
-        <div style="margin-bottom: 2%;">
-            <section class="hero is-small is-dark">
-                <div class="hero-body has-text-centered">
-                    <h1 class="title" style="font-size: 50px; margin-top: 7%;">
-                        How can we help?
-                    </h1>
-                    <input class="search" type="text" placeholder="Search your problem here..."
-                        style="width: 675px; border-radius: 20px; text-indent: 3%;" v-model="searchValue">
-                </div>
-                <div class="hero-footer has-text-centered">
-                    <p style="margin-bottom: 1%;">
-                        {{ introText }}
-                    </p>
-                </div>
 
-            </section>
+      <section class="hero is-medium is-dark mb-6">
+      <div class="hero-body has-text-centered">
+        <h1 class="title">
+              How can we help?
+        </h1>
+        <p class="subtitle">Have an issue? Look no further...</p>
+      </div>
+    </section>
+  
+      <div class="section">
+        <div class="columns is-centered is-multiline">
+          <div class="column is-one-third">
+            <RouterLink to="/help_features/" tabindex="-1" class="button is-large is-link is-light is-outlined is-fullwidth">
+              Features
+            </RouterLink>
+          </div>
+          <div class="column is-one-third">
+            <RouterLink to="/help_accessibility/" tabindex="-1" class="button is-large is-link is-light is-outlined is-fullwidth">
+              Accessibility
+            </RouterLink>
+          </div>
+          <div class="column is-one-third">
+            <RouterLink to="/privacy_policy/" tabindex="-1" class="button is-large is-link is-light is-outlined is-fullwidth">
+              Privacy Policy
+            </RouterLink>
+          </div>
         </div>
-
-        <div v-show="showing">
-            <div class="columns is-mobile is-centered is-multiline has-text-centered" style="margin-bottom: 2%;">
-                <div class="column">
-                    <RouterLink to="/help_features/" tabindex="-1" class="button is-large is-link is-light is-outlined"
-                        style="width: 250px; height: 125px;">
-                        Features
-                    </RouterLink>
-                </div>
-                <div class="column">
-                    <RouterLink to="/help_accessibility/" tabindex="-1" class="button is-large is-link is-light is-outlined"
-                        style="width: 250px; height: 125px;">
-                        Accessibility
-                    </RouterLink>
-                </div>
-                <div class="column">
-                    <RouterLink to="/privacy_policy/" tabindex="-1" class="button is-large is-link is-light is-outlined"
-                        style="width: 250px; height: 125px;">
-                        Privacy Policy
-                    </RouterLink>
+        <hr>
+  
+ 
+        <div class="columns">
+            <div class="column is-3">
+                <h2 class="title is-3">{{ listTitle }}</h2>
+            </div>
+            <div class="field column is-5">
+                <div class="control">
+                    <input class="input" type="text" placeholder="Search your problem here..." v-model="searchValue">
                 </div>
             </div>
-
-            <div class="hero" style="margin-bottom: 3%; margin-left: 5%;">
-                <p class="title is-4">Or you can submit your problem here</p>
-                <!-- <div class="columns" style="align-items: center;">
-                    <i class="column is-1 material-icons" style="font-size: 40px;">person</i>
-                    <p class="column"> </p>
-                </div> -->
-
-                <form class="event-card" style="margin: 0%; width: 1000px;" @submit.prevent="submitProblem">
-                    <div class="field">
-                        <label>Title of your problem</label>
-                        <input class="input" ows="1" type="text" placeholder="Enter Title" style="width: 400px; 
-                        border:1px solid grey;
-                        background-color: white;" v-model.trim="problemInfo.title" required>
-                    </div>
-                    <div class="field">
-                        <label>Describe your problem</label>
-                        <textarea class="textarea" type="text" placeholder="Describe your problem here"
-                            style="border:1px solid grey;" v-model.trim="problemInfo.description" required>
-                        </textarea>
-                        <div style="text-align: right;">
-                            <button class="button is-info" type="submit" style="margin-top: 5px;">Submit</button>
-                        </div>
-                    </div>
-                </form>
+            <div class="column is-2">
+                <button class="button is-link is-outlined" @click="filterProblems">My problems</button>
             </div>
-
-            <div class="columns">
-                <div class="column is-10">
-                    <h2 class="title is-3"> {{ listTitle }} </h2>
-                </div>
-                <div class="column is-2 is-offset 8">
-                    <button class="button is-underlined is-link is-light is-outlined" @click="filterProblems"> My problems
-                    </button>
-                </div>
+            <div class="column is-2">
+                <button class="button is-link" @click="showForm = !showForm">{{ showForm ? 'Hide form' : 'Submit a problem' }}</button>
             </div>
+            
+            </div>
+            <div v-show= "showForm" class="columns">
+          <div class="column is-half is-offset-one-quarter">
+            <div class="box">
+              <h2 class="title is-4">Or you can submit your problem here</h2>
+              <form @submit.prevent="submitProblem">
+                <div class="field">
+                  <label class="label">Title of your problem</label>
+                  <div class="control">
+                    <input class="input" type="text" placeholder="Enter Title" v-model.trim="problemInfo.title" required>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Describe your problem</label>
+                  <div class="control">
+                    <textarea class="textarea" placeholder="Describe your problem here" v-model.trim="problemInfo.description" required></textarea>
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="control">
+                    <button class="button is-link" type="submit">Submit</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
 
             <div>
                 <ProblemCard v-for="problem in displayedProblems" v-bind:key="problem.id" v-bind:problem="problem" />
@@ -122,11 +119,12 @@ export default {
             renderComponent: true,
             searchValue: '',
             showing: true,
-            listTitle: 'Here is a list of problems submitted by other users',
+            listTitle: 'All Questions',
             introText: 'Here are some useful articles',
             noproblem: this.displayedProblems === [],
             notificationMessage: '',
             notificationType: '',
+            showForm: false,
         }
     },
     components: {
@@ -179,7 +177,7 @@ export default {
                 // when user clicks button again - filterByOwner is true is will run
                 this.displayedProblems = this.allProblems;
                 this.filterByOwner = false;
-                this.listTitle = 'Here is a list of problems submitted by other users';
+                this.listTitle = 'All Questions';
             } else {
                 const userId = jwt_decode(this.$store.state.accessToken).user_id;
                 const filteredProblems = this.allProblems.filter((problem) => {
@@ -187,7 +185,7 @@ export default {
                 });
                 this.displayedProblems = filteredProblems;
                 this.filterByOwner = true;
-                this.listTitle = 'My problems'
+                this.listTitle = 'My Questions'
             }
         },
 
