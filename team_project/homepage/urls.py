@@ -1,17 +1,14 @@
+from . import views
+from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
-from .views import ProblemsDetail, ProblemsView, CommentList
-from help_section import views
-
-
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView, TokenRefreshView)
+from . import views
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
-    path('api-token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api-token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/v1/help/<int:problem_id>/', views.ProblemsDetail.as_view()),
-    path('api/v1/help/', views.ProblemsView.as_view(), name="ProblemView"),
-    path('api/v1/help/<int:problem_id>/comments/', views.CommentList.as_view()),
-    path('api/v1/help/<int:problem_id>/comments/<int:comment_id>/',
-         views.CommentList.as_view()),
+    path('register/', views.register_user, name='register'),
+    # path('forgot-password/', views.forgot_password, name='forgot_password'),
+    # path('reset-password/<str:token>/', csrf_exempt(views.reset_password), name='reset_password'),
+    path('reset-password/<str:token>/',
+         views.reset_password, name='reset_password'),
+
 ]

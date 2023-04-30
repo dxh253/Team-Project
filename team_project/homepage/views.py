@@ -32,9 +32,9 @@ def forgot_password(request):
     email = request.data.get('email')
     user = User.objects.filter(email=email).first()
     if user:
-        token = jwt.encode({'user_id': user.id},
-                        'secret_key', algorithm='HS256')
-        link = request.build_absolute_uri(f'/reset-password/{token.decode("utf-8")}/')
+        token = jwt.encode({'user_id': user.id}, 'secret_key', algorithm='HS256')
+        link = request.build_absolute_uri(
+            f'/reset-password/{token.decode("utf-8")}/')
         message = f'Click the link below to reset your password:\n\n{link}'
         send_mail('Password reset for your account', message, 'from@example.com', [email])
     return Response({'message': 'If the provided email exists in our database, an email with instructions to reset your password will be sent.'})
