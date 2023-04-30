@@ -58,6 +58,111 @@
     </div>
 </template>
 
+<!-- <template>
+    <div class="comment-container">
+      <div class="comments">
+        <div v-if="comments.length === 0">No comments yet.</div>
+        <div v-else>
+          <div v-for="comment in parentComments" :key="comment.id" class="comment">
+            <div class="comment-header">
+              <h3 class="comment-owner">{{ comment.owner }}</h3>
+            </div>
+            <div class="comment-body">
+              <p>{{ comment.text }}</p>
+            </div>
+            <div class="buttons">
+              <button
+                @click="showReplyForm(comment.id)"
+                class="button is-small is-light"
+              >
+                Reply
+              </button>
+              <button
+                v-if="isOwner(comment)"
+                @click="deleteComment(comment.id)"
+                class="button is-small is-danger"
+              >
+                Delete
+              </button>
+            </div>
+            <div v-if="visibleReplyForm === comment.id" class="reply-form">
+              <textarea
+                class="textarea"
+                v-model="replyText[comment.id]"
+                placeholder="Write your reply here"
+              ></textarea>
+              <div class="buttons">
+                <button
+                  @click="submitReply(comment.id)"
+                  class="button is-small is-primary"
+                >
+                  Submit
+                </button>
+                <button
+                  @click="hideReplyForm(comment.id)"
+                  class="button is-small is-light is-rounded"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+            <!-- This section shows the children comments only. -->
+            <div class="replies" v-if="comment.children && comment.children.length > 0">
+              <div v-for="reply in comment.children" :key="reply.id" class="reply">
+                <div class="reply-footer">
+                  <span class="reply-owner">{{ reply.owner }}</span>
+                </div>
+                <div class="reply-body">
+                  <span v-for="word in reply.text.split(' ')" :key="word">
+                    <span v-if="word[0] == '@'" style="color: #0000ee">{{ word }}&nbsp;</span>
+                    <span v-else>{{ word }}&nbsp;</span>
+                  </span>
+                  <span>&nbsp;</span>
+                </div>
+                <div class="buttons">
+                  <button
+                    @click="showReplyForm(reply.id)"
+                    class="button is-small is-light"
+                  >
+                    Reply
+                  </button>
+                  <button
+                    v-if="isOwner(reply)"
+                    @click="deleteReply(reply.id)"
+                    class="button is-small is-danger"
+                  >
+                    Delete
+                  </button>
+                </div>
+                <div v-if="visibleReplyForm === reply.id" class="reply-form">
+                  <textarea
+                    class="textarea"
+                    v-model="replyText[reply.id]"
+                    placeholder="Write your reply here"
+                  ></textarea>
+                  <div class="buttons">
+                    <button
+                      @click="submitReply(reply.id)"
+                      class="button is-small is-primary"
+                    >
+                      Submit
+                    </button>
+                    <button
+                      @click="hideReplyForm(reply.id)"
+                      class="button is-small is-light"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</template> -->
+
 <script>
 import jwtDecode from "jwt-decode";
 
