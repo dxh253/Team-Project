@@ -14,6 +14,9 @@
           </option>
         </select>
         <input type="file" @change="onFileSelected"/>
+        <div v-if="get_image">
+          <img :src="get_image" style="max-width: 200px; max-height: 200px;"/>
+        </div>
         <div style="margin-left: auto; display: flex; align-items: center;">
             <p>Sensitive Content ?</p>
             <label class="switch" tabindex="0" @keydown.enter="toggleBlur">
@@ -46,6 +49,7 @@
     },
     mounted(){
       this.fetchCategories();
+      this.fetchPost();
     },
     // component logic goes here
     methods:{
@@ -66,6 +70,20 @@
                 this.isBlurred = !this.isBlurred;
             }
         },
+        fetchPost() {
+          getAPI.get(`/api/v1/posts/${this.$route.params.id}/`)
+            .then(response => {
+          this.title = response.data.title;
+          this.description = response.data.description;
+          this.owner = response.data.owner;
+          this.category = response.data.category;
+          this.get_image = response.data.get_image;
+          this.isBlurred = response.data.isBlurred;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
       editPost() {
         const token = localStorage.getItem("access");
         const decodedToken = jwt_decode(token);
