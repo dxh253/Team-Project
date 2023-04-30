@@ -63,6 +63,7 @@ class ProblemsDetail(APIView):
 
 
 class CommentList(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = CommentSerializer
 
     def get(self, request, problem_id):
@@ -81,3 +82,9 @@ class CommentList(generics.ListCreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, problem_id, comment_id):
+        comments = Comment.objects.get(problem=problem_id, id=comment_id)
+
+        comments.delete_comment()
+        return Response(status=status.HTTP_204_NO_CONTENT)
