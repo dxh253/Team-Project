@@ -151,8 +151,8 @@ export default {
     <notification ref="notification" :message="notificationMessage" :type="notificationType" :duration="3000">
     </notification>
     <div class="box">
-      <figure class="image mb-4">
-        <img :src="event.get_thumbnail" class="event-thumbnail" alt="event image">
+      <figure class="image is-256x256 is-1by1">
+        <img :src="event.get_thumbnail" alt="event image">
       </figure>
       <h3 class="is-size-4">{{ event.name }}</h3>
       <p class="is-size-6 has-text-grey">{{ event.date }}</p>
@@ -231,8 +231,8 @@ export default {
 }
 
 .event-thumbnail {
-  width: 150px;
-  height: 150px;
+  width: 250px;
+  height: 250px;
 }
 .icon-overlay {
   position: relative;
