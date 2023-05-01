@@ -11,12 +11,12 @@
       <div class="column is-3">
         <h2 class="title">Upcoming Events</h2>
       </div>
-      <div class="field column is-3">
+      <div class="field column is-3" style="">
         <div class="control">
           <input v-model="searchText" class="input" type="text" placeholder="Search" />
         </div>
       </div>
-      <div class="select field column is-3">
+      <div class="select field column is-3 is-narrow">
         <select v-model="categoryFilter">
           <option value="0">Events and study groups</option>
           <option value="1">Events only</option>
@@ -30,7 +30,7 @@
       </div>
       <div class="column is-1">
         <router-link to="/events_form" tabindex="-1">
-          <button class="button is-primary is-light" tabindex="0">Add Event</button>
+          <button class="button is-primary is-light" tabindex="0" style="">Add Event</button>
         </router-link>
       </div>
     </div>
@@ -46,9 +46,23 @@
   margin-bottom: 0;
 }
 
-.select:not(.is-multiple) {
-  height: 100px;
+.select select::-ms-expand {
+    display: none;
 }
+.select select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6"><path fill="gray" d="M0 0l5 4.998L10 0z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right .7em top 50%, 0 0;
+    background-size: 10px 6px, 100%;
+    padding-right: 2.5em;
+}
+
+/* .select:not(.is-multiple) {
+  height: 100px;
+} */
 </style>
 
 <script>
