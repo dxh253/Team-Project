@@ -24,7 +24,7 @@ urlpatterns = [
     path('', include('help_section.urls')),
     path('help/', include('help_section.urls')),
     # add a url for the admin page with csrf exempt
-    path('api/admin/', csrf_exempt(admin.site.urls), name='admin'),
+    path('api/admin/', csrf_exempt (admin.site.urls), name='admin'),
     path('api/v1/admin/', admin.site.urls, name='admin'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
