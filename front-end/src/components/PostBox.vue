@@ -14,7 +14,7 @@
       </div>
       <div class="card-content">
         <div class="content">
-          <p>{{ post.description }}</p>
+          <p style="overflow-wrap: break-word;">{{ post.description }}</p>
           <div v-if="post.get_image">
             <img :src="post.get_image" :style="{ filter: blur ? 'blur(20px)' : 'none', maxWidth: '30%', maxHeight: '30%' }"
               @click="enlargeImage" />
