@@ -7,7 +7,7 @@
       <article class="media">
         <div class="media-content">
           <h1 class="title">{{ post.title }}</h1>
-          <p class="subtitle">{{ post.description }}</p>
+          <p class="subtitle" style="white-space: pre-wrap">{{ post.description }}</p>
           <figure class="image">
             <a :href="post.get_image" target="_blank">
               <img :src="post.get_image" :style="{
