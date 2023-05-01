@@ -4,6 +4,8 @@ from django.contrib import admin
 from django.urls import path, include
 from homepage.views import register_user, reset_password
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView)
+# import csrf exempt
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     # path('admin/', admin.site.urls, name='admin'),
@@ -21,7 +23,9 @@ urlpatterns = [
     path('api/v1/', include('forum.urls')),
     path('', include('help_section.urls')),
     path('help/', include('help_section.urls')),
-    path('api/admin/', admin.site.urls, name='admin'),
+    # add a url for the admin page with csrf exempt
+    path('api/admin/', csrf_exempt(admin.site.urls), name='admin'),
+    # path('api/admin/', admin.site.urls, name='admin'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
