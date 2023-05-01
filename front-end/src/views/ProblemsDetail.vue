@@ -3,7 +3,7 @@
       <div class="columns is-centered">
         <div class="column is-10">
           <div class="box">
-            <div class="columns is-mobile is-vcentered">
+            <div class="columns is-mobile is-centered">
               <div class="column is-10">
                 <h1 class="title is-size-2 has-text-weight-bold">{{ problems.title }}</h1>
               </div>
@@ -14,7 +14,7 @@
             <p class="subtitle is-size-6 has-text-grey">{{ problems.date_added }} by {{ problems.author }}</p>
             <hr>
             <div class="content">
-              <p>{{ problems.description }}</p>
+              <p style="white-space: pre-wrap; overflow-wrap: break-word;">{{ problems.description }}</p>
             </div>
           </div>
           <div class="box">
