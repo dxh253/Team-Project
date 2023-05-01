@@ -6,7 +6,7 @@ from homepage.views import register_user, reset_password
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView)
 
 urlpatterns = [
-    path('admin/', admin.site.urls, name='admin'),
+    # path('admin/', admin.site.urls, name='admin'),
     path('api/v1/register/', register_user),
     path('api/v1/forgot-password/', reset_password),
     path('api-token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -21,7 +21,7 @@ urlpatterns = [
     path('api/v1/', include('forum.urls')),
     path('', include('help_section.urls')),
     path('help/', include('help_section.urls')),
-    # path('api/admin/', admin.site.urls, name='admin'),
+    path('api/admin/', admin.site.urls, name='admin'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

@@ -110,7 +110,6 @@ export default {
       // Checks that all characters in `searchText` appear in the same order
       // in `textToMatch`
       // e.g. `prty` will match `party` but not `piracy` or `try please`
-
       searchText = searchText.toLowerCase();
       textToMatch = textToMatch.toLowerCase();
       let charIndex = 0;
