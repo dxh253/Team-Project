@@ -18,7 +18,7 @@
                 <!-- <label class="image-selector" tabindex="0" @keydown.enter="onFileSelected"> -->
                     <!-- <i class="fa-solid fa-image fa-xl"></i> -->
                     
-                    <input type="file" style="max-width:200px" @change="onFileSelected"/>
+                    <input type="file" style="max-width:200px" @change="onFileSelected" accept="image/*"/>
                     
                 <!-- </label> -->
                 <div style="margin-left: auto; display: flex; align-items: center;">

@@ -13,7 +13,7 @@
           <option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}
           </option>
         </select>
-        <input type="file" style="max-width:200px" @change="onFileSelected"/>
+        <input type="file" style="max-width:200px" @change="onFileSelected" accept="image/*"/>
         <div style="margin-left: auto; display: flex; align-items: center;">
             <p>Sensitive Content ?</p>
             <label class="switch" tabindex="0" @keydown.enter="toggleBlur">
