@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div>
         <h1>Forgot Password</h1>
         <form @submit.prevent="forgotPassword">
@@ -37,4 +37,40 @@
             }
         }
     }
+</script> -->
+
+<template>
+    <div>
+        <h2>Forgot Password</h2>
+        <form @submit.prevent="submitForm">
+            <label>Email Address:</label>
+            <input type="email" v-model="email">
+            <button type="submit">Reset Password</button>
+        </form>
+    </div>
+</template>
+
+<script>
+import { getAPI } from '@/plugins/axios';
+export default {
+    data() {
+        return {
+            email: '',
+        };
+    },
+    methods: {
+        submitForm() {
+            // Send email to initiate password reset
+            getAPI.post('/api/v1/forgot-password/', { email: this.email })
+                .then(response => {
+                    alert('Password reset email sent');
+                    console.log(response.data);
+                })
+                .catch(error => {
+                    console.log('Error sending password reset email');
+                    console.log(error.response.data);
+                });
+        },
+    },
+};
 </script>

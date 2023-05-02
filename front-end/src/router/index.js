@@ -15,6 +15,7 @@ import ProblemsDetail from "../views/ProblemsDetail.vue"
 import ForgotPassword from "../views/ForgotPassword.vue"
 import HelpAccessibility from  "../views/HelpAccessibility.vue"
 import HelpFeatures from "../views/HelpFeatures.vue"
+import ResetPassword from "../views/ResetPassword.vue"
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -36,6 +37,11 @@ const router = createRouter({
             }
         },
         {
+            path: "/register/",
+            name: "RegisterForm",
+            component: RegisterForm
+        },
+        {
             path: "/forgot-password/",
             name: "ForgotPassword",
             component: ForgotPassword,
@@ -44,9 +50,13 @@ const router = createRouter({
             }
         },
         {
-            path: "/register/",
-            name: "RegisterForm",
-            component: RegisterForm
+            path: "/reset-password/:token/",
+            name: "ResetPassword",
+            component: ResetPassword,
+            props: true,
+            meta: {
+                requiresLogin: false
+            }
         },
         {
             path: "/events/",
@@ -55,7 +65,6 @@ const router = createRouter({
             meta: {
                 requiresLogin: true
             }
-
         },
         {
             path: "/help/",
