@@ -903,6 +903,13 @@ export default {
   text-align: center;
 }
 
+.hero{
+  background-image: url(@/assets/background5.jpg);
+  background-size: cover;
+  background-position: center center;
+  background-blend-mode: multiply;
+}
+
 .event-link {
   display: flex;
   align-items: center;
