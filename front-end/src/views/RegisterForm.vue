@@ -146,7 +146,7 @@ export default {
             })
                 .then(response => {
                     console.log(response.data);
-                    this.$router.push({ name: 'EventsView' });
+                    this.$router.push({ name: 'Dashboard' });
                 })
                 .catch(error => {
                     const data = error.response.data;
