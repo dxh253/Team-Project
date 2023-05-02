@@ -838,10 +838,10 @@ export default {
           <ul class="has-text-weight-bold">
             <li v-for="event in userEvents" :key="event.id">
               <router-link :to="'' + event.event.get_absolute_url" v-a11y-link="event.event.name" class="event-link">
-                <i class="fas fa-clock event-icon has-text-primary"></i>
-                <span class="event-name">{{ event.event.name }}</span>
-                <span class="event-reminder">{{ getReminder(event.event.date) }}</span>
-              </router-link>
+    <i class="fas fa-clock event-icon has-text-primary"></i>
+    <span class="event-name">{{ event.event.name }}</span>
+    <span class="event-reminder">{{ getReminder(event.event.date) === '0 day left' ? 'Today' : getReminder(event.event.date) }}</span>
+</router-link>
             </li>
           </ul>
         </div>
