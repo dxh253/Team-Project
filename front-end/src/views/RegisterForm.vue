@@ -146,7 +146,8 @@ export default {
             })
                 .then(response => {
                     console.log(response.data);
-                    this.$router.push({ name: 'Dashboard' });
+                    // upon successful registration, redirect to login page
+                    this.$router.push({ name: 'Login' });
                 })
                 .catch(error => {
                     const data = error.response.data;
