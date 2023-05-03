@@ -1,5 +1,7 @@
 from django.contrib.auth.hashers import make_password
+# from django.contrib.auth.models import User
 from django.contrib.auth.models import User
+from .models import PasswordResetToken
 from django.core.mail import send_mail
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import api_view, permission_classes
@@ -46,16 +48,18 @@ def forgot_password(request):
     reset_token = get_random_string(length=32)
 
     # Set the reset token on the user
-    user.reset_token = reset_token
-    user.save()
+    reset_token_obj, created = PasswordResetToken.objects.get_or_create(
+        user=user)
+    reset_token_obj.reset_token = reset_token
+    reset_token_obj.save()
 
     # Send password reset email
     subject = 'Reset your password'
-    # reset_url = f'https://team22-22.bham.team/reset-password/{reset_token}/'
-    reset_url = f'http://localhost:8080/reset-password/{reset_token}/'
+    reset_url = f'https://team22-22.bham.team/reset-password/{reset_token}/'
+    # reset_url = f'http://localhost:8080/reset-password/{reset_token}/'
     message = f'Click this link to reset your password: {reset_url}'
     send_mail(subject, message, 'noreply@example.com',
-              [email], fail_silently=False)
+            [email], fail_silently=False)
 
     return JsonResponse({'message': 'Password reset email sent'}, status=200)
 
@@ -65,22 +69,24 @@ def forgot_password(request):
 def reset_password(request, reset_token):
     print(f'The reset token is {reset_token}')
     try:
-        user = User.objects.get(reset_token=reset_token)
-    except User.DoesNotExist:
+        reset_token_obj = PasswordResetToken.objects.get(
+            reset_token=reset_token)
+        user = reset_token_obj.user
+    except PasswordResetToken.DoesNotExist:
         return JsonResponse({'error': 'Invalid reset token'}, status=404)
 
+    print(request.data)
     password = request.data.get('password')
-    confirm_password = request.data.get('confirm_password')
+    confirm_password = request.data.get('confirmPassword')
+    print(f'Password: {password}')
+    print(f'Confirm Password: {confirm_password}')
 
     if not password:
         return JsonResponse({'error': 'Password is required'}, status=400)
 
-    if password != confirm_password:
-        return JsonResponse({'error': 'Passwords do not match'}, status=400)
-
-    # Set the new password on the user and clear the reset token
     user.password = make_password(password)
-    user.reset_token = None
     user.save()
+
+    reset_token_obj.delete()
 
     return JsonResponse({'message': 'Password reset successful'}, status=200)
